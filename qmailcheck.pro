@@ -6,7 +6,9 @@ TARGET = qmailcheck
 TEMPLATE = app
 SOURCES += main.cpp \
     qtincoming.cpp \
-    incomingmailmodel.cpp
+    incomingmailmodel.cpp \
+    mailmsg.cpp
 HEADERS += qtincoming.h \
-    incomingmailmodel.h
+    incomingmailmodel.h \
+    mailmsg.h
 FORMS += qtincoming.ui
