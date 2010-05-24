@@ -1,6 +1,11 @@
 #include "qtincoming.h"
 #include "ui_qtincoming.h"
+#include "ui_prefs.h"
 #include "incomingmailmodel.h"
+
+#include <iostream>
+#define OUTPUT(x) std::cerr << x;
+#define DEBUG(x) OUTPUT(x)
 
 QtIncoming::QtIncoming(QWidget *parent) :
     QMainWindow(parent),
@@ -25,6 +30,10 @@ QtIncoming::QtIncoming(QWidget *parent) :
             mailModel, SLOT(checkMail()));
     connect(mailModel, SIGNAL(newMail()),
             this, SLOT(maybeRaise()));
+
+    connect(ui->actionPreferences, SIGNAL(activated()),
+            this, SLOT(showPrefs()));
+
 }
 
 QtIncoming::~QtIncoming()
@@ -47,6 +56,23 @@ void QtIncoming::changeEvent(QEvent *e)
 void QtIncoming::maybeRaise()
 {
     raise();
+}
+
+void QtIncoming::showPrefs()
+{
+    Ui::PrefWindow *prefui;
+    QDialog *dialog;
+    
+    prefui = new Ui::PrefWindow();
+    prefui->setupUi(dialog = new QDialog());
+    dialog->show();
+    connect(prefui->buttonBox, SIGNAL(accepted()),
+            this, SLOT(changedSettings()));
+}
+
+void QtIncoming::changedSettings()
+{
+    OUTPUT("changed!\n");
 }
 
 #include "moc_qtincoming.cpp"

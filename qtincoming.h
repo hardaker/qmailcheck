@@ -13,8 +13,11 @@ public:
     QtIncoming(QWidget *parent = 0);
     ~QtIncoming();
 
+
 public slots:
     void maybeRaise();
+    void showPrefs();
+    void changedSettings();
 
 protected:
     void changeEvent(QEvent *e);

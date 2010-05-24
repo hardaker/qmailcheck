@@ -11,4 +11,5 @@ SOURCES += main.cpp \
 HEADERS += qtincoming.h \
     incomingmailmodel.h \
     mailmsg.h
-FORMS += qtincoming.ui
+FORMS += qtincoming.ui \
+    prefs.ui
