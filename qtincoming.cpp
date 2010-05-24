@@ -24,7 +24,7 @@ QtIncoming::QtIncoming(QWidget *parent) :
     connect(ui->checkMail, SIGNAL(clicked()),
             mailModel, SLOT(checkMail()));
     connect(mailModel, SIGNAL(mailUpdated()),
-            this, SLOT(raise()));
+            this, SLOT(maybeRaise()));
 }
 
 QtIncoming::~QtIncoming()
@@ -42,6 +42,11 @@ void QtIncoming::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+void QtIncoming::maybeRaise()
+{
+    raise();
 }
 
 #include "moc_qtincoming.cpp"
