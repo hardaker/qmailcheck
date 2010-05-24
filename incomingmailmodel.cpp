@@ -1,11 +1,32 @@
 #include "incomingmailmodel.h"
 
 #include <QtGui/QLabel>
+#include <QtNetwork/QSslSocket>
+
+#define HSERVER "mail.hardakers.net"
+#define HPORT   993
+#define HUSER   "hardaker"
+#define HPATH   "INBOX"
+
+#define DATE_WIDTH    5
+#define FROM_WIDTH    20
+#define SUBJECT_WIDTH 48
+
+// #define DEBUG(x) std::cerr << x;
+#include <iostream>
+#define DEBUG(x) 
+#define OUTPUT(x) std::cerr << x;
 
 IncomingMailModel::IncomingMailModel(QObject *parent) :
-    QAbstractTableModel(parent), mailInfo()
+    QAbstractTableModel(parent), mailInfo(), m_socket(),
+    __counter(0),
+    m_username(HUSER), m_password("doub6good"), m_hostname(HSERVER),
+    m_port(HPORT)
 {
     mailInfo.push_back("foo");
+
+    mailBoxes.push_back("imap.inbox");
+    mailBoxes.push_back("imap.tislabs");
 }
 
 int IncomingMailModel::rowCount(const QModelIndex &parent) const
@@ -29,6 +50,10 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid() || role != Qt::DisplayRole)
         return QVariant();
+
+    if (index.row() == 1 && index.column() == 1)
+        return QString("fooo bar aoehtuasoehu aoeuntdoeuantdoue oueanthdntdeu\nwhooot\n\n\nto!");
+
     return QString::number(index.row() * index.column());
 }
 
@@ -45,4 +70,114 @@ QVariant IncomingMailModel::headerData(int section, Qt::Orientation orientation,
     else
         return QString("Row %1").arg("section");
 #endif
+}
+
+void
+IncomingMailModel::initializeSocket()
+{
+    if (!m_socket.isOpen()) {
+        m_socket.setPeerVerifyMode(QSslSocket::VerifyNone);
+        m_socket.connectToHostEncrypted(HSERVER, HPORT);
+        m_socket.waitForReadyRead();
+
+        // read throw-away line info
+        char buf[4096];
+        int linelength = m_socket.readLine( buf, sizeof( buf ) );
+
+        // XXX: should check for error
+        sendCommand(QString("login ") + m_username + " " + m_password);
+    }
+}
+
+void
+IncomingMailModel::checkMail()
+{
+    
+    int serverh;
+    int ret;
+
+    const char * cache_directory;
+    const char * flags_directory;
+    int connecth;
+    int i, msgnum;
+    char buf[1024];
+
+    m_messages.clear();
+
+    QList<QString> results;
+    QRegExp subjectMatch("Subject: +(.*)");
+    QRegExp fromMatch("From: +(.*)");
+    QRegExp dateMatch("Date: +(.*)");
+
+    for(int mbox = 0; mbox < mailBoxes.length(); mbox++) {
+
+        OUTPUT("---- " << mailBoxes[mbox].toAscii().data() << " ------\n");
+
+        sendCommand(QString("EXAMINE \"" + mailBoxes[mbox] + "\""));
+
+        results = sendCommand(QString("SEARCH RECENT"));
+        QStringList msglist = results[0].split(' ');
+        for(int i = 2; i < msglist.length(); i++) {
+            QString subject, from, date;
+            QStringList headers =
+                sendCommand(QString("FETCH " + msglist[i] +
+                                    " (FLAGS BODY[HEADER])"));
+            for(int j = 0; j < headers.length(); j++) {
+                if (subjectMatch.indexIn(headers[j]) != -1) {
+                    subject = subjectMatch.cap( 1 );
+                } else if (fromMatch.indexIn(headers[j]) != -1) {
+                    from = fromMatch.cap( 1 );
+                } else if (dateMatch.indexIn(headers[j]) != -1) {
+                    date = dateMatch.cap( 1 );
+                }
+            }
+
+            m_messages.push_back(MailMsg(date, from, subject));
+
+            date.truncate(DATE_WIDTH);
+            from.truncate(FROM_WIDTH);
+            subject.truncate(SUBJECT_WIDTH);
+            QString output = QString("%1 | %2 | %3")
+                .arg(date, - DATE_WIDTH)
+                .arg(from, - FROM_WIDTH)
+                .arg(subject, - SUBJECT_WIDTH);
+            OUTPUT(output.toAscii().data() << "\n");
+        }
+    }
+}
+
+QList<QString>
+IncomingMailModel::sendCommand(const QString &cmd) {
+    char buf[1024];
+
+    QString fullcmd ( QString('A') + QString::number(++__counter) +
+                      QString(' ') + cmd + QString('\n') );
+    DEBUG ("sending: " << fullcmd.toAscii().data());
+    m_socket.write(fullcmd.toAscii().data(), fullcmd.length());
+
+    QRegExp donematch(QString("^A") + QString::number(__counter) + QString(" "));
+
+    bool notDone = true;
+    QList<QString> results;
+    while(notDone) {
+        if ( m_socket.bytesAvailable() <= 0 )
+            m_socket.waitForReadyRead();
+
+        int linelength = m_socket.readLine( buf, sizeof( buf ) );
+        if (linelength <= 0) {
+            exit(42); // XXX
+        }
+
+        QString resultString(buf);
+        resultString = resultString.trimmed();
+        results.push_back(resultString);
+        DEBUG( "data: " << resultString.toAscii().data() << "\n");
+
+        if (donematch.indexIn(resultString) != -1) {
+            notDone = false;
+            DEBUG( "end marker found " << donematch.pattern().toAscii().data() << "\n");
+        }
+    }
+    DEBUG( "----\n");
+    return results;
 }
