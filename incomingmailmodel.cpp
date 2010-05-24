@@ -154,7 +154,7 @@ IncomingMailModel::checkMail()
                 }
             }
 
-            m_messages.push_back(MailMsg(date, from, subject));
+            m_messages.push_back(MailMsg(mailBoxes[mbox], date, from, subject));
 
             date.truncate(DATE_WIDTH);
             from.truncate(FROM_WIDTH);
