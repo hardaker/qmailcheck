@@ -14,25 +14,28 @@
 
 // #define DEBUG(x) std::cerr << x;
 #include <iostream>
-#define DEBUG(x) 
 #define OUTPUT(x) std::cerr << x;
+#define DEBUG(x) OUTPUT(x)
 
 IncomingMailModel::IncomingMailModel(QObject *parent) :
     QAbstractTableModel(parent), mailInfo(), m_socket(),
     __counter(0),
-    m_username(HUSER), m_password("doub6good"), m_hostname(HSERVER),
+    m_username(HUSER), m_password("doubgoo6"), m_hostname(HSERVER),
     m_port(HPORT)
 {
     mailInfo.push_back("foo");
 
     mailBoxes.push_back("imap.inbox");
     mailBoxes.push_back("imap.tislabs");
+
+    initializeSocket();
+    checkMail();
 }
 
 int IncomingMailModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return 4;
+    return m_messages.length();
 }
 
 int IncomingMailModel::columnCount(const QModelIndex &parent) const
@@ -43,6 +46,7 @@ int IncomingMailModel::columnCount(const QModelIndex &parent) const
 
 Qt::ItemFlags IncomingMailModel::flags(const QModelIndex &index) const
 {
+    Q_UNUSED(index);
     return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 }
 
@@ -51,10 +55,27 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
     if (!index.isValid() || role != Qt::DisplayRole)
         return QVariant();
 
-    if (index.row() == 1 && index.column() == 1)
-        return QString("fooo bar aoehtuasoehu aoeuntdoeuantdoue oueanthdntdeu\nwhooot\n\n\nto!");
+    if (index.row() > m_messages.length())
+        return QVariant();
 
-    return QString::number(index.row() * index.column());
+    if (index.column() > 4)
+        return QVariant();
+
+    switch(index.column()) {
+
+    case 0:
+        return m_messages[index.row()].date();
+
+    case 1:
+        return m_messages[index.row()].from();
+
+    case 2:
+        return m_messages[index.row()].subject();
+
+    default:
+        return QString("x");
+        
+    }
 }
 
 QVariant IncomingMailModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -84,8 +105,11 @@ IncomingMailModel::initializeSocket()
         char buf[4096];
         int linelength = m_socket.readLine( buf, sizeof( buf ) );
 
+        DEBUG("intial line: " << buf);
+
         // XXX: should check for error
         sendCommand(QString("login ") + m_username + " " + m_password);
+        // XXX: A1 NO [AUTHENTICATIONFAILED] Authentication failed.
     }
 }
 
