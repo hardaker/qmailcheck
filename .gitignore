@@ -1,3 +1,4 @@
 moc_*.cpp
 ui_qtincoming.h
 qmailcheck
+ui_prefs.h
