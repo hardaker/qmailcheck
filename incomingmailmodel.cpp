@@ -43,7 +43,7 @@ int IncomingMailModel::rowCount(const QModelIndex &parent) const
 int IncomingMailModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return 3;
+    return 4;
 }
 
 Qt::ItemFlags IncomingMailModel::flags(const QModelIndex &index) const
@@ -66,12 +66,15 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
     switch(index.column()) {
 
     case 0:
-        return m_messages[index.row()].time();
+        return m_messages[index.row()].folder();
 
     case 1:
-        return m_messages[index.row()].from();
+        return m_messages[index.row()].time();
 
     case 2:
+        return m_messages[index.row()].from();
+
+    case 3:
         return m_messages[index.row()].subject();
 
     default:
