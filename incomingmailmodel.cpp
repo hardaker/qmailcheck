@@ -37,7 +37,8 @@ IncomingMailModel::IncomingMailModel(QObject *parent) :
 int IncomingMailModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return m_messages.length();
+    return 20;
+    //return m_messages.length();
 }
 
 int IncomingMailModel::columnCount(const QModelIndex &parent) const
@@ -57,7 +58,7 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
     if (!index.isValid() || role != Qt::DisplayRole)
         return QVariant();
 
-    if (index.row() > m_messages.length())
+    if (index.row() >= m_messages.length())
         return QVariant();
 
     if (index.column() > 4)
@@ -171,6 +172,8 @@ IncomingMailModel::checkMail()
     }
     emit mailUpdated();
     emit updateCount(oldcount, m_messages.count());
+    if (oldcount < m_messages.count())
+        emit newMail();
     m_statusMessage = QString("%1 messages available").arg(m_messages.count());
     emit statusMessage(m_statusMessage, 0);
 }
