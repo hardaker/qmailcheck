@@ -3,13 +3,14 @@
 #include <QRegExp>
 
 MailMsg::MailMsg() 
-    : m_date(), m_from(), m_subject()
+    : m_folder(), m_date(), m_from(), m_subject()
 {
     setTime();
 }
 
-MailMsg::MailMsg(QString &date, QString &from, QString &subject) 
-    : m_date(date), m_from(from), m_subject(subject)
+MailMsg::MailMsg(QString &folder, QString &date,
+                 QString &from, QString &subject) 
+    : m_folder(folder), m_date(date), m_from(from), m_subject(subject)
 {
     setTime();
 }
@@ -48,6 +49,12 @@ MailMsg::setTime()
     }
 }
 
+void
+MailMsg::setFolder(QString &folder)
+{
+    m_folder = folder;
+}
+
 const QString &
 MailMsg::subject() const
 {
@@ -64,6 +71,12 @@ const QString &
 MailMsg::from() const
 {
     return m_from;
+}
+
+const QString &
+MailMsg::folder() const
+{
+    return m_folder;
 }
 
 const QString &

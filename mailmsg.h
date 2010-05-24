@@ -7,7 +7,7 @@ class MailMsg {
   public:
 
     MailMsg();
-    MailMsg(QString &date, QString &from, QString &subject);
+    MailMsg(QString &folder, QString &date, QString &from, QString &subject);
 
     ~MailMsg();
 
@@ -15,15 +15,18 @@ class MailMsg {
     const QString &from() const;
     const QString &date() const;
     const QString &time() const;
+    const QString &folder() const;
 
     void setSubject(QString &subject);
     void setDate(QString &date);
     void setFrom(QString &from);
+    void setFolder(QString &folder);
 
   protected:
     void setTime();
 
   private:
+    QString m_folder;
     QString m_date;
     QString m_time;
     QString m_from;
