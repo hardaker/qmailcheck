@@ -33,7 +33,6 @@ signals:
 
 public slots:
     void checkMail();
-    void gotUpdated();
 
 private:
     QStringList mailInfo;
