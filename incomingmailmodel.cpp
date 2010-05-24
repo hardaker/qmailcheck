@@ -66,7 +66,7 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
     switch(index.column()) {
 
     case 0:
-        return m_messages[index.row()].date();
+        return m_messages[index.row()].time();
 
     case 1:
         return m_messages[index.row()].from();

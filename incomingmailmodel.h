@@ -6,6 +6,7 @@
 #include <QStringList>
 #include <QtNetwork/QSslSocket>
 #include <QtCore/QTimer>
+#include <QRegExp>
 
 #include "mailmsg.h"
 
