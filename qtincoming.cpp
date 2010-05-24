@@ -10,6 +10,19 @@ QtIncoming::QtIncoming(QWidget *parent) :
     IncomingMailModel *mailModel = new IncomingMailModel(this);
     QTableView *view = ui->mailTable;
     view->setModel(mailModel);
+    connect(mailModel, SIGNAL(mailUpdated()),
+            view, SLOT(resizeRowsToContents()));
+    connect(mailModel, SIGNAL(mailUpdated()),
+            view, SLOT(resizeColumnsToContents()));
+    connect(mailModel, SIGNAL(updateCount(int, int)),
+            view, SLOT(rowCountChanged(int, int)));
+    view->resizeColumnsToContents();
+    view->resizeRowsToContents();
+
+    connect(mailModel, SIGNAL(statusMessage(const QString &, int)),
+            ui->statusBar, SLOT(showMessage(const QString &, int)));
+    connect(ui->checkMail, SIGNAL(clicked()),
+            mailModel, SLOT(checkMail()));
 }
 
 QtIncoming::~QtIncoming()
