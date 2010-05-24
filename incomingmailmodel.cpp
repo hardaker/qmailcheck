@@ -7,7 +7,7 @@
 #define HPORT   993
 #define HUSER   "hardaker"
 #define HPATH   "INBOX"
-#define CHECKEVERY 60*1000
+#define CHECKEVERY 10*1000
 
 #define DATE_WIDTH    5
 #define FROM_WIDTH    20
@@ -22,7 +22,7 @@ IncomingMailModel::IncomingMailModel(QObject *parent) :
     QAbstractTableModel(parent), mailInfo(), m_socket(),
     __counter(0),
     m_username(HUSER), m_password("tmppassw"), m_hostname(HSERVER),
-    m_port(HPORT), m_timer()
+    m_port(HPORT), m_timer(), m_statusMessage()
 {
     mailInfo.push_back("foo");
 
@@ -43,7 +43,7 @@ int IncomingMailModel::rowCount(const QModelIndex &parent) const
 int IncomingMailModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return 4;
+    return 3;
 }
 
 Qt::ItemFlags IncomingMailModel::flags(const QModelIndex &index) const
@@ -123,6 +123,7 @@ void
 IncomingMailModel::checkMail()
 {
     
+    int oldcount = m_messages.count();
     m_messages.clear();
 
     QList<QString> results;
@@ -166,6 +167,9 @@ IncomingMailModel::checkMail()
         }
     }
     emit mailUpdated();
+    emit updateCount(oldcount, m_messages.count());
+    m_statusMessage = QString("%1 messages available").arg(m_messages.count());
+    emit statusMessage(m_statusMessage, 0);
 }
 
 QList<QString>
@@ -218,6 +222,5 @@ IncomingMailModel::gotUpdated()
 {
     OUTPUT("\n\nhere\n\n");
 }
-
 
 #include "moc_incomingmailmodel.cpp"

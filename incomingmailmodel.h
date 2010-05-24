@@ -26,6 +26,8 @@ public:
 
 signals:
     void mailUpdated();
+    void updateCount(int from, int to);
+    void statusMessage(QString &message, int timeout);
 
 public slots:
     void checkMail();
@@ -45,6 +47,8 @@ private:
     int m_port;
     
     QTimer m_timer;
+
+    QString m_statusMessage;
 };
 
 #endif // INCOMINGMAILMODEL_H
