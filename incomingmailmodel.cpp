@@ -219,14 +219,7 @@ IncomingMailModel::setupTimer()
 {
     m_timer.stop();
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(checkMail()));
-    connect(this, SIGNAL(mailUpdated()), this, SLOT(gotUpdated()));
     m_timer.start(CHECKEVERY);
-}
-
-void
-IncomingMailModel::gotUpdated()
-{
-    OUTPUT("\n\nhere\n\n");
 }
 
 #include "moc_incomingmailmodel.cpp"
