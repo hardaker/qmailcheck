@@ -7,6 +7,7 @@
 #define HPORT   993
 #define HUSER   "hardaker"
 #define HPATH   "INBOX"
+#define CHECKEVERY 60*1000
 
 #define DATE_WIDTH    5
 #define FROM_WIDTH    20
@@ -21,7 +22,7 @@ IncomingMailModel::IncomingMailModel(QObject *parent) :
     QAbstractTableModel(parent), mailInfo(), m_socket(),
     __counter(0),
     m_username(HUSER), m_password("doubgoo6"), m_hostname(HSERVER),
-    m_port(HPORT)
+    m_port(HPORT), m_timer()
 {
     mailInfo.push_back("foo");
 
@@ -29,6 +30,7 @@ IncomingMailModel::IncomingMailModel(QObject *parent) :
     mailBoxes.push_back("imap.tislabs");
 
     initializeSocket();
+    setupTimer();
     checkMail();
 }
 
@@ -80,6 +82,10 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
 
 QVariant IncomingMailModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+    Q_UNUSED(section);
+    Q_UNUSED(orientation);
+    Q_UNUSED(role);
+    
 #if 0
     if (role == Qt::SizeHintRole)
         return QSize(1,1);
@@ -117,15 +123,6 @@ void
 IncomingMailModel::checkMail()
 {
     
-    int serverh;
-    int ret;
-
-    const char * cache_directory;
-    const char * flags_directory;
-    int connecth;
-    int i, msgnum;
-    char buf[1024];
-
     m_messages.clear();
 
     QList<QString> results;
@@ -168,6 +165,7 @@ IncomingMailModel::checkMail()
             OUTPUT(output.toAscii().data() << "\n");
         }
     }
+    emit mailUpdated();
 }
 
 QList<QString>
@@ -205,3 +203,21 @@ IncomingMailModel::sendCommand(const QString &cmd) {
     DEBUG( "----\n");
     return results;
 }
+
+void
+IncomingMailModel::setupTimer()
+{
+    m_timer.stop();
+    connect(&m_timer, SIGNAL(timeout()), this, SLOT(checkMail()));
+    connect(this, SIGNAL(mailUpdated()), this, SLOT(gotUpdated()));
+    m_timer.start(CHECKEVERY);
+}
+
+void
+IncomingMailModel::gotUpdated()
+{
+    OUTPUT("\n\nhere\n\n");
+}
+
+
+#include "moc_incomingmailmodel.cpp"

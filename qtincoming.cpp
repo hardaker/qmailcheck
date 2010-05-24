@@ -28,3 +28,5 @@ void QtIncoming::changeEvent(QEvent *e)
         break;
     }
 }
+
+#include "moc_qtincoming.cpp"
