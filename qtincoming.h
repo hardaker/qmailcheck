@@ -13,6 +13,9 @@ public:
     QtIncoming(QWidget *parent = 0);
     ~QtIncoming();
 
+public slots:
+    void maybeRaise();
+
 protected:
     void changeEvent(QEvent *e);
 
