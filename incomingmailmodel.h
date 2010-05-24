@@ -27,6 +27,7 @@ public:
 
 signals:
     void mailUpdated();
+    void newMail();
     void updateCount(int from, int to);
     void statusMessage(const QString &message, int timeout);
 

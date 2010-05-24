@@ -23,7 +23,7 @@ QtIncoming::QtIncoming(QWidget *parent) :
             ui->statusBar, SLOT(showMessage(const QString &, int)));
     connect(ui->checkMail, SIGNAL(clicked()),
             mailModel, SLOT(checkMail()));
-    connect(mailModel, SIGNAL(mailUpdated()),
+    connect(mailModel, SIGNAL(newMail()),
             this, SLOT(maybeRaise()));
 }
 
