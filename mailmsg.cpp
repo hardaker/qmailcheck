@@ -3,14 +3,15 @@
 #include <QRegExp>
 
 MailMsg::MailMsg() 
-    : m_folder(), m_date(), m_from(), m_subject()
+    : m_folder(), m_date(), m_from(), m_subject(), m_uid(), m_isnew(false)
 {
     setTime();
 }
 
-MailMsg::MailMsg(QString &folder, QString &date,
-                 QString &from, QString &subject) 
-    : m_folder(folder), m_date(date), m_from(from), m_subject(subject)
+MailMsg::MailMsg(const QString &uid, const QString &folder, const QString &date,
+                 const QString &from, const QString &subject) 
+    : m_folder(folder), m_date(date), m_from(from),
+      m_subject(subject), m_uid(uid), m_isnew(false)
 {
     setTime();
 }
@@ -55,6 +56,18 @@ MailMsg::setFolder(QString &folder)
     m_folder = folder;
 }
 
+void
+MailMsg::setUid(QString &uid)
+{
+    m_uid = uid;
+}
+
+void
+MailMsg::setIsNew(bool isnew)
+{
+    m_isnew = isnew;
+}
+
 const QString &
 MailMsg::subject() const
 {
@@ -77,6 +90,18 @@ const QString &
 MailMsg::folder() const
 {
     return m_folder;
+}
+
+const QString &
+MailMsg::uid() const
+{
+    return m_uid;
+}
+
+bool
+MailMsg::isnew() const
+{
+    return m_isnew;
 }
 
 const QString &

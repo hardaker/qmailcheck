@@ -43,7 +43,18 @@ Qt::ItemFlags IncomingMailModel::flags(const QModelIndex &index) const
 
 QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid() || role != Qt::DisplayRole)
+    if (!index.isValid())
+        return QVariant();
+
+    if (role == Qt::BackgroundRole && index.column() < 4 &&
+        index.row() < m_messages.count()) {
+        if (m_messages[index.row()].isnew())
+            return QColor(128,255,255);
+        else
+            return QVariant();
+    }
+
+    if (role != Qt::DisplayRole)
         return QVariant();
 
     if (index.row() >= m_messages.length())
@@ -142,6 +153,11 @@ IncomingMailModel::checkMail()
             return;
     }
 
+    QList<QString> uid_list;
+    for(int i = 0; i < m_messages.count(); i++) {
+        uid_list.push_back(m_messages[i].uid());
+    }
+
     int oldcount = m_messages.count();
     m_messages.clear();
 
@@ -149,6 +165,7 @@ IncomingMailModel::checkMail()
     QRegExp subjectMatch("Subject: +(.*)");
     QRegExp fromMatch("From: +(.*)");
     QRegExp dateMatch("Date: +(.*)");
+    bool containsNewMessages = false;
 
     for(int mbox = 0; mbox < folderList->count(); mbox++) {
 
@@ -173,7 +190,12 @@ IncomingMailModel::checkMail()
                 }
             }
 
-            m_messages.push_back(MailMsg(folderList->folderName(mbox), date, from, subject));
+            MailMsg message(msglist[i], folderList->folderName(mbox), date, from, subject);
+            if (! uid_list.contains(msglist[i])) {
+                message.setIsNew(true);
+                containsNewMessages = true;
+            }
+            m_messages.push_back(message);
 
             date.truncate(DATE_WIDTH);
             from.truncate(FROM_WIDTH);
@@ -187,7 +209,7 @@ IncomingMailModel::checkMail()
     }
     emit mailUpdated();
     emit updateCount(oldcount, m_messages.count());
-    if (oldcount < m_messages.count())
+    if (containsNewMessages)
         emit newMail();
     m_statusMessage = QString("%1 messages available").arg(m_messages.count());
     emit statusMessage(m_statusMessage, 0);
@@ -218,11 +240,11 @@ IncomingMailModel::sendCommand(const QString &cmd) {
         QString resultString(buf);
         resultString = resultString.trimmed();
         results.push_back(resultString);
-        DEBUG( "data: " << resultString.toAscii().data() << "\n");
+        // DEBUG( "data: " << resultString.toAscii().data() << "\n");
 
         if (donematch.indexIn(resultString) != -1) {
             notDone = false;
-            DEBUG( "end marker found " << donematch.pattern().toAscii().data() << "\n");
+            // DEBUG( "end marker found " << donematch.pattern().toAscii().data() << "\n");
         }
     }
     DEBUG( "----\n");
