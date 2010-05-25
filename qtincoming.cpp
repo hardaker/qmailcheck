@@ -103,6 +103,7 @@ void QtIncoming::changedSettings()
     saveSettings();
     readSettings();
     mailModel->checkMail();
+    this->repaint();
 //    prefDialog = 0;
 }
 
