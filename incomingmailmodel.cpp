@@ -24,7 +24,6 @@ IncomingMailModel::IncomingMailModel(QObject *parent) :
     mailBoxes.push_back("imap.tislabs");
 
     initializeSocket();
-    setupTimer();
     checkMail();
 }
 
@@ -128,6 +127,8 @@ IncomingMailModel::initializeSocket()
         // XXX: should check for error
         sendCommand(QString("login ") + m_username + " " + m_password);
         // XXX: A1 NO [AUTHENTICATIONFAILED] Authentication failed.
+
+        setupTimer();
     }
 }
 
@@ -135,6 +136,8 @@ void
 IncomingMailModel::checkMail()
 {
     
+    DEBUG("Attempting to check mail...\n");
+
     if (! m_socket.isOpen()) {
         initializeSocket();
         if (! m_socket.isOpen())
@@ -233,7 +236,7 @@ IncomingMailModel::setupTimer()
 {
     m_timer.stop();
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(checkMail()));
-    m_timer.start(m_checkinterval);
+    m_timer.start(m_checkinterval * 1000);
 }
 
 void IncomingMailModel::set_hostname(QString hostname) {

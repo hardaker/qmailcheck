@@ -9,7 +9,8 @@
 
 QtIncoming::QtIncoming(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::QtIncoming), prefui(new Ui::PrefWindow()), do_popup(true)
+    ui(new Ui::QtIncoming), prefui(new Ui::PrefWindow()), prefDialog(0),
+    do_popup(true)
 {
     ui->setupUi(this);
     mailModel = new IncomingMailModel(this);
@@ -116,10 +117,10 @@ void QtIncoming::readSettings()
     mailModel->set_hostname(QString(settings.value("serverName").toString()));
 
     prefui->password->setText(settings.value("password").toString());
-    mailModel->set_hostname(settings.value("password").toString());
+    mailModel->set_password(settings.value("password").toString());
 
     prefui->userName->setText(settings.value("username").toString());
-    mailModel->set_hostname(settings.value("username").toString());
+    mailModel->set_username(settings.value("username").toString());
 
     prefui->serverPort->setText(settings.value("serverPort").toString());
     mailModel->set_portnumber(settings.value("serverPort").toInt());
