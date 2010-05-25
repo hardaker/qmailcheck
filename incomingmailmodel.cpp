@@ -42,8 +42,10 @@ void IncomingMailModel::clearNew()
 
 Qt::ItemFlags IncomingMailModel::flags(const QModelIndex &index) const
 {
-    Q_UNUSED(index);
-    return QAbstractItemModel::flags(index) | Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+    if (!index.isValid())
+        return Qt::ItemIsEnabled;
+    
+    return QAbstractItemModel::flags(index) | Qt::ItemIsEnabled;
 }
 
 QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
