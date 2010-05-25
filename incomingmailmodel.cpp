@@ -56,6 +56,14 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
         // QColor(128,255,255);n
         // return QApplication::palette().colorGroup(QPalette::Highlight);
         if (m_messages[index.row()].isnew())
+            return QApplication::palette().highlight();
+        else
+            return QVariant();
+    }
+
+    if (role == Qt::ForegroundRole && index.column() < 4 &&
+        index.row() < m_messages.count()) {
+        if (m_messages[index.row()].isnew())
             return QApplication::palette().highlightedText();
         else
             return QVariant();
