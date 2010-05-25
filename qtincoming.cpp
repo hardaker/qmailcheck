@@ -2,6 +2,7 @@
 #include "ui_qtincoming.h"
 #include "ui_prefs.h"
 #include "incomingmailmodel.h"
+#include "foldermodel.h"
 #include <QSettings>
 
 #include <iostream>
@@ -9,13 +10,17 @@
 
 QtIncoming::QtIncoming(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::QtIncoming), prefui(new Ui::PrefWindow()), prefDialog(0),
+    ui(new Ui::QtIncoming), prefui(new Ui::PrefWindow), prefDialog(0),
     do_popup(true)
 {
     ui->setupUi(this);
+
     mailModel = new IncomingMailModel(this);
     QTableView *view = ui->mailTable;
     view->setModel(mailModel);
+
+    folderListModel = new folderModel(this);
+
     connect(mailModel, SIGNAL(mailUpdated()),
             view, SLOT(resizeRowsToContents()));
     connect(mailModel, SIGNAL(mailUpdated()),
@@ -67,6 +72,8 @@ void QtIncoming::showPrefs()
     
     prefui->setupUi(prefDialog = new QDialog());
     readSettings();
+    QTableView *view = prefui->folderList;
+    view->setModel(folderListModel);
     prefDialog->show();
     connect(prefui->buttonBox, SIGNAL(accepted()),
             this, SLOT(changedSettings()));

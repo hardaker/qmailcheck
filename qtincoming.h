@@ -4,9 +4,11 @@
 #include <QMainWindow>
 #include "ui_prefs.h"
 #include "incomingmailmodel.h"
+#include "foldermodel.h"
 
 namespace Ui {
     class QtIncoming;
+    class PrefWindow;
 }
 
 class QtIncoming : public QMainWindow {
@@ -32,6 +34,7 @@ private:
     Ui::PrefWindow    *prefui;
     QDialog           *prefDialog;
     IncomingMailModel *mailModel;
+    folderModel       *folderListModel;
     bool               do_popup;
 };
 
