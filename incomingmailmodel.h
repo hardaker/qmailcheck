@@ -9,6 +9,7 @@
 #include <QRegExp>
 
 #include "mailmsg.h"
+#include "foldermodel.h"
 #include "ui_prefs.h"
 
 class IncomingMailModel : public QAbstractTableModel
@@ -34,6 +35,8 @@ public:
     void set_portnumber(int portnumber);
     void set_checkinterval(int interval);
 
+    void set_folderList(folderModel *list);
+
 signals:
     void mailUpdated();
     void newMail();
@@ -44,10 +47,9 @@ public slots:
     void checkMail();
 
 private:
-    QStringList mailInfo;
     QSslSocket m_socket;
     int __counter;
-    QStringList mailBoxes;
+    folderModel *folderList;
 
     QList<MailMsg> m_messages;
 

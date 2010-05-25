@@ -13,16 +13,11 @@
 #define DEBUG(x) OUTPUT(x)
 
 IncomingMailModel::IncomingMailModel(QObject *parent) :
-    QAbstractTableModel(parent), mailInfo(), m_socket(),
-    __counter(0),
+    QAbstractTableModel(parent), m_socket(),
+    __counter(0), folderList(0),
     m_username(), m_password(), m_hostname(),
     m_portnumber(993), m_timer(), m_checkinterval(600), m_statusMessage()
 {
-    mailInfo.push_back("foo");
-
-    mailBoxes.push_back("imap.inbox");
-    mailBoxes.push_back("imap.tislabs");
-
     initializeSocket();
     checkMail();
 }
@@ -138,6 +133,9 @@ IncomingMailModel::checkMail()
     
     DEBUG("Attempting to check mail...\n");
 
+    if (!folderList || folderList->count() == 0)
+        return;
+
     if (! m_socket.isOpen()) {
         initializeSocket();
         if (! m_socket.isOpen())
@@ -152,11 +150,11 @@ IncomingMailModel::checkMail()
     QRegExp fromMatch("From: +(.*)");
     QRegExp dateMatch("Date: +(.*)");
 
-    for(int mbox = 0; mbox < mailBoxes.length(); mbox++) {
+    for(int mbox = 0; mbox < folderList->count(); mbox++) {
 
-        DEBUG("---- " << mailBoxes[mbox].toAscii().data() << " ------\n");
+        DEBUG("---- " << folderList->folderName(mbox).toAscii().data() << " ------\n");
 
-        sendCommand(QString("EXAMINE \"" + mailBoxes[mbox] + "\""));
+        sendCommand(QString("EXAMINE \"" + folderList->folderName(mbox) + "\""));
 
         results = sendCommand(QString("SEARCH RECENT"));
         QStringList msglist = results[0].split(' ');
@@ -175,7 +173,7 @@ IncomingMailModel::checkMail()
                 }
             }
 
-            m_messages.push_back(MailMsg(mailBoxes[mbox], date, from, subject));
+            m_messages.push_back(MailMsg(folderList->folderName(mbox), date, from, subject));
 
             date.truncate(DATE_WIDTH);
             from.truncate(FROM_WIDTH);
@@ -259,5 +257,9 @@ void IncomingMailModel::set_checkinterval(int checkinterval) {
     m_checkinterval = checkinterval;
 }
 
+void IncomingMailModel::set_folderList(folderModel *list) 
+{
+    folderList = list;
+}
 
 #include "moc_incomingmailmodel.cpp"

@@ -20,6 +20,7 @@ QtIncoming::QtIncoming(QWidget *parent) :
     view->setModel(mailModel);
 
     folderListModel = new folderModel(this);
+    mailModel->set_folderList(folderListModel);
 
     connect(mailModel, SIGNAL(mailUpdated()),
             view, SLOT(resizeRowsToContents()));
