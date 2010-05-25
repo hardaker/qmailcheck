@@ -181,6 +181,9 @@ IncomingMailModel::checkMail()
 
     for(int mbox = 0; mbox < folderList->count(); mbox++) {
 
+        if (folderList->folderName(mbox) == "")
+            continue;
+
         DEBUG("---- " << folderList->folderName(mbox).toAscii().data() << " ------\n");
 
         sendCommand(QString("EXAMINE \"" + folderList->folderName(mbox) + "\""));
