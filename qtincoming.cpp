@@ -10,7 +10,8 @@
 
 QtIncoming::QtIncoming(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::QtIncoming), prefui(new Ui::PrefWindow), prefDialog(0),
+    ui(new Ui::QtIncoming), prefui(new Ui::PrefWindow),
+    prefDialog(new QDialog()),
     do_popup(true)
 {
     ui->setupUi(this);
@@ -35,16 +36,35 @@ QtIncoming::QtIncoming(QWidget *parent) :
     view->resizeColumnsToContents();
     view->resizeRowsToContents();
 
+    // signals from the mailbox
     connect(mailModel, SIGNAL(statusMessage(const QString &, int)),
             ui->statusBar, SLOT(showMessage(const QString &, int)));
-    connect(ui->checkMail, SIGNAL(clicked()),
-            mailModel, SLOT(checkMail()));
     connect(mailModel, SIGNAL(newMail()),
             this, SLOT(maybeRaise()));
+
+    // signals from the buttons
+    connect(ui->checkMail, SIGNAL(clicked()),
+            mailModel, SLOT(checkMail()));
+    connect(ui->acknowledge, SIGNAL(clicked()),
+            mailModel, SLOT(clearNew()));
+    connect(ui->preferences, SIGNAL(clicked()),
+            this, SLOT(showPrefs()));
 
     connect(ui->actionPreferences, SIGNAL(activated()),
             this, SLOT(showPrefs()));
 
+    prefui->setupUi(prefDialog);
+    readSettings();
+    view = prefui->folderList;
+    view->setModel(folderListModel);
+    //prefDialog->show();
+    connect(prefui->buttonBox, SIGNAL(accepted()),
+            this, SLOT(changedSettings()));
+    connect(prefui->buttonBox, SIGNAL(rejected()),
+            this, SLOT(cancelled()));
+
+    // readSettings();
+    mailModel->checkMail();
 }
 
 QtIncoming::~QtIncoming()
@@ -75,15 +95,6 @@ void QtIncoming::showPrefs()
     if (prefDialog)
         prefDialog->show();
     
-    prefui->setupUi(prefDialog = new QDialog());
-    readSettings();
-    QTableView *view = prefui->folderList;
-    view->setModel(folderListModel);
-    prefDialog->show();
-    connect(prefui->buttonBox, SIGNAL(accepted()),
-            this, SLOT(changedSettings()));
-    connect(prefui->buttonBox, SIGNAL(rejected()),
-            this, SLOT(cancelled()));
 }
 
 void QtIncoming::changedSettings()
@@ -92,13 +103,13 @@ void QtIncoming::changedSettings()
     saveSettings();
     readSettings();
     mailModel->checkMail();
-    prefDialog = 0;
+//    prefDialog = 0;
 }
 
 void QtIncoming::cancelled() 
 {
     DEBUG("settings cancelled\n");
-    prefDialog = 0;
+    // prefDialog = 0;
 }
 
 void QtIncoming::saveSettings()

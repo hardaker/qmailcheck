@@ -28,11 +28,42 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QPushButton" name="checkMail">
-      <property name="text">
-       <string>CheckMail</string>
-      </property>
-     </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QToolButton" name="preferences">
+        <property name="text">
+         <string>Preferences</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="checkMail">
+        <property name="text">
+         <string>CheckMail</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="acknowledge">
+        <property name="text">
+         <string>Acknowledge</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
     </item>
     <item>
      <widget class="QTableView" name="mailTable">
