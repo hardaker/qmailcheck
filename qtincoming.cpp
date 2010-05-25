@@ -18,6 +18,10 @@ QtIncoming::QtIncoming(QWidget *parent) :
     mailModel = new IncomingMailModel(this);
     QTableView *view = ui->mailTable;
     view->setModel(mailModel);
+    view->setWordWrap(false);
+    for(int i = 0; i < 20; i++) {
+        view->setRowHeight(i, 1);
+    }
 
     folderListModel = new folderModel(this);
     mailModel->set_folderList(folderListModel);
@@ -87,6 +91,7 @@ void QtIncoming::changedSettings()
     DEBUG("settings changed!\n");
     saveSettings();
     readSettings();
+    mailModel->checkMail();
     prefDialog = 0;
 }
 
@@ -105,6 +110,7 @@ void QtIncoming::saveSettings()
     settings.setValue("serverPort", prefui->serverPort->text());
     settings.setValue("userName", prefui->userName->text());
     settings.setValue("password", prefui->password->text());
+    folderListModel->saveSettings(settings);
 }
 
 void QtIncoming::readSettings()
@@ -132,6 +138,8 @@ void QtIncoming::readSettings()
 
     prefui->serverPort->setText(settings.value("serverPort").toString());
     mailModel->set_portnumber(settings.value("serverPort").toInt());
+
+    folderListModel->readSettings(settings);
 
     mailModel->reInitializeSocket();
 }
