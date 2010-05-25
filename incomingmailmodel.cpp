@@ -3,12 +3,6 @@
 #include <QtGui/QLabel>
 #include <QtNetwork/QSslSocket>
 
-#define HSERVER "mail.hardakers.net"
-#define HPORT   993
-#define HUSER   "hardaker"
-#define HPATH   "INBOX"
-#define CHECKEVERY 10*1000
-
 #define DATE_WIDTH    5
 #define FROM_WIDTH    20
 #define SUBJECT_WIDTH 48
@@ -21,8 +15,8 @@
 IncomingMailModel::IncomingMailModel(QObject *parent) :
     QAbstractTableModel(parent), mailInfo(), m_socket(),
     __counter(0),
-    m_username(HUSER), m_password("doubgoo6"), m_hostname(HSERVER),
-    m_port(HPORT), m_timer(), m_statusMessage()
+    m_username(), m_password(), m_hostname(),
+    m_portnumber(993), m_timer(), m_checkinterval(600), m_statusMessage()
 {
     mailInfo.push_back("foo");
 
@@ -104,11 +98,25 @@ QVariant IncomingMailModel::headerData(int section, Qt::Orientation orientation,
 }
 
 void
+IncomingMailModel::reInitializeSocket()
+{
+    if (!m_socket.isOpen())
+        m_socket.close();
+    initializeSocket();
+}
+
+        
+
+void
 IncomingMailModel::initializeSocket()
 {
-    if (!m_socket.isOpen()) {
+    if (!m_socket.isOpen() && m_username != "" && m_password != "" &&
+        m_hostname != "" && m_portnumber != 0) {
+
+        DEBUG("Opening Connection\n");
+
         m_socket.setPeerVerifyMode(QSslSocket::VerifyNone);
-        m_socket.connectToHostEncrypted(HSERVER, HPORT);
+        m_socket.connectToHostEncrypted(m_hostname, m_portnumber);
         m_socket.waitForReadyRead();
 
         // read throw-away line info
@@ -127,6 +135,12 @@ void
 IncomingMailModel::checkMail()
 {
     
+    if (! m_socket.isOpen()) {
+        initializeSocket();
+        if (! m_socket.isOpen())
+            return;
+    }
+
     int oldcount = m_messages.count();
     m_messages.clear();
 
@@ -137,7 +151,7 @@ IncomingMailModel::checkMail()
 
     for(int mbox = 0; mbox < mailBoxes.length(); mbox++) {
 
-        OUTPUT("---- " << mailBoxes[mbox].toAscii().data() << " ------\n");
+        DEBUG("---- " << mailBoxes[mbox].toAscii().data() << " ------\n");
 
         sendCommand(QString("EXAMINE \"" + mailBoxes[mbox] + "\""));
 
@@ -167,7 +181,7 @@ IncomingMailModel::checkMail()
                 .arg(date, - DATE_WIDTH)
                 .arg(from, - FROM_WIDTH)
                 .arg(subject, - SUBJECT_WIDTH);
-            OUTPUT(output.toAscii().data() << "\n");
+            DEBUG(output.toAscii().data() << "\n");
         }
     }
     emit mailUpdated();
@@ -219,7 +233,28 @@ IncomingMailModel::setupTimer()
 {
     m_timer.stop();
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(checkMail()));
-    m_timer.start(CHECKEVERY);
+    m_timer.start(m_checkinterval);
 }
+
+void IncomingMailModel::set_hostname(QString hostname) {
+    m_hostname = hostname;
+}
+
+void IncomingMailModel::set_username(QString username) {
+    m_username = username;
+}
+
+void IncomingMailModel::set_password(QString password) {
+    m_password = password;
+}
+
+void IncomingMailModel::set_portnumber(int portnumber) {
+    m_portnumber = portnumber;
+}
+
+void IncomingMailModel::set_checkinterval(int checkinterval) {
+    m_checkinterval = checkinterval;
+}
+
 
 #include "moc_incomingmailmodel.cpp"

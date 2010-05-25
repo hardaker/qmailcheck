@@ -2,17 +2,17 @@
 #include "ui_qtincoming.h"
 #include "ui_prefs.h"
 #include "incomingmailmodel.h"
+#include <QSettings>
 
 #include <iostream>
-#define OUTPUT(x) std::cerr << x;
-#define DEBUG(x) OUTPUT(x)
+#define DEBUG(x) std::cerr << x;
 
 QtIncoming::QtIncoming(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::QtIncoming)
+    ui(new Ui::QtIncoming), prefui(new Ui::PrefWindow()), do_popup(true)
 {
     ui->setupUi(this);
-    IncomingMailModel *mailModel = new IncomingMailModel(this);
+    mailModel = new IncomingMailModel(this);
     QTableView *view = ui->mailTable;
     view->setModel(mailModel);
     connect(mailModel, SIGNAL(mailUpdated()),
@@ -55,24 +55,78 @@ void QtIncoming::changeEvent(QEvent *e)
 
 void QtIncoming::maybeRaise()
 {
-    raise();
+    if (do_popup)
+        raise();
 }
 
 void QtIncoming::showPrefs()
 {
-    Ui::PrefWindow *prefui;
-    QDialog *dialog;
+    if (prefDialog)
+        prefDialog->show();
     
-    prefui = new Ui::PrefWindow();
-    prefui->setupUi(dialog = new QDialog());
-    dialog->show();
+    prefui->setupUi(prefDialog = new QDialog());
+    readSettings();
+    prefDialog->show();
     connect(prefui->buttonBox, SIGNAL(accepted()),
             this, SLOT(changedSettings()));
+    connect(prefui->buttonBox, SIGNAL(rejected()),
+            this, SLOT(cancelled()));
 }
 
 void QtIncoming::changedSettings()
 {
-    OUTPUT("changed!\n");
+    DEBUG("settings changed!\n");
+    saveSettings();
+    readSettings();
+    prefDialog = 0;
 }
+
+void QtIncoming::cancelled() 
+{
+    DEBUG("settings cancelled\n");
+    prefDialog = 0;
+}
+
+void QtIncoming::saveSettings()
+{
+    QSettings settings("Wes Hardaker", "qmailcheck");
+    settings.setValue("popupWindow", prefui->popupWindow->isChecked());
+    settings.setValue("checkInterval", prefui->checkMail->text());
+    settings.setValue("serverName", prefui->serverName->text());
+    settings.setValue("serverPort", prefui->serverPort->text());
+    settings.setValue("userName", prefui->userName->text());
+    settings.setValue("password", prefui->password->text());
+}
+
+void QtIncoming::readSettings()
+{
+    QSettings settings("Wes Hardaker", "qmailcheck");
+    if (settings.value("popupWindow").toBool()) {
+        prefui->popupWindow->setCheckState( Qt::Checked );
+        do_popup = true;
+    } else {
+        prefui->popupWindow->setCheckState( Qt::Unchecked );
+        do_popup = false;
+    }
+
+    prefui->checkMail->setText(settings.value("checkInterval").toString());
+    mailModel->set_checkinterval(settings.value("checkInterval").toInt());
+
+    prefui->serverName->setText(settings.value("serverName").toString());
+    mailModel->set_hostname(QString(settings.value("serverName").toString()));
+
+    prefui->password->setText(settings.value("password").toString());
+    mailModel->set_hostname(settings.value("password").toString());
+
+    prefui->userName->setText(settings.value("username").toString());
+    mailModel->set_hostname(settings.value("username").toString());
+
+    prefui->serverPort->setText(settings.value("serverPort").toString());
+    mailModel->set_portnumber(settings.value("serverPort").toInt());
+
+    mailModel->reInitializeSocket();
+}
+
+
 
 #include "moc_qtincoming.cpp"
