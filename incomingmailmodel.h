@@ -9,6 +9,7 @@
 #include <QRegExp>
 
 #include "mailmsg.h"
+#include "ui_prefs.h"
 
 class IncomingMailModel : public QAbstractTableModel
 {
@@ -22,8 +23,16 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
     void initializeSocket();
+    void reInitializeSocket();
+
     void setupTimer();
     QList<QString> sendCommand(const QString &cmd);
+
+    void set_hostname(QString hostname);
+    void set_username(QString username);
+    void set_password(QString password);
+    void set_portnumber(int portnumber);
+    void set_checkinterval(int interval);
 
 signals:
     void mailUpdated();
@@ -45,9 +54,10 @@ private:
     QString m_username;
     QString m_password;
     QString m_hostname;
-    int m_port;
+    int m_portnumber;
     
     QTimer m_timer;
+    int m_checkinterval;
 
     QString m_statusMessage;
 };
