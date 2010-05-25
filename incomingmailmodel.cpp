@@ -188,12 +188,12 @@ IncomingMailModel::checkMail()
 
         sendCommand(QString("EXAMINE \"" + folderList->folderName(mbox) + "\""));
 
-        results = sendCommand(QString("SEARCH RECENT"));
+        results = sendCommand(QString("UID SEARCH RECENT"));
         QStringList msglist = results[0].split(' ');
         for(int i = 2; i < msglist.length(); i++) {
             QString subject, from, date;
             QStringList headers =
-                sendCommand(QString("FETCH " + msglist[i] +
+                sendCommand(QString("UID FETCH " + msglist[i] +
                                     " (FLAGS BODY[HEADER])"));
             for(int j = 0; j < headers.length(); j++) {
                 if (subjectMatch.indexIn(headers[j]) != -1) {
