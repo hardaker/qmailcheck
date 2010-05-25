@@ -11,7 +11,21 @@ folderModel::folderModel(QObject *parent) :
 
 QVariant folderModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid() || role != Qt::DisplayRole)
+    if (!index.isValid())
+        return QVariant();
+
+    if (role == Qt::CheckStateRole &&
+        index.row() < folders.count()) {
+        if (index.column() == 1) {
+            if (folders[index.row()].second)
+                return Qt::Checked;
+            else
+                return Qt::Unchecked;
+        }
+        return QVariant();
+    }
+
+    if (role != Qt::DisplayRole && role != Qt::EditRole)
         return QVariant();
 
     if (index.row() >= folders.length())
@@ -26,7 +40,7 @@ QVariant folderModel::data(const QModelIndex &index, int role) const
         return folders[index.row()].first;
 
     case 1:
-        return folders[index.row()].second;
+        return  folders[index.row()].second;
 
     default:
         return QString("");
@@ -72,18 +86,27 @@ bool folderModel::enablePopup(int row) const
     return folders[row].second;
 }
 
+#include <iostream>
 
 bool folderModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if (index.isValid() && role == Qt::EditRole) {
+    std::cerr << "role: " << role << "\n";
+
+    if (!index.isValid())
+        return false;
+    
+    if (role == Qt::CheckStateRole && index.column() == 1 &&
+        index.row() < folders.count()) {
+        folders[index.row()].second = value.toBool();
+        return true;
+    }
+        
+    if (role == Qt::EditRole) {
         if (index.row() >= folders.count())
             insertRows(folders.count(), index.row()-folders.count()+1, index);
         switch (index.column()) {
         case 0:
             folders[index.row()].first = value.toString();
-            break;
-        case 1:
-            folders[index.row()].second = value.toBool();
             break;
         default:
             return false;
