@@ -43,7 +43,7 @@ int IncomingMailModel::columnCount(const QModelIndex &parent) const
 Qt::ItemFlags IncomingMailModel::flags(const QModelIndex &index) const
 {
     Q_UNUSED(index);
-    return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+    return QAbstractItemModel::flags(index) | Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 }
 
 QVariant IncomingMailModel::data(const QModelIndex &index, int role) const

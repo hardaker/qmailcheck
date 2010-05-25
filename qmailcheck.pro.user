@@ -120,7 +120,7 @@
     <value type="QString">KDE_SESSION_VERSION=4</value>
     <value type="QString">KMIX_PULSEAUDIO_DISABLE=1</value>
     <value type="QString">KONSOLE_DBUS_SERVICE=:1.34</value>
-    <value type="QString">KONSOLE_DBUS_SESSION=/Sessions/1</value>
+    <value type="QString">KONSOLE_DBUS_SESSION=/Sessions/3</value>
     <value type="QString">LANG=C</value>
     <value type="QString">LANGUAGE=</value>
     <value type="QString">LD_LIBRARY_PATH=/usr/lib/qtcreator:</value>
@@ -141,7 +141,7 @@
     <value type="QString">PRINTER=work</value>
     <value type="QString">PROFILEHOME=</value>
     <value type="QString">PULSE_PROP_media.role=none</value>
-    <value type="QString">PULSE_PROP_phonon.streamid={f1add98e-0a79-4da4-b7bf-50d5a115261d}</value>
+    <value type="QString">PULSE_PROP_phonon.streamid={bda40a79-bf37-4550-a115-261dea66cdf3}</value>
     <value type="QString">PWD=/home/hardaker/src/qmailcheck</value>
     <value type="QString">PWSAFE_IGNORE=klipper</value>
     <value type="QString">QTDIR=/usr/lib/qt4</value>
@@ -233,7 +233,7 @@
     <value type="QString">KDE_SESSION_VERSION=4</value>
     <value type="QString">KMIX_PULSEAUDIO_DISABLE=1</value>
     <value type="QString">KONSOLE_DBUS_SERVICE=:1.34</value>
-    <value type="QString">KONSOLE_DBUS_SESSION=/Sessions/1</value>
+    <value type="QString">KONSOLE_DBUS_SESSION=/Sessions/3</value>
     <value type="QString">LANG=C</value>
     <value type="QString">LANGUAGE=</value>
     <value type="QString">LD_LIBRARY_PATH=/usr/lib/qtcreator:</value>
@@ -254,7 +254,7 @@
     <value type="QString">PRINTER=work</value>
     <value type="QString">PROFILEHOME=</value>
     <value type="QString">PULSE_PROP_media.role=none</value>
-    <value type="QString">PULSE_PROP_phonon.streamid={f1add98e-0a79-4da4-b7bf-50d5a115261d}</value>
+    <value type="QString">PULSE_PROP_phonon.streamid={bda40a79-bf37-4550-a115-261dea66cdf3}</value>
     <value type="QString">PWD=/home/hardaker/src/qmailcheck</value>
     <value type="QString">PWSAFE_IGNORE=klipper</value>
     <value type="QString">QTDIR=/usr/lib/qt4</value>

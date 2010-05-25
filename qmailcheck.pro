@@ -7,9 +7,11 @@ TEMPLATE = app
 SOURCES += main.cpp \
     qtincoming.cpp \
     incomingmailmodel.cpp \
-    mailmsg.cpp
+    mailmsg.cpp \
+    foldermodel.cpp
 HEADERS += qtincoming.h \
     incomingmailmodel.h \
-    mailmsg.h
+    mailmsg.h \
+    foldermodel.h
 FORMS += qtincoming.ui \
     prefs.ui
