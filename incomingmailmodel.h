@@ -45,6 +45,7 @@ signals:
 
 public slots:
     void checkMail();
+    void clearNew();
 
 private:
     QSslSocket m_socket;

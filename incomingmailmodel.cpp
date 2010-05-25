@@ -18,8 +18,6 @@ IncomingMailModel::IncomingMailModel(QObject *parent) :
     m_username(), m_password(), m_hostname(),
     m_portnumber(993), m_timer(), m_checkinterval(600), m_statusMessage()
 {
-    initializeSocket();
-    checkMail();
 }
 
 int IncomingMailModel::rowCount(const QModelIndex &parent) const
@@ -33,6 +31,13 @@ int IncomingMailModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return 4;
+}
+
+void IncomingMailModel::clearNew()
+{
+    for(int i = 0; i < m_messages.count(); i++) {
+        m_messages[i].setIsNew(false);
+    }
 }
 
 Qt::ItemFlags IncomingMailModel::flags(const QModelIndex &index) const
@@ -144,18 +149,25 @@ IncomingMailModel::checkMail()
     
     DEBUG("Attempting to check mail...\n");
 
-    if (!folderList || folderList->count() == 0)
+    if (!folderList || folderList->count() == 0) {
+        if (!folderList) {
+            DEBUG("no folder list\n");
+        } else {
+            DEBUG("folder list empty\n");
+        }
         return;
+    }
 
     if (! m_socket.isOpen()) {
+        DEBUG("socket not open\n");
         initializeSocket();
         if (! m_socket.isOpen())
             return;
     }
 
-    QList<QString> uid_list;
+    QMap<QString, bool> uid_list;
     for(int i = 0; i < m_messages.count(); i++) {
-        uid_list.push_back(m_messages[i].uid());
+        uid_list.insert(m_messages[i].uid(), m_messages[i].isnew());
     }
 
     int oldcount = m_messages.count();
@@ -194,7 +206,10 @@ IncomingMailModel::checkMail()
             if (! uid_list.contains(msglist[i])) {
                 message.setIsNew(true);
                 containsNewMessages = true;
+            } else {
+                message.setIsNew(uid_list[msglist[i]]);
             }
+            
             m_messages.push_back(message);
 
             date.truncate(DATE_WIDTH);
