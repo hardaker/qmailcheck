@@ -47,6 +47,8 @@ signals:
 public slots:
     void checkMail();
     void clearNew();
+    void hideMessages();
+    void clearHideList();
 
 private:
     QSslSocket m_socket;
@@ -54,6 +56,7 @@ private:
     folderModel *folderList;
 
     QList<MailMsg> m_messages;
+    QList<QString> m_hideList;
 
     QString m_username;
     QString m_password;
