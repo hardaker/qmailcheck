@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="Notifications">
       <attribute name="title">
@@ -70,6 +70,13 @@
            </widget>
           </item>
          </layout>
+        </item>
+        <item row="2" column="1">
+         <widget class="QCheckBox" name="criticalNotifications">
+          <property name="text">
+           <string>Mark notifications critical</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>

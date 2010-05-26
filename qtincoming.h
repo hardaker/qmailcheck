@@ -38,6 +38,7 @@ private:
     IncomingMailModel *mailModel;
     folderModel       *folderListModel;
     bool               do_popup;
+    bool               m_notifyCritical;
 };
 
 #endif // QTINCOMING_H
