@@ -113,6 +113,10 @@ void QtIncoming::sendNotification(QString message)
         if (!notify_notification_show(notification, NULL))
             DEBUG("Failed to send notification");
         
+        if (m_notifyCritical)
+            notify_notification_set_urgency(notification,
+                                            NOTIFY_URGENCY_CRITICAL);
+
         /* Clean up the memory */
         g_object_unref(notification);
     } else {
@@ -153,6 +157,7 @@ void QtIncoming::saveSettings()
 {
     QSettings settings("Wes Hardaker", "qmailcheck");
     settings.setValue("popupWindow", prefui->popupWindow->isChecked());
+    settings.setValue("notifyCritical", prefui->criticalNotifications->isChecked());
     settings.setValue("checkInterval", prefui->checkMail->text());
     settings.setValue("serverName", prefui->serverName->text());
     settings.setValue("serverPort", prefui->serverPort->text());
@@ -170,6 +175,14 @@ void QtIncoming::readSettings()
     } else {
         prefui->popupWindow->setCheckState( Qt::Unchecked );
         do_popup = false;
+    }
+
+    if (settings.value("notifyCritical").toBool()) {
+        prefui->criticalNotifications->setCheckState( Qt::Checked );
+        m_notifyCritical = true;
+    } else {
+        prefui->criticalNotifications->setCheckState( Qt::Unchecked );
+        m_notifyCritical = false;
     }
 
     prefui->checkMail->setText(settings.value("checkInterval").toString());
