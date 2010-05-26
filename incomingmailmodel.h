@@ -42,6 +42,7 @@ signals:
     void newMail();
     void updateCount(int from, int to);
     void statusMessage(const QString &message, int timeout);
+    void newMailMessage(const QString newmessage);
 
 public slots:
     void checkMail();
