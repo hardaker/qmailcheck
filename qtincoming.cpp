@@ -59,6 +59,11 @@ QtIncoming::QtIncoming(QWidget *parent) :
     connect(ui->preferences, SIGNAL(clicked()),
             this, SLOT(showPrefs()));
 
+    connect(ui->hideAll, SIGNAL(clicked()),
+            mailModel, SLOT(hideMessages()));
+    connect(ui->unhideAll, SIGNAL(clicked()),
+            mailModel, SLOT(clearHideList()));
+
     connect(ui->actionPreferences, SIGNAL(activated()),
             this, SLOT(showPrefs()));
 

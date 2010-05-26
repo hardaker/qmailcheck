@@ -14,7 +14,7 @@
 
 IncomingMailModel::IncomingMailModel(QObject *parent) :
     QAbstractTableModel(parent), m_socket(),
-    __counter(0), folderList(0),
+    __counter(0), folderList(0), m_messages(), m_hideList(),
     m_username(), m_password(), m_hostname(),
     m_portnumber(993), m_timer(), m_checkinterval(600), m_statusMessage()
 {
@@ -53,19 +53,33 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    if (role == Qt::BackgroundRole && index.column() < 4 &&
-        index.row() < m_messages.count()) {
+    QList<MailMsg>::const_iterator message;
+    QList<MailMsg>::const_iterator stopat = m_messages.end();
+    int findrow = index.row();
+    
+    for(message = m_messages.begin(); message != stopat; ++message) {
+        if (! m_hideList.contains(message->uid()))
+            findrow--;
+        if (findrow == -1)
+            break;
+        if (message == stopat)
+            return QVariant();
+    }
+
+    if (message == stopat)
+        return QVariant();
+
+    if (role == Qt::BackgroundRole && index.column() < 4) {
         // QColor(128,255,255);n
         // return QApplication::palette().colorGroup(QPalette::Highlight);
-        if (m_messages[index.row()].isnew())
+        if (message->isnew())
             return QApplication::palette().highlight();
         else
             return QVariant();
     }
 
-    if (role == Qt::ForegroundRole && index.column() < 4 &&
-        index.row() < m_messages.count()) {
-        if (m_messages[index.row()].isnew())
+    if (role == Qt::ForegroundRole && index.column() < 4) {
+        if (message->isnew())
             return QApplication::palette().highlightedText();
         else
             return QVariant();
@@ -74,25 +88,22 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
     if (role != Qt::DisplayRole)
         return QVariant();
 
-    if (index.row() >= m_messages.length())
-        return QVariant();
-
     if (index.column() > 4)
         return QVariant();
 
     switch(index.column()) {
 
     case 0:
-        return m_messages[index.row()].folder();
+        return message->folder();
 
     case 1:
-        return m_messages[index.row()].time();
+        return message->time();
 
     case 2:
-        return m_messages[index.row()].from();
+        return message->from();
 
     case 3:
-        return m_messages[index.row()].subject();
+        return message->subject();
 
     default:
         return QString("x");
@@ -143,7 +154,7 @@ IncomingMailModel::initializeSocket()
 
         // read throw-away line info
         char buf[4096];
-        int linelength = m_socket.readLine( buf, sizeof( buf ) );
+        m_socket.readLine( buf, sizeof( buf ) );
 
         DEBUG("intial line: " << buf);
 
@@ -313,6 +324,21 @@ void IncomingMailModel::set_checkinterval(int checkinterval) {
 void IncomingMailModel::set_folderList(folderModel *list) 
 {
     folderList = list;
+}
+
+void IncomingMailModel::clearHideList()
+{
+    m_hideList.clear();
+}
+
+void IncomingMailModel::hideMessages()
+{
+    QList<MailMsg>::iterator stopAt = m_messages.end();
+    QList<MailMsg>::iterator message;
+    for(message = m_messages.begin(); message != stopAt; ++message) {
+        if (! m_hideList.contains(message->uid()))
+            m_hideList.push_back(message->uid());
+    }
 }
 
 #include "moc_incomingmailmodel.cpp"
