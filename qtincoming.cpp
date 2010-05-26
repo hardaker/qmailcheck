@@ -106,8 +106,6 @@ void QtIncoming::sendNotification(QString message)
     if (!do_popup)
         return;
 
-    DEBUG("here: " << do_popup << " " << message.toAscii().data() << "\n");
-
     notification = notify_notification_new(name, message.toAscii().data(),
                                            NULL, NULL);
     if (notification) {
@@ -126,7 +124,6 @@ void QtIncoming::maybeRaise()
 {
     if (do_popup)
         raise();
-    sendNotification(QString("test message"));
 }
 
 void QtIncoming::showPrefs()
