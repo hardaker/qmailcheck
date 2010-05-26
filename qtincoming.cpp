@@ -10,6 +10,7 @@
 
 QtIncoming::QtIncoming(QWidget *parent) :
     QMainWindow(parent),
+    mailView(0),
     ui(new Ui::QtIncoming), prefui(new Ui::PrefWindow),
     prefDialog(new QDialog()),
     do_popup(true)
@@ -17,30 +18,32 @@ QtIncoming::QtIncoming(QWidget *parent) :
     ui->setupUi(this);
 
     mailModel = new IncomingMailModel(this);
-    QTableView *view = ui->mailTable;
-    view->setModel(mailModel);
-    view->setWordWrap(false);
+    mailView = ui->mailTable;
+    mailView->setModel(mailModel);
+    mailView->setWordWrap(false);
     for(int i = 0; i < 20; i++) {
-        view->setRowHeight(i, 1);
+        mailView->setRowHeight(i, 1);
     }
 
     folderListModel = new folderModel(this);
     mailModel->set_folderList(folderListModel);
 
     connect(mailModel, SIGNAL(mailUpdated()),
-            view, SLOT(resizeRowsToContents()));
+            mailView, SLOT(resizeRowsToContents()));
     connect(mailModel, SIGNAL(mailUpdated()),
-            view, SLOT(resizeColumnsToContents()));
+            mailView, SLOT(resizeColumnsToContents()));
     connect(mailModel, SIGNAL(updateCount(int, int)),
-            view, SLOT(rowCountChanged(int, int)));
-    view->resizeColumnsToContents();
-    view->resizeRowsToContents();
+            mailView, SLOT(rowCountChanged(int, int)));
+    mailView->resizeColumnsToContents();
+    mailView->resizeRowsToContents();
 
     // signals from the mailbox
     connect(mailModel, SIGNAL(statusMessage(const QString &, int)),
             ui->statusBar, SLOT(showMessage(const QString &, int)));
     connect(mailModel, SIGNAL(newMail()),
             this, SLOT(maybeRaise()));
+    connect(mailModel, SIGNAL(mailUpdated()),
+            mailView, SLOT(repaint()));
 
     // signals from the buttons
     connect(ui->checkMail, SIGNAL(clicked()),
@@ -55,7 +58,7 @@ QtIncoming::QtIncoming(QWidget *parent) :
 
     prefui->setupUi(prefDialog);
     readSettings();
-    view = prefui->folderList;
+    QTableView *view = prefui->folderList;
     view->setModel(folderListModel);
     //prefDialog->show();
     connect(prefui->buttonBox, SIGNAL(accepted()),
