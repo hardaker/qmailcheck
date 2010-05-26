@@ -1,3 +1,5 @@
+#include <libnotify/notify.h>
+
 #include "qtincoming.h"
 #include "ui_qtincoming.h"
 #include "ui_prefs.h"
@@ -15,6 +17,10 @@ QtIncoming::QtIncoming(QWidget *parent) :
     prefDialog(new QDialog()),
     do_popup(true)
 {
+    const char name[] = "qmailcheck";
+
+    notify_init(name);
+
     ui->setupUi(this);
 
     mailModel = new IncomingMailModel(this);
@@ -87,10 +93,30 @@ void QtIncoming::changeEvent(QEvent *e)
     }
 }
 
+void QtIncoming::sendNotification(QString message)
+{
+    const char name[] = "qmailcheck";
+    NotifyNotification *notification;
+
+    notification = notify_notification_new(name, message.toAscii().data(),
+                                           NULL, NULL);
+    if (notification) {
+        // notify_notification_set_timeout(notification, 3000);
+        if (!notify_notification_show(notification, NULL))
+            qDebug("Failed to send notification");
+        
+        /* Clean up the memory */
+        g_object_unref(notification);
+    } else {
+        qDebug("failed to create notification");
+    }
+}
+
 void QtIncoming::maybeRaise()
 {
     if (do_popup)
         raise();
+    sendNotification(QString("test message"));
 }
 
 void QtIncoming::showPrefs()

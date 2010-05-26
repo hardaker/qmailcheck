@@ -25,6 +25,7 @@ public slots:
     void cancelled();
     void saveSettings();
     void readSettings();
+    void sendNotification(QString message);
 
 protected:
     void changeEvent(QEvent *e);

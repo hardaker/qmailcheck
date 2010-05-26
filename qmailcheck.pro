@@ -15,3 +15,6 @@ HEADERS += qtincoming.h \
     foldermodel.h
 FORMS += qtincoming.ui \
     prefs.ui
+CONFIG += link_pkgconfig
+PKGCONFIG += libnotify
+
