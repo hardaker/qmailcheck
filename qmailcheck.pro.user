@@ -85,10 +85,6 @@
     <value type="QString">DISPLAY=:0</value>
     <value type="QString">DISTCC_HOSTS=localhost dawn</value>
     <value type="QString">DRY_RUN=1</value>
-    <value type="QString">DVDCSS_CACHE=/home/hardaker/.dvdcss/</value>
-    <value type="QString">DVDCSS_METHOD=key</value>
-    <value type="QString">DVDCSS_RAW_DEVICE=/dev/rdvd</value>
-    <value type="QString">DVDCSS_VERBOSE=0</value>
     <value type="QString">EDITOR=gnuclient</value>
     <value type="QString">GDMSESSION=kde</value>
     <value type="QString">GDM_KEYBOARD_LAYOUT=us</value>
@@ -140,8 +136,6 @@
     <value type="QString">PERL5LIB=/usr/local/lib/perl5/site_perl/5.10.0/i386-linux-thread-multi:/usr/local/lib/perl5/site_perl/5.10.0:/usr/lib/perl5/vendor_perl/5.10.0/i386-linux-thread-multi:/usr/lib/perl5/vendor_perl/5.10.0</value>
     <value type="QString">PRINTER=work</value>
     <value type="QString">PROFILEHOME=</value>
-    <value type="QString">PULSE_PROP_media.role=none</value>
-    <value type="QString">PULSE_PROP_phonon.streamid={bda40a79-bf37-4550-a115-261dea66cdf3}</value>
     <value type="QString">PWD=/home/hardaker/src/qmailcheck</value>
     <value type="QString">PWSAFE_IGNORE=klipper</value>
     <value type="QString">QTDIR=/usr/lib/qt4</value>
@@ -180,7 +174,7 @@
     <value type="QString">CONFIG+=debug</value>
    </valuelist>
    <value key="abstractProcess.command" type="QString">/usr/bin/qmake-qt4</value>
-   <value key="abstractProcess.enabled" type="bool">false</value>
+   <value key="abstractProcess.enabled" type="bool">true</value>
    <value key="abstractProcess.workingDirectory" type="QString">/home/hardaker/src/qmailcheck</value>
   </valuemap>
  </data>

@@ -30,6 +30,7 @@ protected:
     void changeEvent(QEvent *e);
 
 private:
+    QTableView        *mailView;
     Ui::QtIncoming    *ui;
     Ui::PrefWindow    *prefui;
     QDialog           *prefDialog;
