@@ -126,8 +126,10 @@ void QtIncoming::sendNotification(QString message)
 
 void QtIncoming::maybeRaise()
 {
-    if (do_popup)
+    if (do_popup) {
+        show();
         raise();
+    }
 }
 
 void QtIncoming::showPrefs()
