@@ -30,20 +30,20 @@ QtIncoming::QtIncoming(QWidget *parent) :
     for(int i = 0; i < 20; i++) {
         mailView->setRowHeight(i, 1);
     }
+    mailView->resizeColumnsToContents();
+    mailView->resizeRowsToContents();
 
     folderListModel = new folderModel(this);
     mailModel->set_folderList(folderListModel);
 
+    // signals from the mailbox
     connect(mailModel, SIGNAL(mailUpdated()),
             mailView, SLOT(resizeRowsToContents()));
     connect(mailModel, SIGNAL(mailUpdated()),
             mailView, SLOT(resizeColumnsToContents()));
+
     connect(mailModel, SIGNAL(updateCount(int, int)),
             mailView, SLOT(rowCountChanged(int, int)));
-    mailView->resizeColumnsToContents();
-    mailView->resizeRowsToContents();
-
-    // signals from the mailbox
     connect(mailModel, SIGNAL(statusMessage(const QString &, int)),
             ui->statusBar, SLOT(showMessage(const QString &, int)));
     connect(mailModel, SIGNAL(newMail()),
@@ -62,6 +62,7 @@ QtIncoming::QtIncoming(QWidget *parent) :
     connect(ui->actionPreferences, SIGNAL(activated()),
             this, SLOT(showPrefs()));
 
+    // setup the preferences UI
     prefui->setupUi(prefDialog);
     readSettings();
     QTableView *view = prefui->folderList;
@@ -72,8 +73,12 @@ QtIncoming::QtIncoming(QWidget *parent) :
     connect(prefui->buttonBox, SIGNAL(rejected()),
             this, SLOT(cancelled()));
 
-    // readSettings();
+    // don't do popups for the first mail check
     mailModel->checkMail();
+
+    // connect this after the initial check mail pass
+    connect(mailModel, SIGNAL(newMailMessage(QString)),
+            this, SLOT(sendNotification(QString)));
 }
 
 QtIncoming::~QtIncoming()
@@ -98,17 +103,22 @@ void QtIncoming::sendNotification(QString message)
     const char name[] = "qmailcheck";
     NotifyNotification *notification;
 
+    if (!do_popup)
+        return;
+
+    DEBUG("here: " << do_popup << " " << message.toAscii().data() << "\n");
+
     notification = notify_notification_new(name, message.toAscii().data(),
                                            NULL, NULL);
     if (notification) {
         // notify_notification_set_timeout(notification, 3000);
         if (!notify_notification_show(notification, NULL))
-            qDebug("Failed to send notification");
+            DEBUG("Failed to send notification");
         
         /* Clean up the memory */
         g_object_unref(notification);
     } else {
-        qDebug("failed to create notification");
+        DEBUG("failed to create notification");
     }
 }
 

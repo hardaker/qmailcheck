@@ -196,7 +196,7 @@ IncomingMailModel::checkMail()
         if (folderList->folderName(mbox) == "")
             continue;
 
-        DEBUG("---- " << folderList->folderName(mbox).toAscii().data() << " ------\n");
+        //DEBUG("---- " << folderList->folderName(mbox).toAscii().data() << " ------\n");
 
         sendCommand(QString("EXAMINE \"" + folderList->folderName(mbox) + "\""));
 
@@ -221,6 +221,7 @@ IncomingMailModel::checkMail()
             if (! uid_list.contains(msglist[i])) {
                 message.setIsNew(true);
                 containsNewMessages = true;
+                emit newMailMessage(from + "\n" + subject);
             } else {
                 message.setIsNew(uid_list[msglist[i]]);
             }
@@ -234,7 +235,7 @@ IncomingMailModel::checkMail()
                 .arg(date, - DATE_WIDTH)
                 .arg(from, - FROM_WIDTH)
                 .arg(subject, - SUBJECT_WIDTH);
-            DEBUG(output.toAscii().data() << "\n");
+            //DEBUG(output.toAscii().data() << "\n");
         }
     }
     emit mailUpdated();
@@ -251,7 +252,7 @@ IncomingMailModel::sendCommand(const QString &cmd) {
 
     QString fullcmd ( QString('A') + QString::number(++__counter) +
                       QString(' ') + cmd + QString('\n') );
-    DEBUG ("sending: " << fullcmd.toAscii().data());
+    //DEBUG ("sending: " << fullcmd.toAscii().data());
     m_socket.write(fullcmd.toAscii().data(), fullcmd.length());
 
     QRegExp donematch(QString("^A") + QString::number(__counter) + QString(" "));
@@ -277,7 +278,7 @@ IncomingMailModel::sendCommand(const QString &cmd) {
             // DEBUG( "end marker found " << donematch.pattern().toAscii().data() << "\n");
         }
     }
-    DEBUG( "----\n");
+    //DEBUG( "----\n");
     return results;
 }
 
