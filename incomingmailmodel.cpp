@@ -23,8 +23,8 @@ IncomingMailModel::IncomingMailModel(QObject *parent) :
 int IncomingMailModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return 20;
-    //return m_messages.length();
+    return m_messages.length();
+    //return 20;
 }
 
 int IncomingMailModel::columnCount(const QModelIndex &parent) const
