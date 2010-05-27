@@ -79,25 +79,21 @@
     <value type="QString">COLORFGBG=15;0</value>
     <value type="QString">CVSROOT=/home/hardaker/src/cvsroot</value>
     <value type="QString">CVS_RSH=ssh</value>
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-p5SIRc1jRH,guid=baea5bc8142cc25db806b2d04bfef076</value>
+    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-HHQMtb60l7,guid=ad1268bbdc986e68b11beff44bfa81ce</value>
     <value type="QString">DESKTOP_SESSION=kde</value>
     <value type="QString">DISABLE_IMSETTINGS=1</value>
     <value type="QString">DISPLAY=:0</value>
     <value type="QString">DISTCC_HOSTS=localhost dawn</value>
     <value type="QString">DRY_RUN=1</value>
-    <value type="QString">DVDCSS_CACHE=/home/hardaker/.dvdcss/</value>
-    <value type="QString">DVDCSS_METHOD=key</value>
-    <value type="QString">DVDCSS_RAW_DEVICE=/dev/rdvd</value>
-    <value type="QString">DVDCSS_VERBOSE=0</value>
     <value type="QString">EDITOR=gnuclient</value>
     <value type="QString">GDMSESSION=kde</value>
     <value type="QString">GDM_KEYBOARD_LAYOUT=us</value>
     <value type="QString">GDM_LANG=en_US.UTF-8</value>
-    <value type="QString">GNOME_KEYRING_PID=2524</value>
-    <value type="QString">GNOME_KEYRING_SOCKET=/tmp/keyring-brkbdE/socket</value>
+    <value type="QString">GNOME_KEYRING_PID=2430</value>
+    <value type="QString">GNOME_KEYRING_SOCKET=/tmp/keyring-ZHY1ib/socket</value>
     <value type="QString">GNU_HOST=localhost</value>
     <value type="QString">GNU_SECURE=/home/hardaker/lib/gnu_secure</value>
-    <value type="QString">GPG_AGENT_INFO=/tmp/gpg-2scDFH/S.gpg-agent:2832:1</value>
+    <value type="QString">GPG_AGENT_INFO=/tmp/gpg-Q73c5p/S.gpg-agent:2731:1</value>
     <value type="QString">GROUP=hardaker</value>
     <value type="QString">GS_LIB=</value>
     <value type="QString">GTK2_RC_FILES=/etc/gtk-2.0/gtkrc:/home/hardaker/.gtkrc-2.0::/home/hardaker/.kde/share/config/gtkrc-2.0</value>
@@ -140,8 +136,6 @@
     <value type="QString">PERL5LIB=/usr/local/lib/perl5/site_perl/5.10.0/i386-linux-thread-multi:/usr/local/lib/perl5/site_perl/5.10.0:/usr/lib/perl5/vendor_perl/5.10.0/i386-linux-thread-multi:/usr/lib/perl5/vendor_perl/5.10.0</value>
     <value type="QString">PRINTER=work</value>
     <value type="QString">PROFILEHOME=</value>
-    <value type="QString">PULSE_PROP_media.role=none</value>
-    <value type="QString">PULSE_PROP_phonon.streamid={3faefaa6-b843-4363-9967-f3a5e3308339}</value>
     <value type="QString">PWD=/home/hardaker/src/qmailcheck</value>
     <value type="QString">PWSAFE_IGNORE=klipper</value>
     <value type="QString">QTDIR=/usr/lib/qt4</value>
@@ -151,12 +145,12 @@
     <value type="QString">QT_PLUGIN_PATH=/home/hardaker/.kde/lib/kde4/plugins/:/usr/lib/kde4/plugins/</value>
     <value type="QString">REMOTEHOST=</value>
     <value type="QString">ROGUEOPTS=jump,noseefloor,passgo,terse,flush,tombstone,fruit=guano,name = The Wizard</value>
-    <value type="QString">SESSION_MANAGER=local/unix:@/tmp/.ICE-unix/2920,unix/unix:/tmp/.ICE-unix/2920</value>
+    <value type="QString">SESSION_MANAGER=local/unix:@/tmp/.ICE-unix/2819,unix/unix:/tmp/.ICE-unix/2819</value>
     <value type="QString">SHELL=/bin/tcsh</value>
     <value type="QString">SHLVL=3</value>
-    <value type="QString">SSH_AGENT_PID=2621</value>
+    <value type="QString">SSH_AGENT_PID=2525</value>
     <value type="QString">SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/ssh-ruVNWK2531/agent.2531</value>
+    <value type="QString">SSH_AUTH_SOCK=/tmp/ssh-yrfRwm2438/agent.2438</value>
     <value type="QString">TERM=xterm</value>
     <value type="QString">USER=hardaker</value>
     <value type="QString">USERNAME=hardaker</value>
@@ -168,7 +162,7 @@
     <value type="QString">XCURSOR_THEME=default</value>
     <value type="QString">XDG_DATA_DIRS=/usr/share/kde-settings/kde-profile/default/share:/usr/local/share:/usr/share</value>
     <value type="QString">XDG_MENU_PREFIX=kde4-</value>
-    <value type="QString">XDG_SESSION_COOKIE=c8c4c957f2f8c2d75b6a20e64aa69323-1274998901.615347-1432727776</value>
+    <value type="QString">XDG_SESSION_COOKIE=c8c4c957f2f8c2d75b6a20e64aa69323-1274708429.247362-579929285</value>
     <value type="QString">XMODIFIERS=@im=none</value>
     <value type="QString">XTITLE=wjh</value>
    </valuelist>
@@ -180,7 +174,7 @@
     <value type="QString">CONFIG+=debug</value>
    </valuelist>
    <value key="abstractProcess.command" type="QString">/usr/bin/qmake-qt4</value>
-   <value key="abstractProcess.enabled" type="bool">false</value>
+   <value key="abstractProcess.enabled" type="bool">true</value>
    <value key="abstractProcess.workingDirectory" type="QString">/home/hardaker/src/qmailcheck</value>
   </valuemap>
  </data>
@@ -192,7 +186,7 @@
     <value type="QString">COLORFGBG=15;0</value>
     <value type="QString">CVSROOT=/home/hardaker/src/cvsroot</value>
     <value type="QString">CVS_RSH=ssh</value>
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-p5SIRc1jRH,guid=baea5bc8142cc25db806b2d04bfef076</value>
+    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-HHQMtb60l7,guid=ad1268bbdc986e68b11beff44bfa81ce</value>
     <value type="QString">DESKTOP_SESSION=kde</value>
     <value type="QString">DISABLE_IMSETTINGS=1</value>
     <value type="QString">DISPLAY=:0</value>
@@ -206,11 +200,11 @@
     <value type="QString">GDMSESSION=kde</value>
     <value type="QString">GDM_KEYBOARD_LAYOUT=us</value>
     <value type="QString">GDM_LANG=en_US.UTF-8</value>
-    <value type="QString">GNOME_KEYRING_PID=2524</value>
-    <value type="QString">GNOME_KEYRING_SOCKET=/tmp/keyring-brkbdE/socket</value>
+    <value type="QString">GNOME_KEYRING_PID=2430</value>
+    <value type="QString">GNOME_KEYRING_SOCKET=/tmp/keyring-ZHY1ib/socket</value>
     <value type="QString">GNU_HOST=localhost</value>
     <value type="QString">GNU_SECURE=/home/hardaker/lib/gnu_secure</value>
-    <value type="QString">GPG_AGENT_INFO=/tmp/gpg-2scDFH/S.gpg-agent:2832:1</value>
+    <value type="QString">GPG_AGENT_INFO=/tmp/gpg-Q73c5p/S.gpg-agent:2731:1</value>
     <value type="QString">GROUP=hardaker</value>
     <value type="QString">GS_LIB=</value>
     <value type="QString">GTK2_RC_FILES=/etc/gtk-2.0/gtkrc:/home/hardaker/.gtkrc-2.0::/home/hardaker/.kde/share/config/gtkrc-2.0</value>
@@ -254,7 +248,7 @@
     <value type="QString">PRINTER=work</value>
     <value type="QString">PROFILEHOME=</value>
     <value type="QString">PULSE_PROP_media.role=none</value>
-    <value type="QString">PULSE_PROP_phonon.streamid={3faefaa6-b843-4363-9967-f3a5e3308339}</value>
+    <value type="QString">PULSE_PROP_phonon.streamid={bda40a79-bf37-4550-a115-261dea66cdf3}</value>
     <value type="QString">PWD=/home/hardaker/src/qmailcheck</value>
     <value type="QString">PWSAFE_IGNORE=klipper</value>
     <value type="QString">QTDIR=/usr/lib/qt4</value>
@@ -264,12 +258,12 @@
     <value type="QString">QT_PLUGIN_PATH=/home/hardaker/.kde/lib/kde4/plugins/:/usr/lib/kde4/plugins/</value>
     <value type="QString">REMOTEHOST=</value>
     <value type="QString">ROGUEOPTS=jump,noseefloor,passgo,terse,flush,tombstone,fruit=guano,name = The Wizard</value>
-    <value type="QString">SESSION_MANAGER=local/unix:@/tmp/.ICE-unix/2920,unix/unix:/tmp/.ICE-unix/2920</value>
+    <value type="QString">SESSION_MANAGER=local/unix:@/tmp/.ICE-unix/2819,unix/unix:/tmp/.ICE-unix/2819</value>
     <value type="QString">SHELL=/bin/tcsh</value>
     <value type="QString">SHLVL=3</value>
-    <value type="QString">SSH_AGENT_PID=2621</value>
+    <value type="QString">SSH_AGENT_PID=2525</value>
     <value type="QString">SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/ssh-ruVNWK2531/agent.2531</value>
+    <value type="QString">SSH_AUTH_SOCK=/tmp/ssh-yrfRwm2438/agent.2438</value>
     <value type="QString">TERM=xterm</value>
     <value type="QString">USER=hardaker</value>
     <value type="QString">USERNAME=hardaker</value>
@@ -281,7 +275,7 @@
     <value type="QString">XCURSOR_THEME=default</value>
     <value type="QString">XDG_DATA_DIRS=/usr/share/kde-settings/kde-profile/default/share:/usr/local/share:/usr/share</value>
     <value type="QString">XDG_MENU_PREFIX=kde4-</value>
-    <value type="QString">XDG_SESSION_COOKIE=c8c4c957f2f8c2d75b6a20e64aa69323-1274998901.615347-1432727776</value>
+    <value type="QString">XDG_SESSION_COOKIE=c8c4c957f2f8c2d75b6a20e64aa69323-1274708429.247362-579929285</value>
     <value type="QString">XMODIFIERS=@im=none</value>
     <value type="QString">XTITLE=wjh</value>
    </valuelist>
