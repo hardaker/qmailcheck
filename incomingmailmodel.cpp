@@ -33,13 +33,6 @@ int IncomingMailModel::columnCount(const QModelIndex &parent) const
     return 4;
 }
 
-void IncomingMailModel::clearNew()
-{
-    for(int i = 0; i < m_messages.count(); i++) {
-        m_messages[i].setIsNew(false);
-    }
-}
-
 Qt::ItemFlags IncomingMailModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
@@ -251,8 +244,10 @@ IncomingMailModel::checkMail()
     }
     emit mailUpdated();
     emit updateCount(oldcount, m_messages.count());
-    if (containsNewMessages)
+    if (containsNewMessages) {
         emit newMail();
+        emitChanges();
+    }
     m_statusMessage = QString("%1 messages available").arg(m_messages.count());
     emit statusMessage(m_statusMessage, 0);
 }
@@ -329,6 +324,7 @@ void IncomingMailModel::set_folderList(folderModel *list)
 void IncomingMailModel::clearHideList()
 {
     m_hideList.clear();
+    emitChanges();
 }
 
 void IncomingMailModel::hideMessages()
@@ -339,6 +335,22 @@ void IncomingMailModel::hideMessages()
         if (! m_hideList.contains(message->uid()))
             m_hideList.push_back(message->uid());
     }
+    emitChanges();
+}
+
+void IncomingMailModel::clearNew()
+{
+    for(int i = 0; i < m_messages.count(); i++) {
+        m_messages[i].setIsNew(false);
+    }
+    emitChanges();
+}
+
+void IncomingMailModel::emitChanges()
+{
+    emit dataChanged(createIndex(0,0,0),
+                     createIndex(m_messages.count(),3,0));
+    emit layoutChanged();
 }
 
 #include "moc_incomingmailmodel.cpp"

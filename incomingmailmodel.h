@@ -36,6 +36,7 @@ public:
     void set_checkinterval(int interval);
 
     void set_folderList(folderModel *list);
+    void emitChanges();
 
 signals:
     void mailUpdated();
