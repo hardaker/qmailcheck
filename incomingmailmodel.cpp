@@ -49,6 +49,7 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
     QList<MailMsg>::const_iterator message;
     QList<MailMsg>::const_iterator stopat = m_messages.end();
     int findrow = index.row();
+    QString lastfolder;
     
     for(message = m_messages.begin(); message != stopat; ++message) {
         if (! m_hideList.contains(message->uid()))
@@ -57,6 +58,7 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
             break;
         if (message == stopat)
             return QVariant();
+        lastfolder = message->folder();
     }
 
     if (message == stopat)
@@ -87,6 +89,8 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
     switch(index.column()) {
 
     case 0:
+        if (message->folder() == lastfolder)
+            return QVariant();
         return message->folder();
 
     case 1:
