@@ -41,6 +41,8 @@ QtIncoming::QtIncoming(QWidget *parent) :
             mailView, SLOT(resizeRowsToContents()));
     connect(mailModel, SIGNAL(mailUpdated()),
             mailView, SLOT(resizeColumnsToContents()));
+    connect(mailModel, SIGNAL(mailUpdated()),
+            mailView, SLOT(repaint()));
 
     connect(mailModel, SIGNAL(updateCount(int, int)),
             mailView, SLOT(rowCountChanged(int, int)));
@@ -80,7 +82,8 @@ QtIncoming::QtIncoming(QWidget *parent) :
 
     // don't do popups for the first mail check
     mailModel->checkMail();
-
+    mailModel->clearNew();
+    
     // connect this after the initial check mail pass
     connect(mailModel, SIGNAL(newMailMessage(QString)),
             this, SLOT(sendNotification(QString)));
