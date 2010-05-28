@@ -119,7 +119,7 @@ void QtIncoming::sendNotification(QString message)
     notification = notify_notification_new(name, message.toAscii().data(),
                                            NULL, NULL);
     if (notification) {
-        // notify_notification_set_timeout(notification, 3000);
+        notify_notification_set_timeout(notification, 60000);
         if (!notify_notification_show(notification, NULL))
             DEBUG("Failed to send notification");
         
