@@ -15,7 +15,7 @@ QtIncoming::QtIncoming(QWidget *parent) :
     mailView(0),
     ui(new Ui::QtIncoming), prefui(new Ui::PrefWindow),
     prefDialog(new QDialog()),
-    do_popup(true), m_highlightNew(true)
+    do_popup(true), m_doNotification(true), m_highlightNew(true)
 {
     const char name[] = "qmailcheck";
 
@@ -113,7 +113,7 @@ void QtIncoming::sendNotification(QString message)
     const char name[] = "qmailcheck";
     NotifyNotification *notification;
 
-    if (!do_popup)
+    if (!m_doNotification)
         return;
 
     notification = notify_notification_new(name, message.toAscii().data(),
@@ -165,7 +165,7 @@ void QtIncoming::cancelled()
     // prefDialog = 0;
 }
 
-void QtIncoming::set_doNotification(bool newval)
+void QtIncoming::set_doPopup(bool newval)
 {
     do_popup = newval;
 }
@@ -175,10 +175,16 @@ void QtIncoming::set_highlightNew(bool newval)
     m_highlightNew = newval;
 }
 
+void QtIncoming::set_doNotification(bool newval)
+{
+    m_doNotification = newval;
+}
+
 void QtIncoming::saveSettings()
 {
     QSettings settings("Wes Hardaker", "qmailcheck");
     settings.setValue("popupWindow", prefui->popupWindow->isChecked());
+    settings.setValue("doNotification", prefui->doNotification->isChecked());
     settings.setValue("notifyCritical", prefui->criticalNotifications->isChecked());
     settings.setValue("highlightNew", prefui->highlightNew->isChecked());
     settings.setValue("checkInterval", prefui->checkMail->text());
@@ -198,6 +204,14 @@ void QtIncoming::readSettings()
     } else {
         prefui->popupWindow->setCheckState( Qt::Unchecked );
         do_popup = false;
+    }
+
+    if (settings.value("doNotification").toBool()) {
+        prefui->doNotification->setCheckState( Qt::Checked );
+        m_doNotification = true;
+    } else {
+        prefui->doNotification->setCheckState( Qt::Unchecked );
+        m_doNotification = false;
     }
 
     if (settings.value("notifyCritical").toBool()) {
