@@ -46,8 +46,10 @@ QtIncoming::QtIncoming(QWidget *parent) :
 
     connect(mailModel, SIGNAL(updateCount(int, int)),
             mailView, SLOT(rowCountChanged(int, int)));
+#ifdef USE_STATUSBAR
     connect(mailModel, SIGNAL(statusMessage(const QString &, int)),
             ui->statusBar, SLOT(showMessage(const QString &, int)));
+#endif
     connect(mailModel, SIGNAL(newMail()),
             this, SLOT(maybeRaise()));
     connect(mailModel, SIGNAL(mailUpdated()),
@@ -71,6 +73,9 @@ QtIncoming::QtIncoming(QWidget *parent) :
 
     // setup the preferences UI
     prefui->setupUi(prefDialog);
+#if defined(Q_WS_MAEMO_5) || defined(MAEMO_CHANGES)
+    prefDialog->setAttribute((Qt::WidgetAttribute) 127); // Qt::WA_Maemo5StackedWindow
+#endif
     readSettings();
     QTableView *view = prefui->folderList;
     view->setModel(folderListModel);

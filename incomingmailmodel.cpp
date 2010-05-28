@@ -12,6 +12,14 @@
 #define OUTPUT(x) std::cerr << x;
 #define DEBUG(x) OUTPUT(x)
 
+enum column_list 
+{
+    COL_FOLDER  = 0,
+    COL_DATE    = 1,
+    COL_FROM    = 2,
+    COL_SUBJECT = 3
+};
+
 IncomingMailModel::IncomingMailModel(QObject *parent) :
     QAbstractTableModel(parent), m_socket(),
     __counter(0), folderList(0), m_messages(), m_hideList(),
@@ -68,14 +76,22 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
         // QColor(128,255,255);n
         // return QApplication::palette().colorGroup(QPalette::Highlight);
         if (message->isnew())
+#if defined(Q_WS_MAEMO_5) || defined(MAEMO_CHANGES)
+            return QColor(255,255,255);
+#else
             return QApplication::palette().highlight();
+#endif
         else
             return QVariant();
     }
 
     if (role == Qt::ForegroundRole && index.column() < 4) {
         if (message->isnew())
+#if defined(Q_WS_MAEMO_5) || defined(MAEMO_CHANGES)
+            return QColor(128,128,255);
+#else
             return QApplication::palette().highlightedText();
+#endif
         else
             return QVariant();
     }
@@ -88,18 +104,18 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
 
     switch(index.column()) {
 
-    case 0:
+    case COL_FOLDER:
         if (message->folder() == lastfolder)
             return QVariant();
         return message->folder();
 
-    case 1:
+    case COL_DATE:
         return message->time();
 
-    case 2:
+    case COL_FROM:
         return message->from();
 
-    case 3:
+    case COL_SUBJECT:
         return message->subject();
 
     default:
