@@ -4,6 +4,8 @@
 #include <QAbstractTableModel>
 #include <QSettings>
 
+#include "folderitem.h"
+
 class folderModel : public QAbstractTableModel
 {
 Q_OBJECT
@@ -29,7 +31,7 @@ signals:
 public slots:
 
 private:
-    QList<QPair<QString, bool> > folders;
+    QList<folderItem> folders;
 
 };
 

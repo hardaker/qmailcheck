@@ -1,12 +1,14 @@
 #include "foldermodel.h"
 
+enum folder_columns 
+{
+    COL_FOLDERNAME    = 0,
+    COL_NOTIFICATION  = 1,
+};
+
 folderModel::folderModel(QObject *parent) :
     QAbstractTableModel(parent)
 {
-    folders.push_back(QPair<QString,bool>(QString("imap.inbox"),true));
-    folders.push_back(QPair<QString,bool>(QString(""),true));
-    folders.push_back(QPair<QString,bool>(QString(""),true));
-    folders.push_back(QPair<QString,bool>(QString(""),true));
 }
 
 QVariant folderModel::data(const QModelIndex &index, int role) const
@@ -16,8 +18,8 @@ QVariant folderModel::data(const QModelIndex &index, int role) const
 
     if (role == Qt::CheckStateRole &&
         index.row() < folders.count()) {
-        if (index.column() == 1) {
-            if (folders[index.row()].second)
+        if (index.column() == COL_NOTIFICATION) {
+            if (folders[index.row()].doNotification())
                 return Qt::Checked;
             else
                 return Qt::Unchecked;
@@ -36,11 +38,11 @@ QVariant folderModel::data(const QModelIndex &index, int role) const
 
     switch(index.column()) {
 
-    case 0:
-        return folders[index.row()].first;
+    case COL_FOLDERNAME:
+        return folders[index.row()].folderName();
 
-    case 1:
-        return  folders[index.row()].second;
+    case COL_NOTIFICATION:
+        return  folders[index.row()].doNotification();
 
     default:
         return QString("");
@@ -52,8 +54,8 @@ void folderModel::saveSettings(QSettings &settings)
     settings.beginWriteArray("folderList");
     for(int i = 0; i < folders.count(); ++i) {
         settings.setArrayIndex(i);
-        settings.setValue("folderName", folders[i].first);
-        settings.setValue("folderPopup", folders[i].second);
+        settings.setValue("folderName", folders[i].folderName());
+        settings.setValue("folderPopup", folders[i].doNotification());
     }
     settings.endArray();
 }
@@ -65,8 +67,9 @@ void folderModel::readSettings(QSettings &settings)
     for(int i = 0; i < size; ++i) {
         settings.setArrayIndex(i);
         folders.push_back(
-            QPair<QString, bool>(settings.value("folderName").toString(),
-                                 settings.value("folderPopup").toBool()));
+            folderItem(settings.value("folderName").toString(),
+                       settings.value("folderName").toString(),
+                       settings.value("folderPopup").toBool()));
     }
     settings.endArray();
 }
@@ -78,12 +81,12 @@ int folderModel::count() const
 
 const QString &folderModel::folderName(int row) const
 {
-    return folders[row].first;
+    return folders[row].folderName();
 }
 
 bool folderModel::enablePopup(int row) const
 {
-    return folders[row].second;
+    return folders[row].doNotification();
 }
 
 #include <iostream>
@@ -95,19 +98,24 @@ bool folderModel::setData(const QModelIndex &index, const QVariant &value, int r
     if (!index.isValid())
         return false;
     
-    if (role == Qt::CheckStateRole && index.column() == 1 &&
+    if (role == Qt::CheckStateRole && index.column() == COL_NOTIFICATION &&
         index.row() < folders.count()) {
-        folders[index.row()].second = value.toBool();
+        folders[index.row()].set_doNotification(value.toBool());
         return true;
     }
         
     if (role == Qt::EditRole) {
+        QString tmpname;
+        
         if (index.row() >= folders.count())
             insertRows(folders.count(), index.row()-folders.count()+1, index);
         switch (index.column()) {
-        case 0:
-            folders[index.row()].first = value.toString();
+
+        case COL_FOLDERNAME:
+            tmpname = value.toString();
+            folders[index.row()].set_folderName(tmpname);
             break;
+
         default:
             return false;
         }
@@ -123,7 +131,7 @@ bool folderModel::insertRows(int position, int rows, const QModelIndex &parent)
     beginInsertRows(QModelIndex(), position, position+rows-1);
 
     for (int row = 0; row < rows; ++row) {
-        folders.insert(position, QPair<QString, bool>(QString(), true));
+        folders.insert(position, folderItem());
     }
 
     endInsertRows();
@@ -167,9 +175,9 @@ Qt::ItemFlags folderModel::flags(const QModelIndex &index) const
     if (!index.isValid())
         return Qt::ItemIsEnabled;
     switch(index.column()) {
-    case 0:
+    case COL_FOLDERNAME:
         return QAbstractItemModel::flags(index) | Qt::ItemIsEnabled | Qt::ItemIsEditable;
-    case 1:
+    case COL_NOTIFICATION:
         return QAbstractItemModel::flags(index) | Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
     }
 

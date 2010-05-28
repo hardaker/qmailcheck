@@ -8,10 +8,12 @@ SOURCES += main.cpp \
     qtincoming.cpp \
     incomingmailmodel.cpp \
     mailmsg.cpp \
+    folderitem.cpp \
     foldermodel.cpp
 HEADERS += qtincoming.h \
     incomingmailmodel.h \
     mailmsg.h \
+    folderitem.h \
     foldermodel.h
 FORMS += qtincoming.ui \
     prefs.ui
