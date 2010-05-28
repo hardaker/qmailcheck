@@ -43,10 +43,10 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
-         <widget class="QCheckBox" name="popupWindow">
+        <item row="2" column="1">
+         <widget class="QCheckBox" name="doNotification">
           <property name="text">
-           <string>Pop up window on new mail</string>
+           <string>Issue notification on new mail</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -71,10 +71,44 @@
           </item>
          </layout>
         </item>
-        <item row="2" column="1">
-         <widget class="QCheckBox" name="criticalNotifications">
+        <item row="5" column="1">
+         <widget class="QCheckBox" name="highlightNew">
           <property name="text">
-           <string>Mark notifications critical</string>
+           <string>Highlight new mail</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="criticalNotifications">
+            <property name="text">
+             <string>Mark notifications critical</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="1">
+         <widget class="QCheckBox" name="popupWindow">
+          <property name="text">
+           <string>Pop up window on new mail</string>
           </property>
          </widget>
         </item>

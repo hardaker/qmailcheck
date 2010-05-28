@@ -24,7 +24,7 @@ IncomingMailModel::IncomingMailModel(QObject *parent) :
     QAbstractTableModel(parent), m_socket(),
     __counter(0), folderList(0), m_messages(), m_hideList(),
     m_username(), m_password(), m_hostname(),
-    m_portnumber(993), m_timer(), m_checkinterval(600), m_statusMessage()
+    m_portnumber(993), m_timer(), m_checkinterval(600), m_statusMessage(), m_highlightNew(true)
 {
 }
 
@@ -242,7 +242,7 @@ IncomingMailModel::checkMail()
             }
 
             MailMsg message(msglist[i], folderList->folderName(mbox), date, from, subject);
-            if (! uid_list.contains(msglist[i])) {
+            if (m_highlightNew && ! uid_list.contains(msglist[i])) {
                 message.setIsNew(true);
                 containsNewMessages = true;
                 emit newMailMessage(from + "\n" + subject);
@@ -339,6 +339,11 @@ void IncomingMailModel::set_checkinterval(int checkinterval) {
 void IncomingMailModel::set_folderList(folderModel *list) 
 {
     folderList = list;
+}
+
+void IncomingMailModel::set_highlightNew(bool newval)
+{
+    m_highlightNew = newval;
 }
 
 void IncomingMailModel::clearHideList()

@@ -34,6 +34,7 @@ public:
     void set_password(QString password);
     void set_portnumber(int portnumber);
     void set_checkinterval(int interval);
+    void set_highlightNew(bool newval);
 
     void set_folderList(folderModel *list);
     void emitChanges();
@@ -66,6 +67,7 @@ private:
     
     QTimer m_timer;
     int m_checkinterval;
+    bool m_highlightNew;
 
     QString m_statusMessage;
 };
