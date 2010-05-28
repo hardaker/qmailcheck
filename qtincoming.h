@@ -27,6 +27,10 @@ public slots:
     void readSettings();
     void sendNotification(QString message);
 
+    void set_highlightNew(bool);
+    void set_doNotification(bool);
+    void set_doPopup(bool);
+
 protected:
     void changeEvent(QEvent *e);
 
@@ -38,7 +42,9 @@ private:
     IncomingMailModel *mailModel;
     folderModel       *folderListModel;
     bool               do_popup;
+    bool               m_doNotification;
     bool               m_notifyCritical;
+    bool               m_highlightNew;
 };
 
 #endif // QTINCOMING_H
