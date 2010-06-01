@@ -7,8 +7,7 @@
 #include "foldermodel.h"
 #include <QSettings>
 
-#include <iostream>
-#define DEBUG(x) std::cerr << x;
+#include "qmailcheckcommon.h"
 
 QtIncoming::QtIncoming(QWidget *parent) :
     QMainWindow(parent),
