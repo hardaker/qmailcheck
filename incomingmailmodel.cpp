@@ -7,9 +7,7 @@
 #define FROM_WIDTH    20
 #define SUBJECT_WIDTH 48
 
-#include <iostream>
-#define OUTPUT(x) std::cerr << x;
-#define DEBUG(x) OUTPUT(x)
+#include "qmailcheckcommon.h"
 
 enum column_list 
 {
