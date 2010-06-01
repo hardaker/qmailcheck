@@ -7,7 +7,6 @@
 #define FROM_WIDTH    20
 #define SUBJECT_WIDTH 48
 
-// #define DEBUG(x) std::cerr << x;
 #include <iostream>
 #define OUTPUT(x) std::cerr << x;
 #define DEBUG(x) OUTPUT(x)
@@ -291,7 +290,8 @@ IncomingMailModel::sendCommand(const QString &cmd) {
 
         int linelength = m_socket.readLine( buf, sizeof( buf ) );
         if (linelength <= 0) {
-            exit(42); // XXX
+            reInitializeSocket();
+            return results; // XXX: need to throw an error or something
         }
 
         QString resultString(buf);
