@@ -13,7 +13,7 @@ QtIncoming::QtIncoming(QWidget *parent) :
     QMainWindow(parent),
     mailView(0),
     ui(new Ui::QtIncoming), prefui(new Ui::PrefWindow),
-    prefDialog(new QDialog()),
+    prefDialog(new QDialog(parent, Qt::Window)),
     do_popup(true), m_doNotification(true), m_highlightNew(true)
 {
     const char name[] = "qmailcheck";
@@ -75,6 +75,7 @@ QtIncoming::QtIncoming(QWidget *parent) :
 #if defined(Q_WS_MAEMO_5) || defined(MAEMO_CHANGES)
     prefDialog->setAttribute((Qt::WidgetAttribute) 127); // Qt::WA_Maemo5StackedWindow
 #endif
+    prefDialog->setSizeGripEnabled(true);
     readSettings();
     QTableView *view = prefui->folderList;
     view->setModel(folderListModel);
