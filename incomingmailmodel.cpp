@@ -222,6 +222,12 @@ IncomingMailModel::checkMail()
         sendCommand(QString("EXAMINE \"" + folderList->folderName(mbox) + "\""));
 
         results = sendCommand(QString("UID SEARCH RECENT"));
+        if (results.length() == 0) {
+            // socket probably died.
+            reInitializeSocket();
+            return;
+        }
+            
         QStringList msglist = results[0].split(' ');
         for(int i = 2; i < msglist.length(); i++) {
             QString subject, from, date;
