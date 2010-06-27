@@ -143,7 +143,7 @@ QVariant IncomingMailModel::headerData(int section, Qt::Orientation orientation,
 void
 IncomingMailModel::reInitializeSocket()
 {
-    if (!m_socket.isOpen())
+    if (m_socket.isOpen())
         m_socket.close();
     initializeSocket();
 }
