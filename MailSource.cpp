@@ -5,13 +5,17 @@ MailSource::MailSource(QObject *parent) :
 {
 }
 
-MailSource::MailSource(QObject *parent, const QString &mailServer, const QString &userName, const QString &passPhrase, bool ignoreCertErrors)
-    : QObject(parent), m_mailServer(mailServer), m_userName(userName), m_passPhrase(passPhrase), m_ignoreCertErrors(ignoreCertErrors)
+MailSource::MailSource(QObject *parent, const QString &hostName, int portNumber, const QString &userName, const QString &passPhrase, bool ignoreCertErrors)
+    : QObject(parent), m_hostName(hostName), m_portNumber(portNumber), m_userName(userName), m_passPhrase(passPhrase), m_ignoreCertErrors(ignoreCertErrors)
 {
 }
 
-const QString &MailSource::mailServer() const {
-    return m_mailServer;
+const QString &MailSource::hostName() const {
+    return m_hostName;
+}
+
+int MailSource::portNumber() const {
+    return m_portNumber;
 }
 
 const QString &MailSource::userName() const {
@@ -26,8 +30,12 @@ bool MailSource::ignoreCertErrors() const {
     return m_ignoreCertErrors;
 }
 
-void MailSource::set_mailServer(const QString &mailServer) {
-    m_mailServer = mailServer;
+void MailSource::set_hostName(const QString &hostName) {
+    m_hostName = hostName;
+}
+
+void MailSource::set_portNumber(int portNumber) {
+    m_portNumber = portNumber;
 }
 
 void MailSource::set_userName(const QString &userName) {
