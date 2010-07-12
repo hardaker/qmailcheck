@@ -240,17 +240,7 @@ void QtIncoming::readSettings()
     prefui->checkMail->setText(settings.value("checkInterval").toString());
     mailModel->set_checkinterval(settings.value("checkInterval").toInt());
 
-    prefui->serverName->setText(settings.value("serverName").toString());
-    mailModel->set_hostname(QString(settings.value("serverName").toString()));
-
-    prefui->password->setText(settings.value("password").toString());
-    mailModel->set_password(settings.value("password").toString());
-
-    prefui->userName->setText(settings.value("username").toString());
-    mailModel->set_username(settings.value("username").toString());
-
-    prefui->serverPort->setText(settings.value("serverPort").toString());
-    mailModel->set_portnumber(settings.value("serverPort").toInt());
+    mailModel->readSettings(settings, prefui);
 
     folderListModel->readSettings(settings);
 

@@ -11,6 +11,7 @@
 #include "mailmsg.h"
 #include "foldermodel.h"
 #include "ui_prefs.h"
+#include "MailSource.h"
 
 class IncomingMailModel : public QAbstractTableModel
 {
@@ -29,15 +30,12 @@ public:
     void setupTimer();
     QList<QString> sendCommand(const QString &cmd);
 
-    void set_hostname(QString hostname);
-    void set_username(QString username);
-    void set_password(QString password);
-    void set_portnumber(int portnumber);
     void set_checkinterval(int interval);
     void set_highlightNew(bool newval);
 
     void set_folderList(folderModel *list);
     void emitChanges();
+    void readSettings(QSettings &settings, Ui::PrefWindow *prefui);
 
 signals:
     void mailUpdated();
@@ -60,10 +58,7 @@ private:
     QList<MailMsg> m_messages;
     QList<QString> m_hideList;
 
-    QString m_username;
-    QString m_password;
-    QString m_hostname;
-    int m_portnumber;
+    QList<MailSource *> m_mailSources;
     
     QTimer m_timer;
     int m_checkinterval;

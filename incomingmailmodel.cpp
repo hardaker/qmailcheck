@@ -19,9 +19,7 @@ enum column_list
 
 IncomingMailModel::IncomingMailModel(QObject *parent) :
     QAbstractTableModel(parent), m_socket(),
-    __counter(0), folderList(0), m_messages(), m_hideList(),
-    m_username(), m_password(), m_hostname(),
-    m_portnumber(993), m_timer(), m_checkinterval(600), m_statusMessage(), m_highlightNew(true)
+    __counter(0), folderList(0), m_messages(), m_hideList(), m_timer(), m_checkinterval(600), m_statusMessage(), m_highlightNew(true)
 {
 }
 
@@ -148,31 +146,52 @@ IncomingMailModel::reInitializeSocket()
     initializeSocket();
 }
 
-        
+void IncomingMailModel::readSettings(QSettings &settings, Ui::PrefWindow *prefui) {
+    QList<MailSource *>::iterator source = m_mailSources.begin();
+    if (m_mailSources.count() == 0) {
+        m_mailSources.append(new MailSource());
+    }
 
-void
-IncomingMailModel::initializeSocket()
+    prefui->serverName->setText(settings.value("serverName").toString());
+    (*source)->set_hostName(QString(settings.value("serverName", "localhost").toString()));
+
+    prefui->password->setText(settings.value("password").toString());
+    (*source)->set_passPhrase(settings.value("password", "").toString());
+
+    prefui->userName->setText(settings.value("username").toString());
+    (*source)->set_userName(settings.value("username", "").toString());
+
+    prefui->serverPort->setText(settings.value("serverPort").toString());
+    (*source)->set_portNumber(settings.value("serverPort", 993).toInt());
+}
+
+void IncomingMailModel::initializeSocket()
 {
-    if (!m_socket.isOpen() && m_username != "" && m_password != "" &&
-        m_hostname != "" && m_portnumber != 0) {
+    if (!m_socket.isOpen() && m_mailSources.count() > 0) {
+        QList<MailSource *>::iterator     source;
+        QList<MailSource *>::iterator     sourceEnd = m_mailSources.end();
 
-        DEBUG("Opening Connection\n");
+        for(source = m_mailSources.begin(); source != sourceEnd; ++source) {
 
-        m_socket.setPeerVerifyMode(QSslSocket::VerifyNone);
-        m_socket.connectToHostEncrypted(m_hostname, m_portnumber);
-        m_socket.waitForReadyRead();
+            DEBUG("Opening Connection\n");
 
-        // read throw-away line info
-        char buf[4096];
-        m_socket.readLine( buf, sizeof( buf ) );
+            if ((*source)->ignoreCertErrors())
+                m_socket.setPeerVerifyMode(QSslSocket::VerifyNone);
+            m_socket.connectToHostEncrypted((*source)->hostName(), (*source)->portNumber());
+            m_socket.waitForReadyRead();
 
-        DEBUG("intial line: " << buf);
+            // read throw-away line info
+            char buf[4096];
+            m_socket.readLine( buf, sizeof( buf ) );
 
-        // XXX: should check for error
-        sendCommand(QString("login ") + m_username + " " + m_password);
-        // XXX: A1 NO [AUTHENTICATIONFAILED] Authentication failed.
+            DEBUG("intial line: " << buf);
 
-        setupTimer();
+            // XXX: should check for error
+            sendCommand(QString("login ") + (*source)->userName() + " " + (*source)->passPhrase());
+            // XXX: A1 NO [AUTHENTICATIONFAILED] Authentication failed.
+
+            setupTimer();
+        }
     }
 }
 
@@ -318,22 +337,6 @@ IncomingMailModel::setupTimer()
     m_timer.stop();
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(checkMail()));
     m_timer.start(m_checkinterval * 1000);
-}
-
-void IncomingMailModel::set_hostname(QString hostname) {
-    m_hostname = hostname;
-}
-
-void IncomingMailModel::set_username(QString username) {
-    m_username = username;
-}
-
-void IncomingMailModel::set_password(QString password) {
-    m_password = password;
-}
-
-void IncomingMailModel::set_portnumber(int portnumber) {
-    m_portnumber = portnumber;
 }
 
 void IncomingMailModel::set_checkinterval(int checkinterval) {
