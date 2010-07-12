@@ -125,8 +125,9 @@ void QtIncoming::sendNotification(QString message)
                                            NULL, NULL);
     if (notification) {
         notify_notification_set_timeout(notification, 60000);
-        if (!notify_notification_show(notification, NULL))
+        if (!notify_notification_show(notification, NULL)) {
             DEBUG("Failed to send notification");
+        }
         
         if (m_notifyCritical)
             notify_notification_set_urgency(notification,
