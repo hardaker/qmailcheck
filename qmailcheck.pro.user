@@ -1,472 +1,111 @@
 <!DOCTYPE QtCreatorProject>
 <qtcreator>
  <data>
-  <variable>RunConfiguration0-BaseEnvironmentBase</variable>
-  <value type="int">2</value>
- </data>
- <data>
-  <variable>RunConfiguration0-CommandLineArguments</variable>
-  <valuelist type="QVariantList"/>
- </data>
- <data>
-  <variable>RunConfiguration0-ProFile</variable>
-  <value type="QString">qmailcheck.pro</value>
- </data>
- <data>
-  <variable>RunConfiguration0-RunConfiguration.name</variable>
-  <value type="QString">qmailcheck</value>
- </data>
- <data>
-  <variable>RunConfiguration0-UseDyldImageSuffix</variable>
-  <value type="bool">false</value>
- </data>
- <data>
-  <variable>RunConfiguration0-UseTerminal</variable>
-  <value type="bool">false</value>
- </data>
- <data>
-  <variable>RunConfiguration0-UserEnvironmentChanges</variable>
-  <valuelist type="QVariantList"/>
- </data>
- <data>
-  <variable>RunConfiguration0-UserSetName</variable>
-  <value type="bool">false</value>
- </data>
- <data>
-  <variable>RunConfiguration0-UserSetWorkingDirectory</variable>
-  <value type="bool">false</value>
- </data>
- <data>
-  <variable>RunConfiguration0-UserWorkingDirectory</variable>
-  <value type="QString"></value>
- </data>
- <data>
-  <variable>RunConfiguration0-type</variable>
-  <value type="QString">Qt4ProjectManager.Qt4RunConfiguration</value>
- </data>
- <data>
-  <variable>activeRunConfiguration</variable>
+  <variable>ProjectExplorer.Project.ActiveTarget</variable>
   <value type="int">0</value>
  </data>
  <data>
-  <variable>activebuildconfiguration</variable>
-  <value type="QString">Debug</value>
- </data>
- <data>
-  <variable>buildConfiguration-Debug</variable>
+  <variable>ProjectExplorer.Project.EditorSettings</variable>
   <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
-   <value key="QtVersionId" type="int">0</value>
-   <value key="ToolChain" type="int">0</value>
-   <value key="addQDumper" type=""></value>
-   <value key="buildConfiguration" type="int">2</value>
+   <value key="EditorConfiguration.Codec" type="QByteArray">System</value>
   </valuemap>
  </data>
  <data>
-  <variable>buildConfiguration-Release</variable>
+  <variable>ProjectExplorer.Project.Target.0</variable>
   <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
-   <value key="QtVersionId" type="int">0</value>
-   <value key="addQDumper" type=""></value>
-   <value key="buildConfiguration" type="int">0</value>
+   <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString">Desktop</value>
+   <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">Qt4ProjectManager.Target.DesktopTarget</value>
+   <value key="ProjectExplorer.Target.ActiveBuildConfiguration" type="int">0</value>
+   <value key="ProjectExplorer.Target.ActiveRunConfiguration" type="int">0</value>
+   <valuemap key="ProjectExplorer.Target.BuildConfiguration.0" type="QVariantMap">
+    <valuemap key="ProjectExplorer.BuildConfiguration.BuildStep.0" type="QVariantMap">
+     <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString"></value>
+     <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">QtProjectManager.QMakeBuildStep</value>
+     <valuelist key="QtProjectManager.QMakeBuildStep.QMakeArguments" type="QVariantList"/>
+    </valuemap>
+    <valuemap key="ProjectExplorer.BuildConfiguration.BuildStep.1" type="QVariantMap">
+     <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString"></value>
+     <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">Qt4ProjectManager.MakeStep</value>
+     <value key="Qt4ProjectManager.MakeStep.Clean" type="bool">false</value>
+     <valuelist key="Qt4ProjectManager.MakeStep.MakeArguments" type="QVariantList"/>
+     <value key="Qt4ProjectManager.MakeStep.MakeCommand" type="QString"></value>
+    </valuemap>
+    <value key="ProjectExplorer.BuildConfiguration.BuildStepsCount" type="int">2</value>
+    <valuemap key="ProjectExplorer.BuildConfiguration.CleanStep.0" type="QVariantMap">
+     <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString"></value>
+     <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">Qt4ProjectManager.MakeStep</value>
+     <value key="Qt4ProjectManager.MakeStep.Clean" type="bool">true</value>
+     <valuelist key="Qt4ProjectManager.MakeStep.MakeArguments" type="QVariantList">
+      <value type="QString">clean</value>
+     </valuelist>
+     <value key="Qt4ProjectManager.MakeStep.MakeCommand" type="QString"></value>
+    </valuemap>
+    <value key="ProjectExplorer.BuildConfiguration.CleanStepsCount" type="int">1</value>
+    <value key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment" type="bool">false</value>
+    <valuelist key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges" type="QVariantList"/>
+    <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString">Debug</value>
+    <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">Qt4ProjectManager.Qt4BuildConfiguration</value>
+    <value key="Qt4ProjectManager.Qt4BuildConfiguration.BuildConfiguration" type="int">2</value>
+    <value key="Qt4ProjectManager.Qt4BuildConfiguration.BuildDirectory" type="QString">/home/hardaker/src/qmailcheck-build-desktop</value>
+    <value key="Qt4ProjectManager.Qt4BuildConfiguration.QtVersionId" type="int">2</value>
+    <value key="Qt4ProjectManager.Qt4BuildConfiguration.ToolChain" type="int">0</value>
+    <value key="Qt4ProjectManager.Qt4BuildConfiguration.UseShadowBuild" type="bool">true</value>
+   </valuemap>
+   <valuemap key="ProjectExplorer.Target.BuildConfiguration.1" type="QVariantMap">
+    <valuemap key="ProjectExplorer.BuildConfiguration.BuildStep.0" type="QVariantMap">
+     <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString"></value>
+     <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">QtProjectManager.QMakeBuildStep</value>
+     <valuelist key="QtProjectManager.QMakeBuildStep.QMakeArguments" type="QVariantList"/>
+    </valuemap>
+    <valuemap key="ProjectExplorer.BuildConfiguration.BuildStep.1" type="QVariantMap">
+     <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString"></value>
+     <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">Qt4ProjectManager.MakeStep</value>
+     <value key="Qt4ProjectManager.MakeStep.Clean" type="bool">false</value>
+     <valuelist key="Qt4ProjectManager.MakeStep.MakeArguments" type="QVariantList"/>
+     <value key="Qt4ProjectManager.MakeStep.MakeCommand" type="QString"></value>
+    </valuemap>
+    <value key="ProjectExplorer.BuildConfiguration.BuildStepsCount" type="int">2</value>
+    <valuemap key="ProjectExplorer.BuildConfiguration.CleanStep.0" type="QVariantMap">
+     <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString"></value>
+     <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">Qt4ProjectManager.MakeStep</value>
+     <value key="Qt4ProjectManager.MakeStep.Clean" type="bool">true</value>
+     <valuelist key="Qt4ProjectManager.MakeStep.MakeArguments" type="QVariantList"/>
+     <value key="Qt4ProjectManager.MakeStep.MakeCommand" type="QString"></value>
+    </valuemap>
+    <value key="ProjectExplorer.BuildConfiguration.CleanStepsCount" type="int">1</value>
+    <value key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment" type="bool">false</value>
+    <valuelist key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges" type="QVariantList"/>
+    <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString">Release</value>
+    <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">Qt4ProjectManager.Qt4BuildConfiguration</value>
+    <value key="Qt4ProjectManager.Qt4BuildConfiguration.BuildConfiguration" type="int">0</value>
+    <value key="Qt4ProjectManager.Qt4BuildConfiguration.BuildDirectory" type="QString">/home/hardaker/src/qmailcheck-build-desktop</value>
+    <value key="Qt4ProjectManager.Qt4BuildConfiguration.QtVersionId" type="int">2</value>
+    <value key="Qt4ProjectManager.Qt4BuildConfiguration.ToolChain" type="int">0</value>
+    <value key="Qt4ProjectManager.Qt4BuildConfiguration.UseShadowBuild" type="bool">true</value>
+   </valuemap>
+   <value key="ProjectExplorer.Target.BuildConfigurationCount" type="int">2</value>
+   <valuemap key="ProjectExplorer.Target.RunConfiguration.0" type="QVariantMap">
+    <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString">qmailcheck</value>
+    <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">Qt4ProjectManager.Qt4RunConfiguration</value>
+    <value key="Qt4ProjectManager.Qt4RunConfiguration.BaseEnvironmentBase" type="int">2</value>
+    <valuelist key="Qt4ProjectManager.Qt4RunConfiguration.CommandLineArguments" type="QVariantList"/>
+    <value key="Qt4ProjectManager.Qt4RunConfiguration.ProFile" type="QString">qmailcheck.pro</value>
+    <value key="Qt4ProjectManager.Qt4RunConfiguration.UseDyldImageSuffix" type="bool">false</value>
+    <value key="Qt4ProjectManager.Qt4RunConfiguration.UseTerminal" type="bool">false</value>
+    <valuelist key="Qt4ProjectManager.Qt4RunConfiguration.UserEnvironmentChanges" type="QVariantList"/>
+    <value key="Qt4ProjectManager.Qt4RunConfiguration.UserSetName" type="bool">false</value>
+    <value key="Qt4ProjectManager.Qt4RunConfiguration.UserSetWorkingDirectory" type="bool">false</value>
+    <value key="Qt4ProjectManager.Qt4RunConfiguration.UserWorkingDirectory" type="QString"></value>
+   </valuemap>
+   <value key="ProjectExplorer.Target.RunConfigurationCount" type="int">1</value>
   </valuemap>
  </data>
  <data>
-  <variable>buildconfiguration-Debug-buildstep0</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
-   <valuelist key="abstractProcess.Environment" type="QVariantList">
-    <value type="QString">COLORFGBG=15;0</value>
-    <value type="QString">CVSROOT=/home/hardaker/src/cvsroot</value>
-    <value type="QString">CVS_RSH=ssh</value>
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-z7WihCkivz,guid=b04ae9e5ee1b70468b8fb1bd4bff2af9</value>
-    <value type="QString">DESKTOP_SESSION=kde</value>
-    <value type="QString">DISABLE_IMSETTINGS=1</value>
-    <value type="QString">DISPLAY=:0</value>
-    <value type="QString">DISTCC_HOSTS=localhost dawn</value>
-    <value type="QString">DRY_RUN=1</value>
-    <value type="QString">DVDCSS_CACHE=/home/hardaker/.dvdcss/</value>
-    <value type="QString">DVDCSS_METHOD=key</value>
-    <value type="QString">DVDCSS_RAW_DEVICE=/dev/rdvd</value>
-    <value type="QString">DVDCSS_VERBOSE=0</value>
-    <value type="QString">EDITOR=gnuclient</value>
-    <value type="QString">GDMSESSION=kde</value>
-    <value type="QString">GDM_KEYBOARD_LAYOUT=us</value>
-    <value type="QString">GDM_LANG=en_US.UTF-8</value>
-    <value type="QString">GNOME_KEYRING_PID=17495</value>
-    <value type="QString">GNOME_KEYRING_SOCKET=/tmp/keyring-6bXuH4/socket</value>
-    <value type="QString">GNU_HOST=localhost</value>
-    <value type="QString">GNU_SECURE=/home/hardaker/lib/gnu_secure</value>
-    <value type="QString">GPG_AGENT_INFO=/tmp/gpg-TBsS7S/S.gpg-agent:17790:1</value>
-    <value type="QString">GROUP=hardaker</value>
-    <value type="QString">GS_LIB=</value>
-    <value type="QString">GTK2_RC_FILES=/etc/gtk-2.0/gtkrc:/home/hardaker/.gtkrc-2.0::/home/hardaker/.kde/share/config/gtkrc-2.0</value>
-    <value type="QString">GTK_IM_MODULE=gtk-im-context-simple</value>
-    <value type="QString">GTK_RC_FILES=/etc/gtk/gtkrc:/home/hardaker/.gtkrc::/home/hardaker/.kde/share/config/gtkrc</value>
-    <value type="QString">G_BROKEN_FILENAMES=1</value>
-    <value type="QString">HOME=/home/hardaker</value>
-    <value type="QString">HOST=wjh.hardakers.net</value>
-    <value type="QString">HOSTNAME=wjh.hardakers.net</value>
-    <value type="QString">HOSTTYPE=i386-linux</value>
-    <value type="QString">IMSETTINGS_INTEGRATE_DESKTOP=yes</value>
-    <value type="QString">IMSETTINGS_MODULE=none</value>
-    <value type="QString">IRCNICK=wes</value>
-    <value type="QString">IRCSERVER=irc.openprojects.net</value>
-    <value type="QString">KDEDIRS=/usr</value>
-    <value type="QString">KDE_FULL_SESSION=true</value>
-    <value type="QString">KDE_IS_PRELINKED=1</value>
-    <value type="QString">KDE_MULTIHEAD=false</value>
-    <value type="QString">KDE_SESSION_UID=274</value>
-    <value type="QString">KDE_SESSION_VERSION=4</value>
-    <value type="QString">KMIX_PULSEAUDIO_DISABLE=1</value>
-    <value type="QString">KONSOLE_DBUS_SERVICE=:1.34</value>
-    <value type="QString">KONSOLE_DBUS_SESSION=/Sessions/2</value>
-    <value type="QString">LANG=C</value>
-    <value type="QString">LANGUAGE=</value>
-    <value type="QString">LD_LIBRARY_PATH=/usr/lib/qtcreator:</value>
-    <value type="QString">LESS=-i</value>
-    <value type="QString">LESSOPEN=|/usr/bin/lesspipe.sh %s</value>
-    <value type="QString">LOGNAME=hardaker</value>
-    <value type="QString">LPDEST=work</value>
-    <value type="QString">LS_OPTIONS=--color -F</value>
-    <value type="QString">MACHTYPE=i386</value>
-    <value type="QString">MAIL=/var/spool/mail/hardaker</value>
-    <value type="QString">NETHACKOPTIONSS=fruit=bat guano,name = The Wizard,number_pad</value>
-    <value type="QString">NNTPSERVER=news.dcn.davis.ca.us</value>
-    <value type="QString">NPX_PLUGIN_PATH=/usr/java/jre1.3.1_03/plugin/i386/ns4</value>
-    <value type="QString">OSTYPE=linux</value>
-    <value type="QString">PAGER=less</value>
-    <value type="QString">PATH=/usr/lib/qt4/bin:/home/hardaker/bin/scripts:/home/hardaker/bin:/usr/local/bin:/usr/local/sbin:/opt/kerberos/bin:/opt/bind9.6/bin:/opt/bind9.6/sbin:/usr/java/j2re1.4.2_06/bin:/usr/lib/qt-3.3/bin:/usr/kerberos/sbin:/usr/kerberos/bin:/usr/lib/ccache:/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin:/usr/local/java/bin:/usr/sbin:/sbin:/usr/local/snmp/bin:/usr/bin/mh:/opt/Office51/bin:/usr/games:/opt/wordperfect/wpbin:/opt/mp3/bin</value>
-    <value type="QString">PERL5LIB=/usr/local/lib/perl5/site_perl/5.10.0/i386-linux-thread-multi:/usr/local/lib/perl5/site_perl/5.10.0:/usr/lib/perl5/vendor_perl/5.10.0/i386-linux-thread-multi:/usr/lib/perl5/vendor_perl/5.10.0</value>
-    <value type="QString">PRINTER=work</value>
-    <value type="QString">PROFILEHOME=</value>
-    <value type="QString">PULSE_PROP_media.role=none</value>
-    <value type="QString">PULSE_PROP_phonon.streamid={bda40a79-bf37-4550-a115-261dea66cdf3}</value>
-    <value type="QString">PWD=/home/hardaker/src/qmailcheck</value>
-    <value type="QString">PWSAFE_IGNORE=klipper</value>
-    <value type="QString">QTDIR=/usr/lib/qt4</value>
-    <value type="QString">QTINC=/usr/lib/qt-3.3/include</value>
-    <value type="QString">QTLIB=/usr/lib/qt-3.3/lib</value>
-    <value type="QString">QT_IM_MODULE=xim</value>
-    <value type="QString">QT_PLUGIN_PATH=/home/hardaker/.kde/lib/kde4/plugins/:/usr/lib/kde4/plugins/</value>
-    <value type="QString">REMOTEHOST=</value>
-    <value type="QString">ROGUEOPTS=jump,noseefloor,passgo,terse,flush,tombstone,fruit=guano,name = The Wizard</value>
-    <value type="QString">SESSION_MANAGER=local/unix:@/tmp/.ICE-unix/17874,unix/unix:/tmp/.ICE-unix/17874</value>
-    <value type="QString">SHELL=/bin/tcsh</value>
-    <value type="QString">SHLVL=3</value>
-    <value type="QString">SSH_AGENT_PID=17588</value>
-    <value type="QString">SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/ssh-PzRBt17502/agent.17502</value>
-    <value type="QString">TERM=xterm</value>
-    <value type="QString">USER=hardaker</value>
-    <value type="QString">USERNAME=hardaker</value>
-    <value type="QString">VENDOR=intel</value>
-    <value type="QString">WESPATH=yep</value>
-    <value type="QString">WINDOWID=35651621</value>
-    <value type="QString">XAPPLRESDIR=/home/hardaker/lib/app-defaults</value>
-    <value type="QString">XAUTHORITY=/home/hardaker/.Xauthority</value>
-    <value type="QString">XCURSOR_THEME=default</value>
-    <value type="QString">XDG_DATA_DIRS=/usr/share/kde-settings/kde-profile/default/share:/usr/local/share:/usr/share</value>
-    <value type="QString">XDG_MENU_PREFIX=kde4-</value>
-    <value type="QString">XDG_SESSION_COOKIE=c8c4c957f2f8c2d75b6a20e64aa69323-1275013880.955057-129896641</value>
-    <value type="QString">XMODIFIERS=@im=none</value>
-    <value type="QString">XTITLE=wjh</value>
-   </valuelist>
-   <valuelist key="abstractProcess.arguments" type="QVariantList">
-    <value type="QString">/home/hardaker/src/qmailcheck/qmailcheck.pro</value>
-    <value type="QString">-spec</value>
-    <value type="QString">linux-g++</value>
-    <value type="QString">-r</value>
-    <value type="QString">CONFIG+=debug</value>
-   </valuelist>
-   <value key="abstractProcess.command" type="QString">/usr/bin/qmake-qt4</value>
-   <value key="abstractProcess.enabled" type="bool">false</value>
-   <value key="abstractProcess.workingDirectory" type="QString">/home/hardaker/src/qmailcheck</value>
-  </valuemap>
+  <variable>ProjectExplorer.Project.TargetCount</variable>
+  <value type="int">1</value>
  </data>
  <data>
-  <variable>buildconfiguration-Debug-buildstep1</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
-   <valuelist key="abstractProcess.Environment" type="QVariantList">
-    <value type="QString">COLORFGBG=15;0</value>
-    <value type="QString">CVSROOT=/home/hardaker/src/cvsroot</value>
-    <value type="QString">CVS_RSH=ssh</value>
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-z7WihCkivz,guid=b04ae9e5ee1b70468b8fb1bd4bff2af9</value>
-    <value type="QString">DESKTOP_SESSION=kde</value>
-    <value type="QString">DISABLE_IMSETTINGS=1</value>
-    <value type="QString">DISPLAY=:0</value>
-    <value type="QString">DISTCC_HOSTS=localhost dawn</value>
-    <value type="QString">DRY_RUN=1</value>
-    <value type="QString">DVDCSS_CACHE=/home/hardaker/.dvdcss/</value>
-    <value type="QString">DVDCSS_METHOD=key</value>
-    <value type="QString">DVDCSS_RAW_DEVICE=/dev/rdvd</value>
-    <value type="QString">DVDCSS_VERBOSE=0</value>
-    <value type="QString">EDITOR=gnuclient</value>
-    <value type="QString">GDMSESSION=kde</value>
-    <value type="QString">GDM_KEYBOARD_LAYOUT=us</value>
-    <value type="QString">GDM_LANG=en_US.UTF-8</value>
-    <value type="QString">GNOME_KEYRING_PID=17495</value>
-    <value type="QString">GNOME_KEYRING_SOCKET=/tmp/keyring-6bXuH4/socket</value>
-    <value type="QString">GNU_HOST=localhost</value>
-    <value type="QString">GNU_SECURE=/home/hardaker/lib/gnu_secure</value>
-    <value type="QString">GPG_AGENT_INFO=/tmp/gpg-TBsS7S/S.gpg-agent:17790:1</value>
-    <value type="QString">GROUP=hardaker</value>
-    <value type="QString">GS_LIB=</value>
-    <value type="QString">GTK2_RC_FILES=/etc/gtk-2.0/gtkrc:/home/hardaker/.gtkrc-2.0::/home/hardaker/.kde/share/config/gtkrc-2.0</value>
-    <value type="QString">GTK_IM_MODULE=gtk-im-context-simple</value>
-    <value type="QString">GTK_RC_FILES=/etc/gtk/gtkrc:/home/hardaker/.gtkrc::/home/hardaker/.kde/share/config/gtkrc</value>
-    <value type="QString">G_BROKEN_FILENAMES=1</value>
-    <value type="QString">HOME=/home/hardaker</value>
-    <value type="QString">HOST=wjh.hardakers.net</value>
-    <value type="QString">HOSTNAME=wjh.hardakers.net</value>
-    <value type="QString">HOSTTYPE=i386-linux</value>
-    <value type="QString">IMSETTINGS_INTEGRATE_DESKTOP=yes</value>
-    <value type="QString">IMSETTINGS_MODULE=none</value>
-    <value type="QString">IRCNICK=wes</value>
-    <value type="QString">IRCSERVER=irc.openprojects.net</value>
-    <value type="QString">KDEDIRS=/usr</value>
-    <value type="QString">KDE_FULL_SESSION=true</value>
-    <value type="QString">KDE_IS_PRELINKED=1</value>
-    <value type="QString">KDE_MULTIHEAD=false</value>
-    <value type="QString">KDE_SESSION_UID=274</value>
-    <value type="QString">KDE_SESSION_VERSION=4</value>
-    <value type="QString">KMIX_PULSEAUDIO_DISABLE=1</value>
-    <value type="QString">KONSOLE_DBUS_SERVICE=:1.34</value>
-    <value type="QString">KONSOLE_DBUS_SESSION=/Sessions/2</value>
-    <value type="QString">LANG=C</value>
-    <value type="QString">LANGUAGE=</value>
-    <value type="QString">LD_LIBRARY_PATH=/usr/lib/qtcreator:</value>
-    <value type="QString">LESS=-i</value>
-    <value type="QString">LESSOPEN=|/usr/bin/lesspipe.sh %s</value>
-    <value type="QString">LOGNAME=hardaker</value>
-    <value type="QString">LPDEST=work</value>
-    <value type="QString">LS_OPTIONS=--color -F</value>
-    <value type="QString">MACHTYPE=i386</value>
-    <value type="QString">MAIL=/var/spool/mail/hardaker</value>
-    <value type="QString">NETHACKOPTIONSS=fruit=bat guano,name = The Wizard,number_pad</value>
-    <value type="QString">NNTPSERVER=news.dcn.davis.ca.us</value>
-    <value type="QString">NPX_PLUGIN_PATH=/usr/java/jre1.3.1_03/plugin/i386/ns4</value>
-    <value type="QString">OSTYPE=linux</value>
-    <value type="QString">PAGER=less</value>
-    <value type="QString">PATH=/usr/lib/qt4/bin:/home/hardaker/bin/scripts:/home/hardaker/bin:/usr/local/bin:/usr/local/sbin:/opt/kerberos/bin:/opt/bind9.6/bin:/opt/bind9.6/sbin:/usr/java/j2re1.4.2_06/bin:/usr/lib/qt-3.3/bin:/usr/kerberos/sbin:/usr/kerberos/bin:/usr/lib/ccache:/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin:/usr/local/java/bin:/usr/sbin:/sbin:/usr/local/snmp/bin:/usr/bin/mh:/opt/Office51/bin:/usr/games:/opt/wordperfect/wpbin:/opt/mp3/bin</value>
-    <value type="QString">PERL5LIB=/usr/local/lib/perl5/site_perl/5.10.0/i386-linux-thread-multi:/usr/local/lib/perl5/site_perl/5.10.0:/usr/lib/perl5/vendor_perl/5.10.0/i386-linux-thread-multi:/usr/lib/perl5/vendor_perl/5.10.0</value>
-    <value type="QString">PRINTER=work</value>
-    <value type="QString">PROFILEHOME=</value>
-    <value type="QString">PULSE_PROP_media.role=none</value>
-    <value type="QString">PULSE_PROP_phonon.streamid={bda40a79-bf37-4550-a115-261dea66cdf3}</value>
-    <value type="QString">PWD=/home/hardaker/src/qmailcheck</value>
-    <value type="QString">PWSAFE_IGNORE=klipper</value>
-    <value type="QString">QTDIR=/usr/lib/qt4</value>
-    <value type="QString">QTINC=/usr/lib/qt-3.3/include</value>
-    <value type="QString">QTLIB=/usr/lib/qt-3.3/lib</value>
-    <value type="QString">QT_IM_MODULE=xim</value>
-    <value type="QString">QT_PLUGIN_PATH=/home/hardaker/.kde/lib/kde4/plugins/:/usr/lib/kde4/plugins/</value>
-    <value type="QString">REMOTEHOST=</value>
-    <value type="QString">ROGUEOPTS=jump,noseefloor,passgo,terse,flush,tombstone,fruit=guano,name = The Wizard</value>
-    <value type="QString">SESSION_MANAGER=local/unix:@/tmp/.ICE-unix/17874,unix/unix:/tmp/.ICE-unix/17874</value>
-    <value type="QString">SHELL=/bin/tcsh</value>
-    <value type="QString">SHLVL=3</value>
-    <value type="QString">SSH_AGENT_PID=17588</value>
-    <value type="QString">SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/ssh-PzRBt17502/agent.17502</value>
-    <value type="QString">TERM=xterm</value>
-    <value type="QString">USER=hardaker</value>
-    <value type="QString">USERNAME=hardaker</value>
-    <value type="QString">VENDOR=intel</value>
-    <value type="QString">WESPATH=yep</value>
-    <value type="QString">WINDOWID=35651621</value>
-    <value type="QString">XAPPLRESDIR=/home/hardaker/lib/app-defaults</value>
-    <value type="QString">XAUTHORITY=/home/hardaker/.Xauthority</value>
-    <value type="QString">XCURSOR_THEME=default</value>
-    <value type="QString">XDG_DATA_DIRS=/usr/share/kde-settings/kde-profile/default/share:/usr/local/share:/usr/share</value>
-    <value type="QString">XDG_MENU_PREFIX=kde4-</value>
-    <value type="QString">XDG_SESSION_COOKIE=c8c4c957f2f8c2d75b6a20e64aa69323-1275013880.955057-129896641</value>
-    <value type="QString">XMODIFIERS=@im=none</value>
-    <value type="QString">XTITLE=wjh</value>
-   </valuelist>
-   <value key="abstractProcess.IgnoreReturnValue" type="bool">false</value>
-   <valuelist key="abstractProcess.arguments" type="QVariantList">
-    <value type="QString">-w</value>
-   </valuelist>
-   <value key="abstractProcess.command" type="QString">/usr/bin/make</value>
-   <value key="abstractProcess.enabled" type="bool">true</value>
-   <value key="abstractProcess.workingDirectory" type="QString">/home/hardaker/src/qmailcheck</value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildconfiguration-Debug-cleanstep0</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
-   <valuelist key="abstractProcess.Environment" type="QVariantList">
-    <value type="QString">COLORFGBG=15;0</value>
-    <value type="QString">CVSROOT=/home/hardaker/src/cvsroot</value>
-    <value type="QString">CVS_RSH=ssh</value>
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-HHQMtb60l7,guid=ad1268bbdc986e68b11beff44bfa81ce</value>
-    <value type="QString">DESKTOP_SESSION=kde</value>
-    <value type="QString">DISABLE_IMSETTINGS=1</value>
-    <value type="QString">DISPLAY=:0</value>
-    <value type="QString">DISTCC_HOSTS=localhost dawn</value>
-    <value type="QString">DRY_RUN=1</value>
-    <value type="QString">EDITOR=gnuclient</value>
-    <value type="QString">GDMSESSION=kde</value>
-    <value type="QString">GDM_KEYBOARD_LAYOUT=us</value>
-    <value type="QString">GDM_LANG=en_US.UTF-8</value>
-    <value type="QString">GNOME_KEYRING_PID=2430</value>
-    <value type="QString">GNOME_KEYRING_SOCKET=/tmp/keyring-ZHY1ib/socket</value>
-    <value type="QString">GNU_HOST=localhost</value>
-    <value type="QString">GNU_SECURE=/home/hardaker/lib/gnu_secure</value>
-    <value type="QString">GPG_AGENT_INFO=/tmp/gpg-Q73c5p/S.gpg-agent:2731:1</value>
-    <value type="QString">GROUP=hardaker</value>
-    <value type="QString">GS_LIB=</value>
-    <value type="QString">GTK2_RC_FILES=/etc/gtk-2.0/gtkrc:/home/hardaker/.gtkrc-2.0::/home/hardaker/.kde/share/config/gtkrc-2.0</value>
-    <value type="QString">GTK_IM_MODULE=gtk-im-context-simple</value>
-    <value type="QString">GTK_RC_FILES=/etc/gtk/gtkrc:/home/hardaker/.gtkrc::/home/hardaker/.kde/share/config/gtkrc</value>
-    <value type="QString">G_BROKEN_FILENAMES=1</value>
-    <value type="QString">HOME=/home/hardaker</value>
-    <value type="QString">HOST=wjh.hardakers.net</value>
-    <value type="QString">HOSTNAME=wjh.hardakers.net</value>
-    <value type="QString">HOSTTYPE=i386-linux</value>
-    <value type="QString">IMSETTINGS_INTEGRATE_DESKTOP=yes</value>
-    <value type="QString">IMSETTINGS_MODULE=none</value>
-    <value type="QString">IRCNICK=wes</value>
-    <value type="QString">IRCSERVER=irc.openprojects.net</value>
-    <value type="QString">KDEDIRS=/usr</value>
-    <value type="QString">KDE_FULL_SESSION=true</value>
-    <value type="QString">KDE_IS_PRELINKED=1</value>
-    <value type="QString">KDE_MULTIHEAD=false</value>
-    <value type="QString">KDE_SESSION_UID=274</value>
-    <value type="QString">KDE_SESSION_VERSION=4</value>
-    <value type="QString">KMIX_PULSEAUDIO_DISABLE=1</value>
-    <value type="QString">KONSOLE_DBUS_SERVICE=:1.34</value>
-    <value type="QString">KONSOLE_DBUS_SESSION=/Sessions/4</value>
-    <value type="QString">LANG=C</value>
-    <value type="QString">LANGUAGE=</value>
-    <value type="QString">LD_LIBRARY_PATH=/usr/lib/qtcreator:</value>
-    <value type="QString">LESS=-i</value>
-    <value type="QString">LESSOPEN=|/usr/bin/lesspipe.sh %s</value>
-    <value type="QString">LOGNAME=hardaker</value>
-    <value type="QString">LPDEST=work</value>
-    <value type="QString">LS_OPTIONS=--color -F</value>
-    <value type="QString">MACHTYPE=i386</value>
-    <value type="QString">MAIL=/var/spool/mail/hardaker</value>
-    <value type="QString">NETHACKOPTIONSS=fruit=bat guano,name = The Wizard,number_pad</value>
-    <value type="QString">NNTPSERVER=news.dcn.davis.ca.us</value>
-    <value type="QString">NPX_PLUGIN_PATH=/usr/java/jre1.3.1_03/plugin/i386/ns4</value>
-    <value type="QString">OSTYPE=linux</value>
-    <value type="QString">PAGER=less</value>
-    <value type="QString">PATH=/usr/lib/qt4/bin:/home/hardaker/bin/scripts:/home/hardaker/bin:/usr/local/bin:/usr/local/sbin:/opt/kerberos/bin:/opt/bind9.6/bin:/opt/bind9.6/sbin:/usr/java/j2re1.4.2_06/bin:/usr/lib/qt-3.3/bin:/usr/kerberos/sbin:/usr/kerberos/bin:/usr/lib/ccache:/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin:/usr/local/java/bin:/usr/sbin:/sbin:/usr/local/snmp/bin:/usr/bin/mh:/opt/Office51/bin:/usr/games:/opt/wordperfect/wpbin:/opt/mp3/bin</value>
-    <value type="QString">PERL5LIB=/usr/local/lib/perl5/site_perl/5.10.0/i386-linux-thread-multi:/usr/local/lib/perl5/site_perl/5.10.0:/usr/lib/perl5/vendor_perl/5.10.0/i386-linux-thread-multi:/usr/lib/perl5/vendor_perl/5.10.0</value>
-    <value type="QString">PRINTER=work</value>
-    <value type="QString">PROFILEHOME=</value>
-    <value type="QString">PWD=/home/hardaker/src/qmailcheck</value>
-    <value type="QString">PWSAFE_IGNORE=klipper</value>
-    <value type="QString">QTDIR=/usr/lib/qt4</value>
-    <value type="QString">QTINC=/usr/lib/qt-3.3/include</value>
-    <value type="QString">QTLIB=/usr/lib/qt-3.3/lib</value>
-    <value type="QString">QT_IM_MODULE=xim</value>
-    <value type="QString">QT_PLUGIN_PATH=/home/hardaker/.kde/lib/kde4/plugins/:/usr/lib/kde4/plugins/</value>
-    <value type="QString">REMOTEHOST=</value>
-    <value type="QString">ROGUEOPTS=jump,noseefloor,passgo,terse,flush,tombstone,fruit=guano,name = The Wizard</value>
-    <value type="QString">SESSION_MANAGER=local/unix:@/tmp/.ICE-unix/2819,unix/unix:/tmp/.ICE-unix/2819</value>
-    <value type="QString">SHELL=/bin/tcsh</value>
-    <value type="QString">SHLVL=3</value>
-    <value type="QString">SSH_AGENT_PID=2525</value>
-    <value type="QString">SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/ssh-yrfRwm2438/agent.2438</value>
-    <value type="QString">TERM=xterm</value>
-    <value type="QString">USER=hardaker</value>
-    <value type="QString">USERNAME=hardaker</value>
-    <value type="QString">VENDOR=intel</value>
-    <value type="QString">WESPATH=yep</value>
-    <value type="QString">WINDOWID=52428837</value>
-    <value type="QString">XAPPLRESDIR=/home/hardaker/lib/app-defaults</value>
-    <value type="QString">XAUTHORITY=/home/hardaker/.Xauthority</value>
-    <value type="QString">XCURSOR_THEME=default</value>
-    <value type="QString">XDG_DATA_DIRS=/usr/share/kde-settings/kde-profile/default/share:/usr/local/share:/usr/share</value>
-    <value type="QString">XDG_MENU_PREFIX=kde4-</value>
-    <value type="QString">XDG_SESSION_COOKIE=c8c4c957f2f8c2d75b6a20e64aa69323-1274708429.247362-579929285</value>
-    <value type="QString">XMODIFIERS=@im=none</value>
-    <value type="QString">XTITLE=wjh</value>
-   </valuelist>
-   <value key="abstractProcess.IgnoreReturnValue" type="bool">true</value>
-   <valuelist key="abstractProcess.arguments" type="QVariantList">
-    <value type="QString">clean</value>
-    <value type="QString">-w</value>
-   </valuelist>
-   <value key="abstractProcess.command" type="QString">/usr/bin/make</value>
-   <value key="abstractProcess.enabled" type="bool">true</value>
-   <value key="abstractProcess.workingDirectory" type="QString">/home/hardaker/src/qmailcheck</value>
-   <value key="cleanConfig" type="bool">true</value>
-   <valuelist key="makeargs" type="QVariantList">
-    <value type="QString">clean</value>
-   </valuelist>
-  </valuemap>
- </data>
- <data>
-  <variable>buildconfiguration-Release-buildstep0</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildconfiguration-Release-buildstep1</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildconfiguration-Release-cleanstep0</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildconfigurations</variable>
-  <valuelist type="QVariantList">
-   <value type="QString">Debug</value>
-   <value type="QString">Release</value>
-  </valuelist>
- </data>
- <data>
-  <variable>buildstep0</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString"></value>
-   <value key="mkspec" type="QString"></value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildstep1</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString"></value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildsteps</variable>
-  <valuelist type="QVariantList">
-   <value type="QString">trolltech.qt4projectmanager.qmake</value>
-   <value type="QString">trolltech.qt4projectmanager.make</value>
-  </valuelist>
- </data>
- <data>
-  <variable>cleanstep0</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString"></value>
-   <value key="clean" type="bool">true</value>
-  </valuemap>
- </data>
- <data>
-  <variable>cleansteps</variable>
-  <valuelist type="QVariantList">
-   <value type="QString">trolltech.qt4projectmanager.make</value>
-  </valuelist>
- </data>
- <data>
-  <variable>defaultFileEncoding</variable>
-  <value type="QByteArray">System</value>
- </data>
- <data>
-  <variable>project</variable>
-  <valuemap type="QVariantMap"/>
+  <variable>ProjectExplorer.Project.Updater.FileVersion</variable>
+  <value type="int">4</value>
  </data>
 </qtcreator>
