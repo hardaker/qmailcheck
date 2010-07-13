@@ -1,4 +1,4 @@
-#define DEBUGGING 0
+#define DEBUGGING 1
 
 #include <iostream>
 #define OUTPUT(x) std::cerr << x;

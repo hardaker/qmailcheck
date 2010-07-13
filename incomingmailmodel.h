@@ -7,6 +7,7 @@
 #include <QtNetwork/QSslSocket>
 #include <QtCore/QTimer>
 #include <QRegExp>
+#include <QtGui/QFont>
 
 #include "mailmsg.h"
 #include "foldermodel.h"
@@ -32,10 +33,12 @@ public:
 
     void set_checkinterval(int interval);
     void set_highlightNew(bool newval);
+    void set_font(const QFont &font);
 
     void set_folderList(folderModel *list);
     void emitChanges();
     void readSettings(QSettings &settings, Ui::PrefWindow *prefui);
+    void saveSettings(QSettings &settings, Ui::PrefWindow *prefui);
 
 signals:
     void mailUpdated();
@@ -65,6 +68,7 @@ private:
     bool m_highlightNew;
 
     QString m_statusMessage;
+    QFont   m_font;
 };
 
 #endif // INCOMINGMAILMODEL_H

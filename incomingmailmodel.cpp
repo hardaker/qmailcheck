@@ -67,6 +67,10 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
     if (message == stopat)
         return QVariant();
 
+    if (role == Qt::FontRole && index.column() < 4) {
+        return m_font;
+    }
+
     if (role == Qt::BackgroundRole && index.column() < 4) {
         // QColor(128,255,255);n
         // return QApplication::palette().colorGroup(QPalette::Highlight);
@@ -147,10 +151,11 @@ IncomingMailModel::reInitializeSocket()
 }
 
 void IncomingMailModel::readSettings(QSettings &settings, Ui::PrefWindow *prefui) {
-    QList<MailSource *>::iterator source = m_mailSources.begin();
     if (m_mailSources.count() == 0) {
         m_mailSources.append(new MailSource());
     }
+
+    QList<MailSource *>::iterator source = m_mailSources.begin();
 
     prefui->serverName->setText(settings.value("serverName").toString());
     (*source)->set_hostName(QString(settings.value("serverName", "localhost").toString()));
@@ -165,6 +170,13 @@ void IncomingMailModel::readSettings(QSettings &settings, Ui::PrefWindow *prefui
     (*source)->set_portNumber(settings.value("serverPort", 993).toInt());
 }
 
+void IncomingMailModel::saveSettings(QSettings &settings, Ui::PrefWindow *prefui) {
+    settings.setValue("serverName", prefui->serverName->text());
+    settings.setValue("serverPort", prefui->serverPort->text());
+    settings.setValue("userName", prefui->userName->text());
+    settings.setValue("password", prefui->password->text());
+}
+
 void IncomingMailModel::initializeSocket()
 {
     if (!m_socket.isOpen() && m_mailSources.count() > 0) {
@@ -174,8 +186,9 @@ void IncomingMailModel::initializeSocket()
         for(source = m_mailSources.begin(); source != sourceEnd; ++source) {
 
             DEBUG("Opening Connection\n");
+            qDebug() << (*source)->hostName() << "/" << (*source)->portNumber();
 
-            if ((*source)->ignoreCertErrors())
+            if (true || (*source)->ignoreCertErrors())
                 m_socket.setPeerVerifyMode(QSslSocket::VerifyNone);
             m_socket.connectToHostEncrypted((*source)->hostName(), (*source)->portNumber());
             m_socket.waitForReadyRead();
@@ -351,6 +364,10 @@ void IncomingMailModel::set_folderList(folderModel *list)
 void IncomingMailModel::set_highlightNew(bool newval)
 {
     m_highlightNew = newval;
+}
+
+void IncomingMailModel::set_font(const QFont &font) {
+    m_font = font;
 }
 
 void IncomingMailModel::clearHideList()

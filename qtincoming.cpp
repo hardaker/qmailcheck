@@ -6,6 +6,7 @@
 #include "incomingmailmodel.h"
 #include "foldermodel.h"
 #include <QSettings>
+#include <QFontDialog>
 
 #include "qmailcheckcommon.h"
 
@@ -84,6 +85,8 @@ QtIncoming::QtIncoming(QWidget *parent) :
             this, SLOT(changedSettings()));
     connect(prefui->buttonBox, SIGNAL(rejected()),
             this, SLOT(cancelled()));
+    connect(prefui->fontSelectButton, SIGNAL(clicked()),
+            this, SLOT(fontButton()));
 
     // don't do popups for the first mail check
     mailModel->checkMail();
@@ -155,6 +158,15 @@ void QtIncoming::showPrefs()
     
 }
 
+void QtIncoming::fontButton() {
+    bool ok;
+    QFont font = QFontDialog::getFont(&ok, this);
+    if (ok) {
+        mailModel->set_font(font);
+    }
+}
+
+
 void QtIncoming::changedSettings()
 {
     DEBUG("settings changed!\n");
@@ -194,10 +206,7 @@ void QtIncoming::saveSettings()
     settings.setValue("notifyCritical", prefui->criticalNotifications->isChecked());
     settings.setValue("highlightNew", prefui->highlightNew->isChecked());
     settings.setValue("checkInterval", prefui->checkMail->text());
-    settings.setValue("serverName", prefui->serverName->text());
-    settings.setValue("serverPort", prefui->serverPort->text());
-    settings.setValue("userName", prefui->userName->text());
-    settings.setValue("password", prefui->password->text());
+    mailModel->saveSettings(settings, prefui);
     folderListModel->saveSettings(settings);
 }
 

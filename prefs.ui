@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="Notifications">
       <attribute name="title">
@@ -43,16 +43,6 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
-         <widget class="QCheckBox" name="doNotification">
-          <property name="text">
-           <string>Issue notification on new mail</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="1">
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
@@ -71,10 +61,20 @@
           </item>
          </layout>
         </item>
-        <item row="5" column="1">
-         <widget class="QCheckBox" name="highlightNew">
+        <item row="1" column="1">
+         <widget class="QCheckBox" name="popupWindow">
           <property name="text">
-           <string>Highlight new mail</string>
+           <string>Pop up window on new mail</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QCheckBox" name="doNotification">
+          <property name="text">
+           <string>Issue notification on new mail</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -105,10 +105,17 @@
           </item>
          </layout>
         </item>
-        <item row="1" column="1">
-         <widget class="QCheckBox" name="popupWindow">
+        <item row="5" column="1">
+         <widget class="QCheckBox" name="highlightNew">
           <property name="text">
-           <string>Pop up window on new mail</string>
+           <string>Highlight new mail</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1">
+         <widget class="QPushButton" name="fontSelectButton">
+          <property name="text">
+           <string>Font</string>
           </property>
          </widget>
         </item>
