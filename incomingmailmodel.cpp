@@ -67,11 +67,23 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
     if (message == stopat)
         return QVariant();
 
-    if (role == Qt::FontRole && index.column() < 4) {
+    if (index.column() > COL_SUBJECT)
+        return QVariant();
+
+    if (role == Qt::FontRole) {
         return m_font;
     }
 
-    if (role == Qt::BackgroundRole && index.column() < 4) {
+    if (false && Qt::SizeHintRole == role){
+        return (QVariant(m_font.pointSize()));
+        QVariant size = QAbstractTableModel::data(index, Qt::SizeHintRole);
+        if (size.toInt() > 5)
+            return QVariant(size.toInt() - 5);
+        else
+            return size;
+    }
+
+    if (role == Qt::BackgroundRole) {
         // QColor(128,255,255);n
         // return QApplication::palette().colorGroup(QPalette::Highlight);
         if (message->isnew())
@@ -84,7 +96,7 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
             return QVariant();
     }
 
-    if (role == Qt::ForegroundRole && index.column() < 4) {
+    if (role == Qt::ForegroundRole) {
         if (message->isnew())
 #if defined(Q_WS_MAEMO_5) || defined(MAEMO_CHANGES)
             return QColor(128,128,255);
