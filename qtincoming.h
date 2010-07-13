@@ -26,6 +26,7 @@ public slots:
     void saveSettings();
     void readSettings();
     void sendNotification(QString message);
+    void fontButton();
 
     void set_highlightNew(bool);
     void set_doNotification(bool);
