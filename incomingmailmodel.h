@@ -24,6 +24,7 @@ public:
     int columnCount(const QModelIndex &parent) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
+    QFont font();
 
     void initializeSocket();
     void reInitializeSocket();

@@ -160,7 +160,7 @@ void QtIncoming::showPrefs()
 
 void QtIncoming::fontButton() {
     bool ok;
-    QFont font = QFontDialog::getFont(&ok, this);
+    QFont font = QFontDialog::getFont(&ok, mailModel->font(), this);
     if (ok) {
         mailModel->set_font(font);
     }

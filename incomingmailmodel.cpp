@@ -370,6 +370,10 @@ void IncomingMailModel::set_font(const QFont &font) {
     m_font = font;
 }
 
+QFont IncomingMailModel::font() {
+    return m_font;
+}
+
 void IncomingMailModel::clearHideList()
 {
     m_hideList.clear();
