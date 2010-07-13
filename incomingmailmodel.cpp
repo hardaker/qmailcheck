@@ -168,6 +168,8 @@ void IncomingMailModel::readSettings(QSettings &settings, Ui::PrefWindow *prefui
 
     prefui->serverPort->setText(settings.value("serverPort").toString());
     (*source)->set_portNumber(settings.value("serverPort", 993).toInt());
+
+    set_font(settings.value("font").value<QFont>());
 }
 
 void IncomingMailModel::saveSettings(QSettings &settings, Ui::PrefWindow *prefui) {
@@ -175,6 +177,7 @@ void IncomingMailModel::saveSettings(QSettings &settings, Ui::PrefWindow *prefui
     settings.setValue("serverPort", prefui->serverPort->text());
     settings.setValue("userName", prefui->userName->text());
     settings.setValue("password", prefui->password->text());
+    settings.setValue("font", m_font);
 }
 
 void IncomingMailModel::initializeSocket()

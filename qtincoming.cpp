@@ -33,6 +33,12 @@ QtIncoming::QtIncoming(QWidget *parent) :
     mailView->resizeColumnsToContents();
     mailView->resizeRowsToContents();
 
+    mailView->setShowGrid(false);
+    mailView->horizontalHeader()->hide();
+    mailView->verticalHeader()->hide();
+    mailView->horizontalHeader()->setMinimumSectionSize(1);
+    mailView->verticalHeader()->setMinimumSectionSize(1);
+
     folderListModel = new folderModel(this);
     mailModel->set_folderList(folderListModel);
 
