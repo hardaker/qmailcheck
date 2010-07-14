@@ -1,4 +1,5 @@
 #include "incomingmailmodel.h"
+#include "MailChecker.h"
 
 #include <QtGui/QLabel>
 #include <QtNetwork/QSslSocket>
@@ -18,9 +19,22 @@ enum column_list
 };
 
 IncomingMailModel::IncomingMailModel(QObject *parent) :
-    QAbstractTableModel(parent), m_socket(),
+    QAbstractTableModel(parent), m_socket(), m_checker(0), m_mutex(new QMutex()),
     folderList(0), m_messages(), m_hideList(), m_checkinterval(600), m_statusMessage(), m_highlightNew(true)
 {
+}
+
+void IncomingMailModel::changedSettings() {
+    restartCheckers();
+}
+
+void IncomingMailModel::restartCheckers() {
+    if (m_checker) {
+        m_checker->shutDown();
+        delete m_checker;
+    }
+    m_checker = new MailChecker(this, m_mutex, 0);
+    m_checker->start();
 }
 
 int IncomingMailModel::rowCount(const QModelIndex &parent) const

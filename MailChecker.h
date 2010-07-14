@@ -10,7 +10,7 @@ class MailChecker : public QThread
 {
     Q_OBJECT
 public:
-    explicit MailChecker(IncomingMailModel *model, QMutex *mutex, QObject *parent = 0);
+    MailChecker(IncomingMailModel *model, QMutex *mutex, QObject *parent = 0);
     void run();
     void shutDown();
     void initializeSocket();

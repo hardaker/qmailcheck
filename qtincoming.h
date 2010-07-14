@@ -27,6 +27,7 @@ public slots:
     void readSettings();
     void sendNotification(QString message);
     void fontButton();
+    void newMail();
 
     void set_highlightNew(bool);
     void set_doNotification(bool);
@@ -46,6 +47,7 @@ private:
     bool               m_doNotification;
     bool               m_notifyCritical;
     bool               m_highlightNew;
+    bool               m_firstCheck;
 };
 
 #endif // QTINCOMING_H

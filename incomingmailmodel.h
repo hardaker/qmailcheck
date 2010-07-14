@@ -8,6 +8,7 @@
 #include <QtCore/QTimer>
 #include <QRegExp>
 #include <QtGui/QFont>
+#include <QtCore/QMutex>
 
 #include "mailmsg.h"
 #include "foldermodel.h"
@@ -27,9 +28,6 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
     QFont font();
 
-    void initializeSocket();
-    void reInitializeSocket();
-
     void setupTimer();
     QList<QString> sendCommand(const QString &cmd);
 
@@ -43,15 +41,20 @@ public:
     void saveSettings(QSettings &settings, Ui::PrefWindow *prefui);
 
 signals:
+    void newMail();
 
 public slots:
-    void checkMail();
     void clearNew();
     void hideMessages();
     void clearHideList();
+    void changedSettings();
+    void restartCheckers();
 
 private:
     friend class MailChecker;
+
+    MailChecker *m_checker;
+    QMutex      *m_mutex;
 
     QSslSocket m_socket;
     folderModel *folderList;

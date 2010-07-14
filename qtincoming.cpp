@@ -15,7 +15,7 @@ QtIncoming::QtIncoming(QWidget *parent) :
     mailView(0),
     ui(new Ui::QtIncoming), prefui(new Ui::PrefWindow),
     prefDialog(new QDialog(parent, Qt::Window)),
-    do_popup(true), m_doNotification(true), m_highlightNew(true)
+    do_popup(true), m_doNotification(true), m_highlightNew(true), m_firstCheck(true)
 {
     const char name[] = "qmailcheck";
 
@@ -89,20 +89,30 @@ QtIncoming::QtIncoming(QWidget *parent) :
     //prefDialog->show();
     connect(prefui->buttonBox, SIGNAL(accepted()),
             this, SLOT(changedSettings()));
+    connect(prefui->buttonBox, SIGNAL(accepted()),
+            folderListModel, SLOT(changedSettings()));
     connect(prefui->buttonBox, SIGNAL(rejected()),
             this, SLOT(cancelled()));
     connect(prefui->fontSelectButton, SIGNAL(clicked()),
             this, SLOT(fontButton()));
 
     // don't do popups for the first mail check
-    mailModel->checkMail();
-    mailModel->clearNew();
-    mailView->resizeRowsToContents();
-    mailView->resizeColumnsToContents();
+    connect(mailModel, SIGNAL(newMail()), this, SLOT(newMail()));
    
     // connect this after the initial check mail pass
     connect(mailModel, SIGNAL(newMailMessage(QString)),
             this, SLOT(sendNotification(QString)));
+
+    mailModel->restartCheckers();
+}
+
+void QtIncoming::newMail() {
+    mailView->resizeRowsToContents();
+    mailView->resizeColumnsToContents();
+    if (m_firstCheck) {
+        mailModel->clearNew();
+        m_firstCheck = false;
+    }
 }
 
 QtIncoming::~QtIncoming()
@@ -178,7 +188,6 @@ void QtIncoming::changedSettings()
     DEBUG("settings changed!\n");
     saveSettings();
     readSettings();
-    mailModel->checkMail();
     this->repaint();
 //    prefDialog = 0;
 }
@@ -259,7 +268,7 @@ void QtIncoming::readSettings()
 
     folderListModel->readSettings(settings);
 
-    mailModel->reInitializeSocket();
+    mailModel->restartCheckers();
 }
 
 
