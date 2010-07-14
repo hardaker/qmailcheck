@@ -10,13 +10,15 @@ SOURCES += main.cpp \
     mailmsg.cpp \
     folderitem.cpp \
     foldermodel.cpp \
-    MailSource.cpp
+    MailSource.cpp \
+    MailChecker.cpp
 HEADERS += qtincoming.h \
     incomingmailmodel.h \
     mailmsg.h \
     folderitem.h \
     foldermodel.h \
-    MailSource.h
+    MailSource.h \
+    MailChecker.h
 FORMS += qtincoming.ui \
     prefs.ui
 CONFIG += link_pkgconfig
