@@ -11,7 +11,8 @@ MailChecker::MailChecker(IncomingMailModel *model, QMutex *mutex, QObject *paren
 }
 
 void MailChecker::run() {
-
+    setupTimer();
+    checkMail();
 }
 
 void MailChecker::shutDown() {
