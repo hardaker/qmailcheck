@@ -19,7 +19,7 @@ enum column_list
 
 IncomingMailModel::IncomingMailModel(QObject *parent) :
     QAbstractTableModel(parent), m_socket(),
-    __counter(0), folderList(0), m_messages(), m_hideList(), m_checkinterval(600), m_statusMessage(), m_highlightNew(true)
+    folderList(0), m_messages(), m_hideList(), m_checkinterval(600), m_statusMessage(), m_highlightNew(true)
 {
 }
 
