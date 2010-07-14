@@ -19,7 +19,7 @@ enum column_list
 
 IncomingMailModel::IncomingMailModel(QObject *parent) :
     QAbstractTableModel(parent), m_socket(),
-    __counter(0), folderList(0), m_messages(), m_hideList(), m_timer(), m_checkinterval(600), m_statusMessage(), m_highlightNew(true)
+    __counter(0), folderList(0), m_messages(), m_hideList(), m_checkinterval(600), m_statusMessage(), m_highlightNew(true)
 {
 }
 
@@ -186,51 +186,6 @@ void IncomingMailModel::saveSettings(QSettings &settings, Ui::PrefWindow *prefui
     settings.setValue("userName", prefui->userName->text());
     settings.setValue("password", prefui->password->text());
     settings.setValue("font", m_font);
-}
-
-QList<QString>
-IncomingMailModel::sendCommand(const QString &cmd) {
-    char buf[1024];
-
-    QString fullcmd ( QString('A') + QString::number(++__counter) +
-                      QString(' ') + cmd + QString('\n') );
-    //DEBUG ("sending: " << fullcmd.toAscii().data());
-    m_socket.write(fullcmd.toAscii().data(), fullcmd.length());
-
-    QRegExp donematch(QString("^A") + QString::number(__counter) + QString(" "));
-
-    bool notDone = true;
-    QList<QString> results;
-    while(notDone) {
-        if ( m_socket.bytesAvailable() <= 0 )
-            m_socket.waitForReadyRead();
-
-        int linelength = m_socket.readLine( buf, sizeof( buf ) );
-        if (linelength <= 0) {
-            reInitializeSocket();
-            return results; // XXX: need to throw an error or something
-        }
-
-        QString resultString(buf);
-        resultString = resultString.trimmed();
-        results.push_back(resultString);
-        // DEBUG( "data: " << resultString.toAscii().data() << "\n");
-
-        if (donematch.indexIn(resultString) != -1) {
-            notDone = false;
-            // DEBUG( "end marker found " << donematch.pattern().toAscii().data() << "\n");
-        }
-    }
-    //DEBUG( "----\n");
-    return results;
-}
-
-void
-IncomingMailModel::setupTimer()
-{
-    m_timer.stop();
-    connect(&m_timer, SIGNAL(timeout()), this, SLOT(checkMail()));
-    m_timer.start(m_checkinterval * 1000);
 }
 
 void IncomingMailModel::set_checkinterval(int checkinterval) {

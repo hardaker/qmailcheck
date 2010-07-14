@@ -15,8 +15,9 @@ public:
     void shutDown();
     void initializeSocket();
     void reInitializeSocket();
+    QList<QString> sendCommand(const QString &cmd);
     void checkMail();
-
+    void setupTimer();
 
 signals:
 
@@ -25,6 +26,7 @@ public slots:
 private:
     IncomingMailModel      *m_model;
     QMutex                 *m_mutex;
+    QTimer m_timer;
 };
 
 #endif // MAILCHECKER_H

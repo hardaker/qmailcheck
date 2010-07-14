@@ -49,12 +49,55 @@ void MailChecker::initializeSocket()
     }
 }
 
-
 void MailChecker::reInitializeSocket()
 {
     if (m_model->m_socket.isOpen())
         m_model->m_socket.close();
     initializeSocket();
+}
+
+QList<QString> MailChecker::sendCommand(const QString &cmd) {
+    char buf[1024];
+
+    QString fullcmd ( QString('A') + QString::number(++__counter) +
+                      QString(' ') + cmd + QString('\n') );
+    //DEBUG ("sending: " << fullcmd.toAscii().data());
+    m_model->m_socket.write(fullcmd.toAscii().data(), fullcmd.length());
+
+    QRegExp donematch(QString("^A") + QString::number(__counter) + QString(" "));
+
+    bool notDone = true;
+    QList<QString> results;
+    while(notDone) {
+        if ( m_model->m_socket.bytesAvailable() <= 0 )
+            m_model->m_socket.waitForReadyRead();
+
+        int linelength = m_model->m_socket.readLine( buf, sizeof( buf ) );
+        if (linelength <= 0) {
+            reInitializeSocket();
+            return results; // XXX: need to throw an error or something
+        }
+
+        QString resultString(buf);
+        resultString = resultString.trimmed();
+        results.push_back(resultString);
+        // DEBUG( "data: " << resultString.toAscii().data() << "\n");
+
+        if (donematch.indexIn(resultString) != -1) {
+            notDone = false;
+            // DEBUG( "end marker found " << donematch.pattern().toAscii().data() << "\n");
+        }
+    }
+    //DEBUG( "----\n");
+    return results;
+}
+
+void
+MailChecker::setupTimer()
+{
+    m_timer.stop();
+    connect(&m_timer, SIGNAL(timeout()), this, SLOT(checkMail()));
+    m_timer.start(m_model->m_checkinterval * 1000);
 }
 
 void MailChecker::checkMail()
