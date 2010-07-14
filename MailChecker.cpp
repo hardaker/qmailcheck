@@ -192,7 +192,7 @@ void MailChecker::checkMail()
     emit updateCount(oldcount, m_model->m_messages.count());
     if (containsNewMessages) {
         emit newMail();
-        emitChanges();
+        m_model->emitChanges();
     }
     m_model->m_statusMessage = QString("%1 messages available").arg(m_model->m_messages.count());
     emit statusMessage(m_model->m_statusMessage, 0);

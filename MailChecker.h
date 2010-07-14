@@ -20,13 +20,19 @@ public:
     void setupTimer();
 
 signals:
+    void mailUpdated();
+    void newMail();
+    void updateCount(int from, int to);
+    void newMailMessage(const QString newmessage);
+    void statusMessage(const QString &message, int timeout);
 
 public slots:
 
 private:
     IncomingMailModel      *m_model;
     QMutex                 *m_mutex;
-    QTimer m_timer;
+    QTimer                  m_timer;
+    int                     __counter;
 };
 
 #endif // MAILCHECKER_H

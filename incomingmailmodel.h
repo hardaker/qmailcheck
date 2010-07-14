@@ -43,11 +43,6 @@ public:
     void saveSettings(QSettings &settings, Ui::PrefWindow *prefui);
 
 signals:
-    void mailUpdated();
-    void newMail();
-    void updateCount(int from, int to);
-    void statusMessage(const QString &message, int timeout);
-    void newMailMessage(const QString newmessage);
 
 public slots:
     void checkMail();
@@ -59,7 +54,6 @@ private:
     friend class MailChecker;
 
     QSslSocket m_socket;
-    int __counter;
     folderModel *folderList;
 
     QList<MailMsg> m_messages;
