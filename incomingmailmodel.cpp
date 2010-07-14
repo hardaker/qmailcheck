@@ -75,6 +75,10 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
     }
 
     if (false && Qt::SizeHintRole == role){
+        QSize s;
+        s.setHeight(12);
+        s.setWidth(400);
+        return s;
         return (QVariant(m_font.pointSize()));
         QVariant size = QAbstractTableModel::data(index, Qt::SizeHintRole);
         if (size.toInt() > 5)
@@ -130,7 +134,7 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
         return message->subject();
 
     default:
-        return QString("x");
+        return QVariant();
         
     }
 }
