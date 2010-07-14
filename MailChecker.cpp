@@ -18,8 +18,46 @@ void MailChecker::shutDown() {
 
 }
 
-void
-MailChecker::checkMail()
+void MailChecker::initializeSocket()
+{
+    if (!m_model->m_socket.isOpen() && m_model->m_mailSources.count() > 0) {
+        QList<MailSource *>::iterator     source;
+        QList<MailSource *>::iterator     sourceEnd = m_model->m_mailSources.end();
+
+        for(source = m_model->m_mailSources.begin(); source != sourceEnd; ++source) {
+
+            DEBUG("Opening Connection\n");
+            qDebug() << (*source)->hostName() << "/" << (*source)->portNumber();
+
+            if (true || (*source)->ignoreCertErrors())
+                m_model->m_socket.setPeerVerifyMode(QSslSocket::VerifyNone);
+            m_model->m_socket.connectToHostEncrypted((*source)->hostName(), (*source)->portNumber());
+            m_model->m_socket.waitForReadyRead();
+
+            // read throw-away line info
+            char buf[4096];
+            m_model->m_socket.readLine( buf, sizeof( buf ) );
+
+            DEBUG("intial line: " << buf);
+
+            // XXX: should check for error
+            sendCommand(QString("login ") + (*source)->userName() + " " + (*source)->passPhrase());
+            // XXX: A1 NO [AUTHENTICATIONFAILED] Authentication failed.
+
+            setupTimer();
+        }
+    }
+}
+
+
+void MailChecker::reInitializeSocket()
+{
+    if (m_model->m_socket.isOpen())
+        m_model->m_socket.close();
+    initializeSocket();
+}
+
+void MailChecker::checkMail()
 {
 
     DEBUG("Attempting to check mail...\n");
