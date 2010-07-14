@@ -67,7 +67,6 @@ private:
 
     QList<MailSource *> m_mailSources;
     
-    QTimer m_timer;
     int m_checkinterval;
     bool m_highlightNew;
 
