@@ -14,6 +14,7 @@
 #include "ui_prefs.h"
 #include "MailSource.h"
 
+class MailChecker;
 class IncomingMailModel : public QAbstractTableModel
 {
 Q_OBJECT
@@ -55,6 +56,8 @@ public slots:
     void clearHideList();
 
 private:
+    friend class MailChecker;
+
     QSslSocket m_socket;
     int __counter;
     folderModel *folderList;

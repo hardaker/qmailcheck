@@ -13,6 +13,7 @@ public:
     explicit MailChecker(IncomingMailModel *model, QMutex *mutex, QObject *parent = 0);
     void run();
     void shutDown();
+    void checkMail();
 
 signals:
 
