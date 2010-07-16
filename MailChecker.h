@@ -3,6 +3,8 @@
 
 #include <QThread>
 #include <QMutex>
+#include <QtNetwork/QSslSocket>
+#include "foldermodel.h"
 
 #include "incomingmailmodel.h"
 
@@ -10,7 +12,8 @@ class MailChecker : public QThread
 {
     Q_OBJECT
 public:
-    MailChecker(IncomingMailModel *model, QMutex *mutex, QObject *parent = 0);
+    MailChecker(IncomingMailModel *model, QMutex *mutex, MailSource *mailSource, folderModel *folderModel, int checkInterval,
+                QList<MailMsg> *messages);
     void run();
     void shutDown();
     void initializeSocket();
@@ -29,10 +32,16 @@ signals:
 public slots:
 
 private:
+    QSslSocket             *m_socket;
     IncomingMailModel      *m_model;
     QMutex                 *m_mutex;
-    QTimer                  m_timer;
+    QTimer                 *m_timer;
     int                     __counter;
+    MailSource             *m_mailSource;
+    folderModel            *m_folderModel;
+    int                     m_checkInterval;
+    QList<MailMsg>         *m_messages;
+    QString                 m_statusMessage;
 };
 
 #endif // MAILCHECKER_H

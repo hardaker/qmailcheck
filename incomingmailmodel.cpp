@@ -19,7 +19,7 @@ enum column_list
 };
 
 IncomingMailModel::IncomingMailModel(QObject *parent) :
-    QAbstractTableModel(parent), m_socket(), m_checker(0), m_mutex(new QMutex()),
+    QAbstractTableModel(parent), m_checker(0), m_mutex(new QMutex()),
     folderList(0), m_messages(), m_hideList(), m_checkinterval(600), m_statusMessage(), m_highlightNew(true)
 {
 }
@@ -33,7 +33,7 @@ void IncomingMailModel::restartCheckers() {
         m_checker->shutDown();
         delete m_checker;
     }
-    m_checker = new MailChecker(this, m_mutex, 0);
+    m_checker = new MailChecker(this, m_mutex, m_mailSources[0], folderList, m_checkinterval, &m_messages);
     m_checker->start();
 }
 

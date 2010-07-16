@@ -51,12 +51,9 @@ public slots:
     void restartCheckers();
 
 private:
-    friend class MailChecker;
-
     MailChecker *m_checker;
     QMutex      *m_mutex;
 
-    QSslSocket m_socket;
     folderModel *folderList;
 
     QList<MailMsg> m_messages;
