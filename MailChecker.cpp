@@ -5,8 +5,10 @@
 #define FROM_WIDTH    20
 #define SUBJECT_WIDTH 48
 
-MailChecker::MailChecker(IncomingMailModel *model, QMutex *mutex, QObject *parent) :
-    QThread(parent), m_model(model), m_mutex(mutex)
+MailChecker::MailChecker(IncomingMailModel *model, QMutex *mutex, MailSource *mailSource, folderModel *folderModel, int checkInterval,
+                         QList<MailMsg> *messages) :
+    QThread(0), m_socket(0), m_model(model), m_mutex(mutex), m_timer(0), m_mailSource(mailSource), m_folderModel(folderModel),
+    m_checkInterval(checkInterval), m_messages(messages)
 {
 }
 
@@ -21,39 +23,46 @@ void MailChecker::shutDown() {
 
 void MailChecker::initializeSocket()
 {
-    if (!m_model->m_socket.isOpen() && m_model->m_mailSources.count() > 0) {
-        QList<MailSource *>::iterator     source;
-        QList<MailSource *>::iterator     sourceEnd = m_model->m_mailSources.end();
+    if (!m_socket)
+        m_socket = new QSslSocket(this);
 
-        for(source = m_model->m_mailSources.begin(); source != sourceEnd; ++source) {
+    QList<QString> results;
 
-            DEBUG("Opening Connection\n");
-            qDebug() << (*source)->hostName() << "/" << (*source)->portNumber();
+    qDebug() << "Opening Connection to: " << m_mailSource->hostName() << "/" << m_mailSource->portNumber();
 
-            if (true || (*source)->ignoreCertErrors())
-                m_model->m_socket.setPeerVerifyMode(QSslSocket::VerifyNone);
-            m_model->m_socket.connectToHostEncrypted((*source)->hostName(), (*source)->portNumber());
-            m_model->m_socket.waitForReadyRead();
-
-            // read throw-away line info
-            char buf[4096];
-            m_model->m_socket.readLine( buf, sizeof( buf ) );
-
-            DEBUG("intial line: " << buf);
-
-            // XXX: should check for error
-            sendCommand(QString("login ") + (*source)->userName() + " " + (*source)->passPhrase());
-            // XXX: A1 NO [AUTHENTICATIONFAILED] Authentication failed.
-
-            setupTimer();
-        }
+    if (true || m_mailSource->ignoreCertErrors())
+        m_socket->setPeerVerifyMode(QSslSocket::VerifyNone);
+    m_socket->connectToHostEncrypted(m_mailSource->hostName(), m_mailSource->portNumber());
+    m_socket->waitForReadyRead();
+    if (!m_socket->isOpen()) {
+        qWarning() << "failed to connect to " << m_mailSource->hostName() << ":" << m_mailSource->portNumber();
+        sleep(1);
+        return;
     }
+
+    // read throw-away line info
+    char buf[4096];
+    m_socket->readLine( buf, sizeof( buf ) );
+
+    DEBUG("intial line: " << buf);
+
+    // XXX: should check for error
+    results = sendCommand(QString("login ") + m_mailSource->userName() + " " + m_mailSource->passPhrase());
+    qDebug() << "login results:" << results;
+    if (results.length() == 0) {
+        qWarning() << "login failed";
+        m_socket->close();
+        return;
+    }
+    // XXX: A1 NO [AUTHENTICATIONFAILED] Authentication failed.
 }
 
 void MailChecker::reInitializeSocket()
 {
-    if (m_model->m_socket.isOpen())
-        m_model->m_socket.close();
+    if (m_socket->isOpen()) {
+        m_socket->close();
+        sleep(1);
+    }
     initializeSocket();
 }
 
@@ -62,27 +71,26 @@ QList<QString> MailChecker::sendCommand(const QString &cmd) {
 
     QString fullcmd ( QString('A') + QString::number(++__counter) +
                       QString(' ') + cmd + QString('\n') );
-    //DEBUG ("sending: " << fullcmd.toAscii().data());
-    m_model->m_socket.write(fullcmd.toAscii().data(), fullcmd.length());
+    DEBUG ("sending: " << fullcmd.toAscii().data());
+    m_socket->write(fullcmd.toAscii().data(), fullcmd.length());
 
     QRegExp donematch(QString("^A") + QString::number(__counter) + QString(" "));
 
     bool notDone = true;
     QList<QString> results;
     while(notDone) {
-        if ( m_model->m_socket.bytesAvailable() <= 0 )
-            m_model->m_socket.waitForReadyRead();
+        if ( m_socket->bytesAvailable() <= 0 )
+            m_socket->waitForReadyRead();
 
-        int linelength = m_model->m_socket.readLine( buf, sizeof( buf ) );
+        int linelength = m_socket->readLine( buf, sizeof( buf ) );
         if (linelength <= 0) {
-            reInitializeSocket();
-            return results; // XXX: need to throw an error or something
+            return QList<QString>(); // hopefully they check for an empty list
         }
 
         QString resultString(buf);
         resultString = resultString.trimmed();
         results.push_back(resultString);
-        // DEBUG( "data: " << resultString.toAscii().data() << "\n");
+        DEBUG( "data: " << resultString.toAscii().data() << "\n");
 
         if (donematch.indexIn(resultString) != -1) {
             notDone = false;
@@ -96,9 +104,14 @@ QList<QString> MailChecker::sendCommand(const QString &cmd) {
 void
 MailChecker::setupTimer()
 {
-    m_timer.stop();
-    connect(&m_timer, SIGNAL(timeout()), this, SLOT(checkMail()));
-    m_timer.start(m_model->m_checkinterval * 1000);
+    m_timer = new QTimer(this);
+    if (!m_timer) {
+        qWarning() << "failed to create a timer";
+        return;
+    }
+    m_timer->stop();
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(checkMail()));
+    m_timer->start(m_checkInterval * 1000);
 }
 
 void MailChecker::checkMail()
@@ -106,8 +119,8 @@ void MailChecker::checkMail()
 
     DEBUG("Attempting to check mail...\n");
 
-    if (!m_model->folderList || m_model->folderList->count() == 0) {
-        if (!m_model->folderList) {
+    if (!m_folderModel || m_folderModel->count() == 0) {
+        if (!m_folderModel) {
             DEBUG("no folder list\n");
         } else {
             DEBUG("folder list empty\n");
@@ -115,20 +128,20 @@ void MailChecker::checkMail()
         return;
     }
 
-    if (! m_model->m_socket.isOpen()) {
+    if (!m_socket || ! m_socket->isOpen()) {
         DEBUG("socket not open\n");
         initializeSocket();
-        if (! m_model->m_socket.isOpen())
+        if (!m_socket || ! m_socket->isOpen())
             return;
     }
 
     QMap<QString, bool> uid_list;
-    for(int i = 0; i < m_model->m_messages.count(); i++) {
-        uid_list.insert(m_model->m_messages[i].uid(), m_model->m_messages[i].isnew());
+    for(int i = 0; i < m_messages->count(); i++) {
+        uid_list.insert((*m_messages)[i].uid(), (*m_messages)[i].isnew());
     }
 
-    int oldcount = m_model->m_messages.count();
-    m_model->m_messages.clear();
+    int oldcount = m_messages->count();
+    m_messages->clear();
 
     QList<QString> results;
     QRegExp subjectMatch("Subject: +(.*)");
@@ -136,14 +149,14 @@ void MailChecker::checkMail()
     QRegExp dateMatch("Date: +(.*)");
     bool containsNewMessages = false;
 
-    for(int mbox = 0; mbox < m_model->folderList->count(); mbox++) {
+    for(int mbox = 0; mbox < m_folderModel->count(); mbox++) {
 
-        if (m_model->folderList->folderName(mbox) == "")
+        if (m_folderModel->folderName(mbox) == "")
             continue;
 
-        //DEBUG("---- " << m_model->folderList->folderName(mbox).toAscii().data() << " ------\n");
+        DEBUG("---- " << m_folderModel->folderName(mbox).toAscii().data() << " ------\n");
 
-        sendCommand(QString("EXAMINE \"" + m_model->folderList->folderName(mbox) + "\""));
+        sendCommand(QString("EXAMINE \"" + m_folderModel->folderName(mbox) + "\""));
 
         results = sendCommand(QString("UID SEARCH RECENT"));
         if (results.length() == 0) {
@@ -168,8 +181,8 @@ void MailChecker::checkMail()
                 }
             }
 
-            MailMsg message(msglist[i], m_model->folderList->folderName(mbox), date, from, subject);
-            if (m_model->m_highlightNew && ! uid_list.contains(msglist[i])) {
+            MailMsg message(msglist[i], m_folderModel->folderName(mbox), date, from, subject);
+            if (! uid_list.contains(msglist[i])) {
                 message.setIsNew(true);
                 containsNewMessages = true;
                 emit newMailMessage(from + "\n" + subject);
@@ -177,7 +190,7 @@ void MailChecker::checkMail()
                 message.setIsNew(uid_list[msglist[i]]);
             }
 
-            m_model->m_messages.push_back(message);
+            m_messages->push_back(message);
 
             date.truncate(DATE_WIDTH);
             from.truncate(FROM_WIDTH);
@@ -189,12 +202,13 @@ void MailChecker::checkMail()
             //DEBUG(output.toAscii().data() << "\n");
         }
     }
+    qDebug() << "Done checking mail";
     emit mailUpdated();
-    emit updateCount(oldcount, m_model->m_messages.count());
+    emit updateCount(oldcount, m_messages->count());
     if (containsNewMessages) {
         emit newMail();
-        m_model->emitChanges();
+        // m_model->emitChanges();
     }
-    m_model->m_statusMessage = QString("%1 messages available").arg(m_model->m_messages.count());
-    emit statusMessage(m_model->m_statusMessage, 0);
+    m_statusMessage = QString("%1 messages available").arg(m_messages->count());
+    emit statusMessage(m_statusMessage, 0);
 }
