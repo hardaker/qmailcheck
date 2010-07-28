@@ -16,11 +16,12 @@
 #include "MailSource.h"
 
 class MailChecker;
+class QtIncoming;
 class IncomingMailModel : public QAbstractTableModel
 {
 Q_OBJECT
 public:
-    explicit IncomingMailModel(QObject *parent = 0);
+    explicit IncomingMailModel(QObject *parent, QtIncoming  *mainWidget, QTableView  *mailView);
     QVariant data(const QModelIndex &index, int role) const;
     int rowCount(const QModelIndex &parent) const;
     int columnCount(const QModelIndex &parent) const;
@@ -39,9 +40,11 @@ public:
     void emitChanges();
     void readSettings(QSettings &settings, Ui::PrefWindow *prefui);
     void saveSettings(QSettings &settings, Ui::PrefWindow *prefui);
+    void connectSignals(QTableView *mailView, QtIncoming *mainWidget);
 
 signals:
     void newMail();
+    void checkMail();
 
 public slots:
     void clearNew();
@@ -49,8 +52,11 @@ public slots:
     void clearHideList();
     void changedSettings();
     void restartCheckers();
+    void checkMailSlot();
 
 private:
+    QtIncoming  *m_mainWidget;
+    QTableView  *m_mailView;
     MailChecker *m_checker;
     QMutex      *m_mutex;
 

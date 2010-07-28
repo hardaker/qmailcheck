@@ -1,5 +1,6 @@
 #include "MailChecker.h"
 #include "qmailcheckcommon.h"
+#include "qtincoming.h"
 
 #define DATE_WIDTH    5
 #define FROM_WIDTH    20
@@ -7,24 +8,59 @@
 
 MailChecker::MailChecker(IncomingMailModel *model, QMutex *mutex, MailSource *mailSource, folderModel *folderModel, int checkInterval,
                          QList<MailMsg> *messages) :
-    QThread(0), m_socket(0), m_model(model), m_mutex(mutex), m_timer(0), m_mailSource(mailSource), m_folderModel(folderModel),
+    QThread(0), m_socket(0), m_model(model), m_mutex(mutex), m_timer(this), m_mailSource(mailSource), m_folderModel(folderModel),
     m_checkInterval(checkInterval), m_messages(messages)
 {
+    qDebug() << "----- New CHECKER";
+}
+
+void MailChecker::connectSignals(QTableView *mailView, QtIncoming *mainWidget)
+{
+    // signals from the mailbox
+    connect(this, SIGNAL(mailUpdated()),
+            mailView, SLOT(resizeRowsToContents()));
+    connect(this, SIGNAL(mailUpdated()),
+            mailView, SLOT(resizeColumnsToContents()));
+    connect(this, SIGNAL(mailUpdated()),
+            mailView, SLOT(repaint()));
+
+    connect(this, SIGNAL(updateCount(int, int)),
+            mailView, SLOT(rowCountChanged(int, int)));
+
+    connect(this, SIGNAL(newMail()),
+            mainWidget, SLOT(maybeRaise()));
+    connect(this, SIGNAL(mailUpdated()),
+            mailView, SLOT(repaint()));
+
+    // don't do popups for the first mail check
+    connect(this, SIGNAL(newMail()),
+            mainWidget, SLOT(newMail()));
+
+    // connect this after the initial check mail pass
+    connect(this, SIGNAL(newMailMessage(QString)),
+            mainWidget, SLOT(sendNotification(QString)));
 }
 
 void MailChecker::run() {
-    setupTimer();
-    checkMail();
+    qDebug() << "----- RUN CALLED";
+    //setupTimer();
+    //checkMail();
+    exec();
 }
 
 void MailChecker::shutDown() {
-
+    qDebug() << "----- SHUTDOWN CALLED";
+    m_timer.stop();
+    if (m_socket)
+        m_socket->close();
 }
 
 void MailChecker::initializeSocket()
 {
-    if (!m_socket)
-        m_socket = new QSslSocket(this);
+    qDebug() << "----- INIT SOCKET CALLED";
+    if (m_socket)
+        delete m_socket;
+    m_socket = new QSslSocket(this);
 
     QList<QString> results;
 
@@ -33,12 +69,12 @@ void MailChecker::initializeSocket()
     if (true || m_mailSource->ignoreCertErrors())
         m_socket->setPeerVerifyMode(QSslSocket::VerifyNone);
     m_socket->connectToHostEncrypted(m_mailSource->hostName(), m_mailSource->portNumber());
-    m_socket->waitForReadyRead();
     if (!m_socket->isOpen()) {
         qWarning() << "failed to connect to " << m_mailSource->hostName() << ":" << m_mailSource->portNumber();
         sleep(1);
         return;
     }
+    m_socket->waitForReadyRead();
 
     // read throw-away line info
     char buf[4096];
@@ -90,7 +126,7 @@ QList<QString> MailChecker::sendCommand(const QString &cmd) {
         QString resultString(buf);
         resultString = resultString.trimmed();
         results.push_back(resultString);
-        DEBUG( "data: " << resultString.toAscii().data() << "\n");
+        // DEBUG( "data: " << resultString.toAscii().data() << "\n");
 
         if (donematch.indexIn(resultString) != -1) {
             notDone = false;
@@ -104,14 +140,9 @@ QList<QString> MailChecker::sendCommand(const QString &cmd) {
 void
 MailChecker::setupTimer()
 {
-    m_timer = new QTimer(this);
-    if (!m_timer) {
-        qWarning() << "failed to create a timer";
-        return;
-    }
-    m_timer->stop();
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(checkMail()));
-    m_timer->start(m_checkInterval * 1000);
+    m_timer.stop();
+    connect(&m_timer, SIGNAL(timeout()), this, SLOT(checkMail()));
+    m_timer.start(m_checkInterval * 1000);
 }
 
 void MailChecker::checkMail()
