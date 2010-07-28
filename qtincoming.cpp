@@ -12,7 +12,6 @@
 
 QtIncoming::QtIncoming(QWidget *parent) :
     QMainWindow(parent),
-    mailView(0),
     ui(new Ui::QtIncoming), prefui(new Ui::PrefWindow),
     prefDialog(new QDialog(parent, Qt::Window)),
     do_popup(true), m_doNotification(true), m_highlightNew(true), m_firstCheck(true)
@@ -23,8 +22,8 @@ QtIncoming::QtIncoming(QWidget *parent) :
 
     ui->setupUi(this);
 
-    mailModel = new IncomingMailModel(this);
     mailView = ui->mailTable;
+    mailModel = new IncomingMailModel(0, this, mailView);
     mailView->setModel(mailModel);
     mailView->setWordWrap(false);
     for(int i = 0; i < 20; i++) {
@@ -34,7 +33,7 @@ QtIncoming::QtIncoming(QWidget *parent) :
     mailView->resizeRowsToContents();
 
     mailView->setShowGrid(false);
-    mailView->horizontalHeader()->hide();
+    //mailView->horizontalHeader()->hide();
     mailView->verticalHeader()->hide();
     mailView->horizontalHeader()->setMinimumSectionSize(1);
     mailView->verticalHeader()->setMinimumSectionSize(1);
@@ -42,28 +41,16 @@ QtIncoming::QtIncoming(QWidget *parent) :
     folderListModel = new folderModel(this);
     mailModel->set_folderList(folderListModel);
 
-    // signals from the mailbox
-    connect(mailModel, SIGNAL(mailUpdated()),
-            mailView, SLOT(resizeRowsToContents()));
-    connect(mailModel, SIGNAL(mailUpdated()),
-            mailView, SLOT(resizeColumnsToContents()));
-    connect(mailModel, SIGNAL(mailUpdated()),
-            mailView, SLOT(repaint()));
+    mailModel->connectSignals(mailView, this);
 
-    connect(mailModel, SIGNAL(updateCount(int, int)),
-            mailView, SLOT(rowCountChanged(int, int)));
 #ifdef USE_STATUSBAR
     connect(mailModel, SIGNAL(statusMessage(const QString &, int)),
             ui->statusBar, SLOT(showMessage(const QString &, int)));
 #endif
-    connect(mailModel, SIGNAL(newMail()),
-            this, SLOT(maybeRaise()));
-    connect(mailModel, SIGNAL(mailUpdated()),
-            mailView, SLOT(repaint()));
 
     // signals from the buttons
     connect(ui->checkMail, SIGNAL(clicked()),
-            mailModel, SLOT(checkMail()));
+            mailModel, SLOT(checkMailSlot()));
     connect(ui->acknowledge, SIGNAL(clicked()),
             mailModel, SLOT(clearNew()));
     connect(ui->preferences, SIGNAL(clicked()),
@@ -86,7 +73,8 @@ QtIncoming::QtIncoming(QWidget *parent) :
     readSettings();
     QTableView *view = prefui->folderList;
     view->setModel(folderListModel);
-    //prefDialog->show();
+
+    // preference dialog
     connect(prefui->buttonBox, SIGNAL(accepted()),
             this, SLOT(changedSettings()));
     connect(prefui->buttonBox, SIGNAL(accepted()),
@@ -95,13 +83,6 @@ QtIncoming::QtIncoming(QWidget *parent) :
             this, SLOT(cancelled()));
     connect(prefui->fontSelectButton, SIGNAL(clicked()),
             this, SLOT(fontButton()));
-
-    // don't do popups for the first mail check
-    connect(mailModel, SIGNAL(newMail()), this, SLOT(newMail()));
-   
-    // connect this after the initial check mail pass
-    connect(mailModel, SIGNAL(newMailMessage(QString)),
-            this, SLOT(sendNotification(QString)));
 
     mailModel->restartCheckers();
 }

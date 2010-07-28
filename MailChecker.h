@@ -19,8 +19,8 @@ public:
     void initializeSocket();
     void reInitializeSocket();
     QList<QString> sendCommand(const QString &cmd);
-    void checkMail();
     void setupTimer();
+    void connectSignals(QTableView *mailView, QtIncoming *mainWidget);
 
 signals:
     void mailUpdated();
@@ -30,12 +30,13 @@ signals:
     void statusMessage(const QString &message, int timeout);
 
 public slots:
+    void checkMail();
 
 private:
     QSslSocket             *m_socket;
     IncomingMailModel      *m_model;
     QMutex                 *m_mutex;
-    QTimer                 *m_timer;
+    QTimer                  m_timer;
     int                     __counter;
     MailSource             *m_mailSource;
     folderModel            *m_folderModel;
