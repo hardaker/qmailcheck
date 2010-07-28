@@ -55,6 +55,7 @@ public slots:
     void checkMailSlot();
 
 private:
+    QTimer       m_timer;
     QtIncoming  *m_mainWidget;
     QTableView  *m_mailView;
     MailChecker *m_checker;

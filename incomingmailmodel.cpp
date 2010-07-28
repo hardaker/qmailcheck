@@ -20,9 +20,10 @@ enum column_list
 };
 
 IncomingMailModel::IncomingMailModel(QObject *parent, QtIncoming *mainWidget, QTableView *mailView) :
-    QAbstractTableModel(parent), m_mainWidget(mainWidget), m_mailView(mailView), m_checker(0), m_mutex(new QMutex()),
+    QAbstractTableModel(parent), m_timer(parent), m_mainWidget(mainWidget), m_mailView(mailView), m_checker(0), m_mutex(new QMutex()),
     folderList(0), m_messages(), m_hideList(), m_checkinterval(600), m_highlightNew(true), m_statusMessage()
 {
+    setupTimer();
 }
 
 void IncomingMailModel::changedSettings() {
@@ -42,8 +43,18 @@ void IncomingMailModel::restartCheckers() {
     m_checker = new MailChecker(this, m_mutex, m_mailSources[0], folderList, m_checkinterval, &m_messages);
     m_checker->connectSignals(m_mailView, m_mainWidget);
     m_checker->start();
-    connect(this, SIGNAL(checkMail()), m_checker, SLOT(checkMail()));
+    connect(this, SIGNAL(checkMail()), m_checker, SLOT(internalCheckMail()));
     //emit checkMail(); // immediate check
+}
+
+
+void
+IncomingMailModel::setupTimer()
+{
+    qDebug() << "setting up timer";
+    m_timer.stop();
+    connect(&m_timer, SIGNAL(timeout()), this, SLOT(checkMailSlot()));
+    m_timer.start(m_checkinterval * 1000);
 }
 
 int IncomingMailModel::rowCount(const QModelIndex &parent) const

@@ -8,8 +8,8 @@
 
 MailChecker::MailChecker(IncomingMailModel *model, QMutex *mutex, MailSource *mailSource, folderModel *folderModel, int checkInterval,
                          QList<MailMsg> *messages) :
-    QThread(0), m_socket(0), m_model(model), m_mutex(mutex), m_timer(this), m_mailSource(mailSource), m_folderModel(folderModel),
-    m_checkInterval(checkInterval), m_messages(messages)
+    QThread(0), m_socket(0), m_model(model), m_mutex(mutex), m_mailSource(mailSource), m_folderModel(folderModel),
+    m_messages(messages)
 {
     qDebug() << "----- New CHECKER";
 }
@@ -39,6 +39,12 @@ void MailChecker::connectSignals(QTableView *mailView, QtIncoming *mainWidget)
     // connect this after the initial check mail pass
     connect(this, SIGNAL(newMailMessage(QString)),
             mainWidget, SLOT(sendNotification(QString)));
+
+    connect(this, SIGNAL(internalCheckMailSignal()), this, SLOT(checkMail()));
+}
+
+void MailChecker::internalCheckMail() {
+    emit checkMail();
 }
 
 void MailChecker::run() {
@@ -50,7 +56,6 @@ void MailChecker::run() {
 
 void MailChecker::shutDown() {
     qDebug() << "----- SHUTDOWN CALLED";
-    m_timer.stop();
     if (m_socket)
         m_socket->close();
 }
@@ -135,14 +140,6 @@ QList<QString> MailChecker::sendCommand(const QString &cmd) {
     }
     //DEBUG( "----\n");
     return results;
-}
-
-void
-MailChecker::setupTimer()
-{
-    m_timer.stop();
-    connect(&m_timer, SIGNAL(timeout()), this, SLOT(checkMail()));
-    m_timer.start(m_checkInterval * 1000);
 }
 
 void MailChecker::checkMail()
