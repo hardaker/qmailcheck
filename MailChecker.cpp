@@ -8,7 +8,7 @@
 
 MailChecker::MailChecker(IncomingMailModel *model, QMutex *mutex, MailSource *mailSource, folderModel *folderModel, int checkInterval,
                          QList<MailMsg> *messages) :
-    QThread(0), m_socket(0), m_model(model), m_mutex(mutex), m_mailSource(mailSource), m_folderModel(folderModel),
+    QThread(0), m_socket(0), m_timer(0), m_model(model), m_mutex(mutex), m_mailSource(mailSource), m_folderModel(folderModel),
     m_messages(messages)
 {
     qDebug() << "----- New CHECKER";
@@ -44,7 +44,10 @@ void MailChecker::connectSignals(QTableView *mailView, QtIncoming *mainWidget)
 }
 
 void MailChecker::internalCheckMail() {
-    emit checkMail();
+    if (!m_timer)
+        m_timer = new QTimer();
+    m_timer->start(1000);
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(checkMail()));
 }
 
 void MailChecker::run() {
