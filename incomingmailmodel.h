@@ -53,6 +53,7 @@ public slots:
     void changedSettings();
     void restartCheckers();
     void checkMailSlot();
+    void restartTimer();
 
 private:
     QTimer       m_timer;
