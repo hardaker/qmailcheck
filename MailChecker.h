@@ -42,6 +42,7 @@ private:
     folderModel            *m_folderModel;
     QList<MailMsg>         *m_messages;
     QString                 m_statusMessage;
+    bool                    m_checkingNow;
 };
 
 #endif // MAILCHECKER_H

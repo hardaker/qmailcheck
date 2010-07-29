@@ -23,7 +23,8 @@ IncomingMailModel::IncomingMailModel(QObject *parent, QtIncoming *mainWidget, QT
     QAbstractTableModel(parent), m_timer(parent), m_mainWidget(mainWidget), m_mailView(mailView), m_checker(0), m_mutex(new QMutex()),
     folderList(0), m_messages(), m_hideList(), m_checkinterval(600), m_highlightNew(true), m_statusMessage()
 {
-    setupTimer();
+    //setupTimer();
+    QTimer::singleShot(1000, this, SLOT(checkMailSlot()));
 }
 
 void IncomingMailModel::changedSettings() {
@@ -32,6 +33,11 @@ void IncomingMailModel::changedSettings() {
 
 void IncomingMailModel::checkMailSlot() {
     emit checkMail();
+}
+
+void IncomingMailModel::restartTimer() {
+    qDebug() << "restarting the timer for " << m_checkinterval << "s";
+    QTimer::singleShot(m_checkinterval * 1000, this, SLOT(checkMailSlot()));
 }
 
 void IncomingMailModel::restartCheckers() {
@@ -44,6 +50,7 @@ void IncomingMailModel::restartCheckers() {
     m_checker->connectSignals(m_mailView, m_mainWidget);
     m_checker->start();
     connect(this, SIGNAL(checkMail()), m_checker, SLOT(internalCheckMail()));
+    connect(m_checker, SIGNAL(mailUpdated()), this, SLOT(restartTimer()));
     //emit checkMail(); // immediate check
 }
 

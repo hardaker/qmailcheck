@@ -9,7 +9,7 @@
 MailChecker::MailChecker(IncomingMailModel *model, QMutex *mutex, MailSource *mailSource, folderModel *folderModel, int checkInterval,
                          QList<MailMsg> *messages) :
     QThread(0), m_socket(0), m_timer(0), m_model(model), m_mutex(mutex), m_mailSource(mailSource), m_folderModel(folderModel),
-    m_messages(messages)
+    m_messages(messages), m_checkingNow(false)
 {
     qDebug() << "----- New CHECKER";
 }
@@ -44,17 +44,8 @@ void MailChecker::connectSignals(QTableView *mailView, QtIncoming *mainWidget)
 }
 
 void MailChecker::internalCheckMail() {
-    if (!m_timer)
-        m_timer = new QTimer();
-    m_timer->start(1000);
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(checkMail()));
-}
-
-void MailChecker::run() {
-    qDebug() << "----- RUN CALLED";
-    //setupTimer();
-    //checkMail();
-    exec();
+    if (!m_checkingNow)
+        QTimer::singleShot(0, this, SLOT(checkMail()));
 }
 
 void MailChecker::shutDown() {
@@ -180,6 +171,8 @@ void MailChecker::checkMail()
     QRegExp dateMatch("Date: +(.*)");
     bool containsNewMessages = false;
 
+    m_checkingNow = true;
+
     for(int mbox = 0; mbox < m_folderModel->count(); mbox++) {
 
         if (m_folderModel->folderName(mbox) == "")
@@ -193,6 +186,7 @@ void MailChecker::checkMail()
         if (results.length() == 0) {
             // socket probably died.
             reInitializeSocket();
+            m_checkingNow = false;
             return;
         }
 
@@ -242,4 +236,5 @@ void MailChecker::checkMail()
     }
     m_statusMessage = QString("%1 messages available").arg(m_messages->count());
     emit statusMessage(m_statusMessage, 0);
+    m_checkingNow = false;
 }
