@@ -43,6 +43,15 @@ void MailChecker::connectSignals(QTableView *mailView, QtIncoming *mainWidget)
     connect(this, SIGNAL(internalCheckMailSignal()), this, SLOT(checkMail()));
 }
 
+void MailChecker::run() {
+    qDebug() << "----- RUN CALLED";
+    //setupTimer();
+    //checkMail();
+    exec();
+    if (!m_checkingNow)
+        QTimer::singleShot(1000, this, SLOT(checkMail()));
+}
+
 void MailChecker::internalCheckMail() {
     if (!m_checkingNow)
         QTimer::singleShot(0, this, SLOT(checkMail()));

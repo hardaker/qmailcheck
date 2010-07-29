@@ -54,7 +54,6 @@ void IncomingMailModel::restartCheckers() {
     //emit checkMail(); // immediate check
 }
 
-
 void
 IncomingMailModel::setupTimer()
 {
