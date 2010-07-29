@@ -48,8 +48,6 @@ void MailChecker::run() {
     //setupTimer();
     //checkMail();
     exec();
-    if (!m_checkingNow)
-        QTimer::singleShot(1000, this, SLOT(checkMail()));
 }
 
 void MailChecker::internalCheckMail() {
