@@ -14,6 +14,7 @@ class MailChecker : public QThread
 public:
     MailChecker(IncomingMailModel *model, QMutex *mutex, MailSource *mailSource, folderModel *folderModel, int checkInterval,
                 QList<MailMsg> *messages);
+    void run();
     void shutDown();
     void initializeSocket();
     void reInitializeSocket();
