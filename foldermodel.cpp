@@ -164,6 +164,10 @@ int folderModel::columnCount(const QModelIndex &parent) const
     return 2;
 }
 
+folderItem &folderModel::getFolderAt(int row) {
+    return folders.at(row);
+}
+
 /*
 QVariant folderModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
