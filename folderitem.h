@@ -8,7 +8,8 @@ class folderItem
 public:
     folderItem();
     folderItem(const QString &folderName, const QString &displayName,
-               bool doNotification);
+               bool doNotification = false, bool doPopup = false, bool doVibrate = false,
+               bool doLED = false);
 
     const QString &folderName() const;
     const QString &displayName() const;
@@ -18,11 +19,22 @@ public:
     void set_displayName(QString &displayName);
     void set_doNotification(bool doNotification);
 
+    bool           doPopup() const;
+    void           set_doPopup(bool doPopup);
+
+    bool           doVibrate() const;
+    void           set_doVibrate(bool doVibrate);
+
+    bool           doLED() const;
+    void           set_doLED(bool doLED);
+
   private:
     QString m_folderName;
     QString m_displayName;
     bool    m_doNotification;
-
+    bool    m_doPopup;
+    bool    m_doVibrate;
+    bool    m_doLED;
 };
 
 #endif // FOLDERITEM_H

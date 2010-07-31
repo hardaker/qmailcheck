@@ -1,14 +1,15 @@
 #include "folderitem.h"
 
 folderItem::folderItem()
-    : m_folderName(), m_displayName(), m_doNotification(true)
+    : m_folderName(), m_displayName(), m_doNotification(true), m_doPopup(false), m_doVibrate(false), m_doLED(false)
 {
 }
 
 folderItem::folderItem(const QString &folderName, const QString &displayName,
-                       bool doNotification)
+                       bool doNotification, bool doPopup, bool doVibrate,
+                       bool doLED)
     : m_folderName(folderName), m_displayName(displayName),
-      m_doNotification(doNotification)
+      m_doNotification(doNotification), m_doPopup(doPopup), m_doVibrate(doVibrate), m_doLED(doLED)
 {
 }
 
@@ -48,3 +49,34 @@ folderItem::set_doNotification(bool doNotification)
     m_doNotification = doNotification;
 }
 
+bool folderItem::doPopup() const
+{
+    return m_doPopup;
+}
+
+void folderItem::set_doPopup(bool doPopup)
+{
+    m_doPopup = doPopup;
+}
+
+
+bool folderItem::doVibrate() const
+{
+    return m_doVibrate;
+}
+
+void folderItem::set_doVibrate(bool doVibrate)
+{
+    m_doVibrate = doVibrate;
+}
+
+
+bool folderItem::doLED() const
+{
+    return m_doLED;
+}
+
+void folderItem::set_doLED(bool doLED)
+{
+    m_doLED = doLED;
+}
