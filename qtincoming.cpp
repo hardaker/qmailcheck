@@ -91,12 +91,12 @@ QtIncoming::QtIncoming(QWidget *parent) :
 
 void QtIncoming::setupFolderPrefs(int index) {
     qDebug() << "switched to tab " << index;
-    if (!m_theGrid) {
-        m_theGrid = new QGridLayout();
-        prefui->scrolledFolders->setLayout(m_theGrid);
-    }
-    if (index == 3) {
-        //m_theGrid->clear();
+
+    if (index == 3) { // the index of the folder tab
+        if (!m_theGrid) {
+            m_theGrid = new QGridLayout();
+            prefui->scrolledFolders->setLayout(m_theGrid);
+        }
         for(int i = 0; i < folderListModel->count(); i++) {
             folderItem &folder = folderListModel->getFolderAt(i);
 
@@ -122,6 +122,9 @@ void QtIncoming::setupFolderPrefs(int index) {
                 row->push_back(lineEdit);
                 m_theGrid->addWidget(lineEdit, i, 2);
 
+                lineEdit = new QLineEdit(folder.displayName());
+                row->push_back(lineEdit);
+                m_theGrid->addWidget(lineEdit, i, 3);
             }
         }
     }
