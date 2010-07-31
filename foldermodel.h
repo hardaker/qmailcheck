@@ -3,14 +3,20 @@
 
 #include <QAbstractTableModel>
 #include <QSettings>
+#include <QtGui/QGridLayout>
 
 #include "folderitem.h"
+
+namespace Ui {
+    class QtIncoming;
+    class PrefWindow;
+}
 
 class folderModel : public QAbstractTableModel
 {
 Q_OBJECT
 public:
-    explicit folderModel(QObject *parent = 0);
+    explicit folderModel(QObject *parent, Ui::PrefWindow *prefui);
 
     QVariant data(const QModelIndex &index, int role) const;
     const QString &folderName(int row) const;
@@ -30,10 +36,13 @@ public:
 signals:
 
 public slots:
+    void setupFolderPrefs(int index);
 
 private:
     QList<folderItem> folders;
-
+    QList<QList<QWidget *> *>    widgets;
+    QGridLayout*       m_theGrid;
+    Ui::PrefWindow    *m_prefui;
 };
 
 #endif // FOLDERMODEL_H

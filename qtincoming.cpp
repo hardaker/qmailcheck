@@ -16,7 +16,7 @@ QtIncoming::QtIncoming(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::QtIncoming), prefui(new Ui::PrefWindow),
     prefDialog(new QDialog(parent, Qt::Window)),
-    do_popup(true), m_doNotification(true), m_highlightNew(true), m_firstCheck(true), m_theGrid(0)
+    do_popup(true), m_doNotification(true), m_highlightNew(true), m_firstCheck(true)
 {
     const char name[] = "qmailcheck";
 
@@ -40,7 +40,7 @@ QtIncoming::QtIncoming(QWidget *parent) :
     mailView->horizontalHeader()->setMinimumSectionSize(1);
     mailView->verticalHeader()->setMinimumSectionSize(1);
 
-    folderListModel = new folderModel(this);
+    folderListModel = new folderModel(this, prefui);
     mailModel->set_folderList(folderListModel);
 
     mailModel->connectSignals(mailView, this);
@@ -84,51 +84,11 @@ QtIncoming::QtIncoming(QWidget *parent) :
     connect(prefui->fontSelectButton, SIGNAL(clicked()),
             this, SLOT(fontButton()));
 
-    connect(prefui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(setupFolderPrefs(int)));
+    connect(prefui->tabWidget, SIGNAL(currentChanged(int)), folderListModel, SLOT(setupFolderPrefs(int)));
 
     mailModel->restartCheckers();
 }
 
-void QtIncoming::setupFolderPrefs(int index) {
-    qDebug() << "switched to tab " << index;
-
-    if (index == 3) { // the index of the folder tab
-        if (!m_theGrid) {
-            m_theGrid = new QGridLayout();
-            prefui->scrolledFolders->setLayout(m_theGrid);
-        }
-        for(int i = 0; i < folderListModel->count(); i++) {
-            folderItem &folder = folderListModel->getFolderAt(i);
-
-            if (widgets.count() >= i+1) {
-                // should be recreating this
-                // m_theGrid->removeWidget(widgets.at(i));
-                // XXX: delete it
-            } else {
-                QList<QWidget *> *row = new QList<QWidget *>();
-                widgets.push_back(row);
-
-                QPushButton *button;
-                button = new QPushButton("^");
-                row->push_back(button);
-                m_theGrid->addWidget(button, i, 0);
-
-                button = new QPushButton("v");
-                row->push_back(button);
-                m_theGrid->addWidget(button, i, 1);
-
-                QLineEdit *lineEdit;
-                lineEdit = new QLineEdit(folder.folderName());
-                row->push_back(lineEdit);
-                m_theGrid->addWidget(lineEdit, i, 2);
-
-                lineEdit = new QLineEdit(folder.displayName());
-                row->push_back(lineEdit);
-                m_theGrid->addWidget(lineEdit, i, 3);
-            }
-        }
-    }
-}
 
 void QtIncoming::newMail() {
     mailView->resizeRowsToContents();
@@ -195,7 +155,7 @@ void QtIncoming::showPrefs()
 {
     if (prefDialog)
         prefDialog->show();
-    setupFolderPrefs(prefui->tabWidget->currentIndex());
+    folderListModel->setupFolderPrefs(prefui->tabWidget->currentIndex());
 }
 
 void QtIncoming::fontButton() {
