@@ -1,4 +1,7 @@
 #include "foldermodel.h"
+#include "ui_prefs.h"
+
+#include <qdebug.h>
 
 enum folder_columns 
 {
@@ -6,8 +9,8 @@ enum folder_columns
     COL_NOTIFICATION  = 1,
 };
 
-folderModel::folderModel(QObject *parent) :
-    QAbstractTableModel(parent)
+folderModel::folderModel(QObject *parent, Ui::PrefWindow *prefui) :
+    QAbstractTableModel(parent), m_theGrid(0), m_prefui(prefui)
 {
 }
 
@@ -186,4 +189,46 @@ Qt::ItemFlags folderModel::flags(const QModelIndex &index) const
     }
 
     return Qt::ItemIsEnabled;
+}
+
+
+void folderModel::setupFolderPrefs(int index) {
+    qDebug() << "switched to tab " << index;
+
+    if (index == 3) { // the index of the folder tab
+        if (!m_theGrid) {
+            m_theGrid = new QGridLayout();
+            m_prefui->scrolledFolders->setLayout(m_theGrid);
+        }
+        for(int i = 0; i < count(); i++) {
+            folderItem &folder = getFolderAt(i);
+
+            if (widgets.count() >= i+1) {
+                // should be recreating this
+                // m_theGrid->removeWidget(widgets.at(i));
+                // XXX: delete it
+            } else {
+                QList<QWidget *> *row = new QList<QWidget *>();
+                widgets.push_back(row);
+
+                QPushButton *button;
+                button = new QPushButton("^");
+                row->push_back(button);
+                m_theGrid->addWidget(button, i, 0);
+
+                button = new QPushButton("v");
+                row->push_back(button);
+                m_theGrid->addWidget(button, i, 1);
+
+                QLineEdit *lineEdit;
+                lineEdit = new QLineEdit(folder.folderName());
+                row->push_back(lineEdit);
+                m_theGrid->addWidget(lineEdit, i, 2);
+
+                lineEdit = new QLineEdit(folder.displayName());
+                row->push_back(lineEdit);
+                m_theGrid->addWidget(lineEdit, i, 3);
+            }
+        }
+    }
 }
