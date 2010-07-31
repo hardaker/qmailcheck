@@ -50,7 +50,8 @@ private:
     bool               m_notifyCritical;
     bool               m_highlightNew;
     bool               m_firstCheck;
-    QList<QLabel *>   widgets;
+    QList<QList<QWidget *> *>    widgets;
+    QGridLayout*       m_theGrid;
 };
 
 #endif // QTINCOMING_H

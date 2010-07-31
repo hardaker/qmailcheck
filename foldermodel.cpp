@@ -165,7 +165,7 @@ int folderModel::columnCount(const QModelIndex &parent) const
 }
 
 folderItem &folderModel::getFolderAt(int row) {
-    return folders.at(row);
+    return folders[row];
 }
 
 /*

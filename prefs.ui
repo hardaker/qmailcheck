@@ -225,17 +225,6 @@
             <height>219</height>
            </rect>
           </property>
-          <widget class="QWidget" name="gridLayoutWidget">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>361</width>
-             <height>221</height>
-            </rect>
-           </property>
-           <layout class="QGridLayout" name="folders"/>
-          </widget>
          </widget>
         </widget>
        </item>
