@@ -7,6 +7,8 @@
 #include "foldermodel.h"
 #include <QSettings>
 #include <QFontDialog>
+#include <QtGui/QPushButton>
+#include <QtGui/QLineEdit>
 
 #include "qmailcheckcommon.h"
 
@@ -14,7 +16,7 @@ QtIncoming::QtIncoming(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::QtIncoming), prefui(new Ui::PrefWindow),
     prefDialog(new QDialog(parent, Qt::Window)),
-    do_popup(true), m_doNotification(true), m_highlightNew(true), m_firstCheck(true)
+    do_popup(true), m_doNotification(true), m_highlightNew(true), m_firstCheck(true), m_theGrid(0)
 {
     const char name[] = "qmailcheck";
 
@@ -89,16 +91,37 @@ QtIncoming::QtIncoming(QWidget *parent) :
 
 void QtIncoming::setupFolderPrefs(int index) {
     qDebug() << "switched to tab " << index;
+    if (!m_theGrid) {
+        m_theGrid = new QGridLayout();
+        prefui->scrolledFolders->setLayout(m_theGrid);
+    }
     if (index == 3) {
-        //prefui->folders->clear();
+        //m_theGrid->clear();
         for(int i = 0; i < folderListModel->count(); i++) {
+            folderItem &folder = folderListModel->getFolderAt(i);
+
             if (widgets.count() >= i+1) {
                 // should be recreating this
-                // prefui->folders->removeWidget(widgets.at(i));
+                // m_theGrid->removeWidget(widgets.at(i));
                 // XXX: delete it
             } else {
-                widgets.push_back(new QLabel(folderListModel->folderName(i)));
-                prefui->folders->addWidget(widgets[i], i, 0);
+                QList<QWidget *> *row = new QList<QWidget *>();
+                widgets.push_back(row);
+
+                QPushButton *button;
+                button = new QPushButton("^");
+                row->push_back(button);
+                m_theGrid->addWidget(button, i, 0);
+
+                button = new QPushButton("v");
+                row->push_back(button);
+                m_theGrid->addWidget(button, i, 1);
+
+                QLineEdit *lineEdit;
+                lineEdit = new QLineEdit(folder.folderName());
+                row->push_back(lineEdit);
+                m_theGrid->addWidget(lineEdit, i, 2);
+
             }
         }
     }
