@@ -213,17 +213,16 @@ void folderModel::setupFolderPrefs(int index) {
             m_prefui->scrolledFolders->setLayout(m_theGrid);
         }
         for(int i = 0; i < count(); i++) {
+            QList<QWidget *> *row;
+            QPushButton *button;
+            QLineEdit *lineEdit;
             folderItem &folder = getFolderAt(i);
 
-            if (widgets.count() >= i+1) {
-                // should be recreating this
-                // m_theGrid->removeWidget(widgets.at(i));
-                // XXX: delete it
-            } else {
-                QList<QWidget *> *row = new QList<QWidget *>();
+            if (widgets.count() < i+1) {
+                // a new row is needed
+                row = new QList<QWidget *>();
                 widgets.push_back(row);
 
-                QPushButton *button;
                 button = new QPushButton("^");
                 row->push_back(button);
                 m_theGrid->addWidget(button, i, 0);
@@ -232,7 +231,6 @@ void folderModel::setupFolderPrefs(int index) {
                 row->push_back(button);
                 m_theGrid->addWidget(button, i, 1);
 
-                QLineEdit *lineEdit;
                 lineEdit = new QLineEdit(folder.folderName());
                 row->push_back(lineEdit);
                 m_theGrid->addWidget(lineEdit, i, 2);
@@ -240,6 +238,16 @@ void folderModel::setupFolderPrefs(int index) {
                 lineEdit = new QLineEdit(folder.displayName());
                 row->push_back(lineEdit);
                 m_theGrid->addWidget(lineEdit, i, 3);
+            } else {
+                // change the exist widget settings
+                qDebug() << " changing settings for" << folder.folderName();
+                row = widgets[i];
+
+                lineEdit = dynamic_cast<QLineEdit *>((*row)[2]);
+                lineEdit->setText(folder.folderName());
+
+                lineEdit = dynamic_cast<QLineEdit *>((*row)[2]);
+                lineEdit->setText(folder.displayName());
             }
         }
         m_gridCount = count();
