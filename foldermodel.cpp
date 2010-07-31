@@ -55,9 +55,21 @@ QVariant folderModel::data(const QModelIndex &index, int role) const
 void folderModel::saveSettings(QSettings &settings)
 {
     settings.beginWriteArray("folderList");
-    for(int i = 0; i < folders.count(); ++i) {
+    for(int i = 0; i < widgets.count(); ++i) {
+        QList<QWidget *> *row;
+        QLineEdit *lineEdit;
+        row = widgets[i];
+        QString value;
+
+        lineEdit = dynamic_cast<QLineEdit *>((*row)[2]);
+        folders[i].set_folderName(value = lineEdit->text());
+
+        lineEdit = dynamic_cast<QLineEdit *>((*row)[3]);
+        folders[i].set_displayName(value = lineEdit->text());
+
         settings.setArrayIndex(i);
         settings.setValue("folderName", folders[i].folderName());
+        settings.setValue("displayName", folders[i].displayName());
         settings.setValue("folderPopup", folders[i].doNotification());
     }
     settings.endArray();
@@ -71,7 +83,7 @@ void folderModel::readSettings(QSettings &settings)
         settings.setArrayIndex(i);
         folders.push_back(
             folderItem(settings.value("folderName").toString(),
-                       settings.value("folderName").toString(),
+                       settings.value("displayName").toString(),
                        settings.value("folderPopup").toBool()));
     }
     settings.endArray();
@@ -230,5 +242,6 @@ void folderModel::setupFolderPrefs(int index) {
                 m_theGrid->addWidget(lineEdit, i, 3);
             }
         }
+        m_gridCount = count();
     }
 }

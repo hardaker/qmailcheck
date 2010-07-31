@@ -43,6 +43,7 @@ private:
     QList<QList<QWidget *> *>    widgets;
     QGridLayout*       m_theGrid;
     Ui::PrefWindow    *m_prefui;
+    int                m_gridCount;
 };
 
 #endif // FOLDERMODEL_H
