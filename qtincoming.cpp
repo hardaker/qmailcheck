@@ -71,8 +71,6 @@ QtIncoming::QtIncoming(QWidget *parent) :
 #endif
     prefDialog->setSizeGripEnabled(true);
     readSettings();
-    QTableView *view = prefui->folderList;
-    view->setModel(folderListModel);
 
     // preference dialog
     connect(prefui->buttonBox, SIGNAL(accepted()),
@@ -84,7 +82,26 @@ QtIncoming::QtIncoming(QWidget *parent) :
     connect(prefui->fontSelectButton, SIGNAL(clicked()),
             this, SLOT(fontButton()));
 
+    connect(prefui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(setupFolderPrefs(int)));
+
     mailModel->restartCheckers();
+}
+
+void QtIncoming::setupFolderPrefs(int index) {
+    qDebug() << "switched to tab " << index;
+    if (index == 3) {
+        //prefui->folders->clear();
+        for(int i = 0; i < folderListModel->count(); i++) {
+            if (widgets.count() >= i+1) {
+                // should be recreating this
+                // prefui->folders->removeWidget(widgets.at(i));
+                // XXX: delete it
+            } else {
+                widgets.push_back(new QLabel(folderListModel->folderName(i)));
+                prefui->folders->addWidget(widgets[i], i, 0);
+            }
+        }
+    }
 }
 
 void QtIncoming::newMail() {
@@ -152,7 +169,7 @@ void QtIncoming::showPrefs()
 {
     if (prefDialog)
         prefDialog->show();
-    
+    setupFolderPrefs(prefui->tabWidget->currentIndex());
 }
 
 void QtIncoming::fontButton() {

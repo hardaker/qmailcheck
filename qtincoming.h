@@ -33,6 +33,8 @@ public slots:
     void set_doNotification(bool);
     void set_doPopup(bool);
 
+    void setupFolderPrefs(int index);
+
 protected:
     void changeEvent(QEvent *e);
 
@@ -48,6 +50,7 @@ private:
     bool               m_notifyCritical;
     bool               m_highlightNew;
     bool               m_firstCheck;
+    QList<QLabel *>   widgets;
 };
 
 #endif // QTINCOMING_H

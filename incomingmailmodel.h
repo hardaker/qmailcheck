@@ -9,12 +9,13 @@
 #include <QRegExp>
 #include <QtGui/QFont>
 #include <QtCore/QMutex>
+#include <QtGui/QTableView>
 
 #include "mailmsg.h"
 #include "foldermodel.h"
 #include "ui_prefs.h"
 #include "MailSource.h"
-
+\
 class MailChecker;
 class QtIncoming;
 class IncomingMailModel : public QAbstractTableModel
