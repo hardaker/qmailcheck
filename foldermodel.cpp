@@ -58,13 +58,17 @@ void folderModel::saveSettings(QSettings &settings)
     for(int i = 0; i < widgets.count(); ++i) {
         QList<QWidget *> *row;
         QLineEdit *lineEdit;
+        QCheckBox *checkBox;
         row = widgets[i];
         QString value;
 
-        lineEdit = dynamic_cast<QLineEdit *>((*row)[2]);
-        folders[i].set_folderName(value = lineEdit->text());
+        checkBox = dynamic_cast<QCheckBox *>((*row)[2]);
+        folders[i].set_doNotification(checkBox->isChecked());
 
         lineEdit = dynamic_cast<QLineEdit *>((*row)[3]);
+        folders[i].set_folderName(value = lineEdit->text());
+
+        lineEdit = dynamic_cast<QLineEdit *>((*row)[4]);
         folders[i].set_displayName(value = lineEdit->text());
 
         settings.setArrayIndex(i);
@@ -215,6 +219,7 @@ void folderModel::setupFolderPrefs(int index) {
         for(int i = 0; i < count(); i++) {
             QList<QWidget *> *row;
             QPushButton *button;
+            QCheckBox *checkBox;
             QLineEdit *lineEdit;
             folderItem &folder = getFolderAt(i);
 
@@ -231,22 +236,30 @@ void folderModel::setupFolderPrefs(int index) {
                 row->push_back(button);
                 m_theGrid->addWidget(button, i, 1);
 
+                checkBox = new QCheckBox();
+                checkBox->setChecked(folder.doNotification());
+                row->push_back(checkBox);
+                m_theGrid->addWidget(checkBox, i, 2);
+
                 lineEdit = new QLineEdit(folder.folderName());
                 row->push_back(lineEdit);
-                m_theGrid->addWidget(lineEdit, i, 2);
+                m_theGrid->addWidget(lineEdit, i, 3);
 
                 lineEdit = new QLineEdit(folder.displayName());
                 row->push_back(lineEdit);
-                m_theGrid->addWidget(lineEdit, i, 3);
+                m_theGrid->addWidget(lineEdit, i, 4);
             } else {
                 // change the exist widget settings
                 qDebug() << " changing settings for" << folder.folderName();
                 row = widgets[i];
 
-                lineEdit = dynamic_cast<QLineEdit *>((*row)[2]);
+                checkBox = dynamic_cast<QCheckBox *>((*row)[2]);
+                checkBox->setChecked(folder.doNotification());
+
+                lineEdit = dynamic_cast<QLineEdit *>((*row)[3]);
                 lineEdit->setText(folder.folderName());
 
-                lineEdit = dynamic_cast<QLineEdit *>((*row)[2]);
+                lineEdit = dynamic_cast<QLineEdit *>((*row)[4]);
                 lineEdit->setText(folder.displayName());
             }
         }
