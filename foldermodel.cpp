@@ -55,7 +55,7 @@ QVariant folderModel::data(const QModelIndex &index, int role) const
 void folderModel::saveSettings(QSettings &settings)
 {
     settings.beginWriteArray("folderList");
-    for(int i = 0; i < widgets.count(); ++i) {
+    for(int i = 1; i <= widgets.count(); ++i) {
         QList<QWidget *> *row;
         QLineEdit *lineEdit;
         QCheckBox *checkBox;
@@ -81,12 +81,12 @@ void folderModel::saveSettings(QSettings &settings)
         folders[i].set_displayName(value = lineEdit->text());
 
         settings.setArrayIndex(i);
-        settings.setValue("folderName", folders[i].folderName());
-        settings.setValue("displayName", folders[i].displayName());
-        settings.setValue("folderNotification", folders[i].doNotification());
-        settings.setValue("folderPopup", folders[i].doPopup());
-        settings.setValue("folderVibrate", folders[i].doVibrate());
-        settings.setValue("folderLED", folders[i].doLED());
+        settings.setValue("folderName", folders[i-1].folderName());
+        settings.setValue("displayName", folders[i-1].displayName());
+        settings.setValue("folderNotification", folders[i-1].doNotification());
+        settings.setValue("folderPopup", folders[i-1].doPopup());
+        settings.setValue("folderVibrate", folders[i-1].doVibrate());
+        settings.setValue("folderLED", folders[i-1].doLED());
 
     }
     settings.endArray();
@@ -96,8 +96,8 @@ void folderModel::readSettings(QSettings &settings)
 {
     int size = settings.beginReadArray("folderList");
     folders.clear();
-    for(int i = 0; i < size; ++i) {
-        settings.setArrayIndex(i);
+    for(int i = 1; i <= size; ++i) {
+        settings.setArrayIndex(i-1);
         folders.push_back(
             folderItem(settings.value("folderName").toString(),
                        settings.value("displayName").toString(),
@@ -230,15 +230,22 @@ void folderModel::setupFolderPrefs(int index) {
         if (!m_theGrid) {
             m_theGrid = new QGridLayout();
             m_prefui->scrolledFolders->setLayout(m_theGrid);
+
+            m_theGrid->addWidget(new QLabel("N"), 0, 2);
+            m_theGrid->addWidget(new QLabel("P"), 0, 3);
+            m_theGrid->addWidget(new QLabel("V"), 0, 4);
+            m_theGrid->addWidget(new QLabel("L"), 0, 5);
+            m_theGrid->addWidget(new QLabel("Folder"), 0, 6);
+            m_theGrid->addWidget(new QLabel("Alias"), 0, 7);
         }
-        for(int i = 0; i < count(); i++) {
+        for(int i = 1; i <= count(); i++) {
             QList<QWidget *> *row;
             QPushButton *button;
             QCheckBox *checkBox;
             QLineEdit *lineEdit;
-            folderItem &folder = getFolderAt(i);
+            folderItem &folder = getFolderAt(i-1);
 
-            if (widgets.count() < i+1) {
+            if (widgets.count() < i) {
                 // a new row is needed
                 row = new QList<QWidget *>();
                 widgets.push_back(row);
