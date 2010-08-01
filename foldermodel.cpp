@@ -1,6 +1,8 @@
 #include "foldermodel.h"
 #include "ui_prefs.h"
 
+#include <QSignalMapper>
+
 #include <qdebug.h>
 
 enum folder_columns 
@@ -237,6 +239,9 @@ void folderModel::setupFolderPrefs(int index) {
             m_theGrid->addWidget(new QLabel("L"), 0, 5);
             m_theGrid->addWidget(new QLabel("Folder"), 0, 6);
             m_theGrid->addWidget(new QLabel("Alias"), 0, 7);
+
+            m_signalMapper = new QSignalMapper();
+            connect(m_signalMapper, SIGNAL(mapped(int)), this, SLOT(moveFolder(int)));
         }
         for(int i = 1; i <= count(); i++) {
             QList<QWidget *> *row;
@@ -253,10 +258,14 @@ void folderModel::setupFolderPrefs(int index) {
                 button = new QPushButton("^");
                 row->push_back(button);
                 m_theGrid->addWidget(button, i, 0);
+                connect(button, SIGNAL(clicked()), m_signalMapper, SLOT(map()));
+                m_signalMapper->setMapping(button, i*2);
 
                 button = new QPushButton("v");
                 row->push_back(button);
                 m_theGrid->addWidget(button, i, 1);
+                connect(button, SIGNAL(clicked()), m_signalMapper, SLOT(map()));
+                m_signalMapper->setMapping(button, i*2+1);
 
                 checkBox = new QCheckBox();
                 checkBox->setChecked(folder.doNotification());
@@ -313,4 +322,8 @@ void folderModel::setupFolderPrefs(int index) {
         }
         m_gridCount = count();
     }
+}
+
+void folderModel::moveFolder(int folderNumber) {
+    qDebug() << "moved: " << folderNumber;
 }
