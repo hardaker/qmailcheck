@@ -298,8 +298,8 @@ void folderModel::setupFolderPrefs(int index) {
                 m_theGrid->addWidget(lineEdit, i, 7);
             } else {
                 // change the exist widget settings
-                qDebug() << " changing settings for" << folder.folderName();
-                row = widgets[i];
+                qDebug() << " changing settings for #" << i << " = " << folder.folderName();
+                row = widgets[i-1];
 
                 checkBox = dynamic_cast<QCheckBox *>((*row)[2]);
                 checkBox->setChecked(folder.doNotification());
@@ -326,4 +326,12 @@ void folderModel::setupFolderPrefs(int index) {
 
 void folderModel::moveFolder(int folderNumber) {
     qDebug() << "moved: " << folderNumber;
+    if (folderNumber % 2 == 0) {
+        folderNumber = folderNumber / 2 - 1;
+        folders.swap(folderNumber, folderNumber-1);
+    } else {
+        folderNumber = (folderNumber - 1) / 2 - 1;
+        folders.swap(folderNumber, folderNumber+1);
+    }
+    setupFolderPrefs(3);
 }
