@@ -99,7 +99,7 @@ void folderModel::readSettings(QSettings &settings)
     int size = settings.beginReadArray("folderList");
     folders.clear();
     for(int i = 1; i <= size; ++i) {
-        settings.setArrayIndex(i-1);
+        settings.setArrayIndex(i);
         folders.push_back(
             folderItem(settings.value("folderName").toString(),
                        settings.value("displayName").toString(),
