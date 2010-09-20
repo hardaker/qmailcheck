@@ -213,7 +213,7 @@ void MailChecker::checkMail()
                 }
             }
 
-            MailMsg message(msglist[i], m_folderModel->folderName(mbox), date, from, subject);
+            MailMsg message(msglist[i], m_folderModel->displayName(mbox), date, from, subject);
             if (! uid_list.contains(msglist[i])) {
                 message.setIsNew(true);
                 containsNewMessages = true;

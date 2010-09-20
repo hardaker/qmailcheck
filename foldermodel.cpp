@@ -82,7 +82,7 @@ void folderModel::saveSettings(QSettings &settings)
         lineEdit = dynamic_cast<QLineEdit *>((*row)[7]);
         folders[i].set_displayName(value = lineEdit->text());
 
-        settings.setArrayIndex(i+1);
+        settings.setArrayIndex(i);
         settings.setValue("folderName", folders[i].folderName());
         settings.setValue("displayName", folders[i].displayName());
         settings.setValue("folderNotification", folders[i].doNotification());
@@ -98,8 +98,10 @@ void folderModel::readSettings(QSettings &settings)
 {
     int size = settings.beginReadArray("folderList");
     folders.clear();
-    for(int i = 1; i <= size; ++i) {
+    for(int i = 0; i < size; ++i) {
         settings.setArrayIndex(i);
+        if (settings.value("folderName").toString().length() == 0)
+            continue; // don't save this empty folder name
         folders.push_back(
             folderItem(settings.value("folderName").toString(),
                        settings.value("displayName").toString(),
@@ -113,6 +115,11 @@ void folderModel::readSettings(QSettings &settings)
 int folderModel::count() const
 {
     return folders.count();
+}
+
+const QString &folderModel::displayName(int row) const
+{
+    return ((folders[row].displayName().length() > 0) ? folders[row].displayName() : folders[row].folderName());
 }
 
 const QString &folderModel::folderName(int row) const
