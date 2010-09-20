@@ -57,7 +57,7 @@ QVariant folderModel::data(const QModelIndex &index, int role) const
 void folderModel::saveSettings(QSettings &settings)
 {
     settings.beginWriteArray("folderList");
-    for(int i = 1; i <= widgets.count(); ++i) {
+    for(int i = 0; i < widgets.count(); ++i) {
         QList<QWidget *> *row;
         QLineEdit *lineEdit;
         QCheckBox *checkBox;
@@ -82,13 +82,13 @@ void folderModel::saveSettings(QSettings &settings)
         lineEdit = dynamic_cast<QLineEdit *>((*row)[7]);
         folders[i].set_displayName(value = lineEdit->text());
 
-        settings.setArrayIndex(i);
-        settings.setValue("folderName", folders[i-1].folderName());
-        settings.setValue("displayName", folders[i-1].displayName());
-        settings.setValue("folderNotification", folders[i-1].doNotification());
-        settings.setValue("folderPopup", folders[i-1].doPopup());
-        settings.setValue("folderVibrate", folders[i-1].doVibrate());
-        settings.setValue("folderLED", folders[i-1].doLED());
+        settings.setArrayIndex(i+1);
+        settings.setValue("folderName", folders[i].folderName());
+        settings.setValue("displayName", folders[i].displayName());
+        settings.setValue("folderNotification", folders[i].doNotification());
+        settings.setValue("folderPopup", folders[i].doPopup());
+        settings.setValue("folderVibrate", folders[i].doVibrate());
+        settings.setValue("folderLED", folders[i].doLED());
 
     }
     settings.endArray();
