@@ -1,7 +1,7 @@
 # -------------------------------------------------
 # Project created by QtCreator 2010-05-19T19:06:51
 # -------------------------------------------------
-QT += network
+QT += network core gui
 TARGET = qmailcheck
 TEMPLATE = app
 SOURCES += main.cpp \
@@ -23,3 +23,14 @@ FORMS += qtincoming.ui \
     prefs.ui
 CONFIG += link_pkgconfig
 PKGCONFIG += libnotify
+
+CONFIG += mobility
+MOBILITY = 
+
+symbian {
+    TARGET.UID3 = 0xe0df144b
+    # TARGET.CAPABILITY += 
+    TARGET.EPOCSTACKSIZE = 0x14000
+    TARGET.EPOCHEAPSIZE = 0x020000 0x800000
+}
+
