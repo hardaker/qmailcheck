@@ -120,19 +120,6 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
         return m_font;
     }
 
-    if (false && Qt::SizeHintRole == role){
-        QSize s;
-        s.setHeight(12);
-        s.setWidth(400);
-        return s;
-        return (QVariant(m_font.pointSize()));
-        QVariant size = QAbstractTableModel::data(index, Qt::SizeHintRole);
-        if (size.toInt() > 5)
-            return QVariant(size.toInt() - 5);
-        else
-            return size;
-    }
-
     if (role == Qt::BackgroundRole) {
         // QColor(128,255,255);n
         // return QApplication::palette().colorGroup(QPalette::Highlight);
@@ -157,32 +144,39 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
             return QVariant();
     }
 
-    if (role != Qt::DisplayRole)
+    if (role != Qt::DisplayRole && role != Qt::SizeHintRole)
         return QVariant();
 
     if (index.column() > 4)
         return QVariant();
 
+    QString value;
     switch(index.column()) {
 
     case COL_FOLDER:
         if (message->folder() == lastfolder)
             return QVariant();
-        return message->folder();
+        value = message->folder();
 
     case COL_DATE:
-        return message->time();
+        value = message->time();
 
     case COL_FROM:
-        return message->from();
+        value = message->from();
 
     case COL_SUBJECT:
-        return message->subject();
+        value = message->subject();
 
     default:
         return QVariant();
         
     }
+    if (Qt::SizeHintRole == role){
+	QFontMetrics metrics(m_font);
+        QSize s(metrics.width(value), metrics.height());
+        return s;
+    }
+    return value;
 }
 
 QVariant IncomingMailModel::headerData(int section, Qt::Orientation orientation, int role) const
