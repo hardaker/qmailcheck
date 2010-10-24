@@ -1,3 +1,4 @@
+
 #include "incomingmailmodel.h"
 #include "MailChecker.h"
 
@@ -82,7 +83,11 @@ Qt::ItemFlags IncomingMailModel::flags(const QModelIndex &index) const
     if (!index.isValid())
         return Qt::ItemIsEnabled;
     
-    return QAbstractItemModel::flags(index) | Qt::ItemIsEnabled;
+    QtItemFlags flags = QAbstractItemModel::flags(index) | Qt::ItemIsEnabled;
+    if (flags & Qt::ItemIsSelectable)
+      flags =~ Qt::ItemIsSelectable;
+
+    return flags;
 }
 
 QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
@@ -95,6 +100,9 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
     int findrow = index.row();
     QString lastfolder;
     
+    if (index.column() > COL_SUBJECT)
+        return QVariant();
+
     for(message = m_messages.begin(); message != stopat; ++message) {
         if (! m_hideList.contains(message->uid()))
             findrow--;
@@ -106,9 +114,6 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
     }
 
     if (message == stopat)
-        return QVariant();
-
-    if (index.column() > COL_SUBJECT)
         return QVariant();
 
     if (role == Qt::FontRole) {
