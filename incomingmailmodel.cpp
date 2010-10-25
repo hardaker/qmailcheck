@@ -83,9 +83,9 @@ Qt::ItemFlags IncomingMailModel::flags(const QModelIndex &index) const
     if (!index.isValid())
         return Qt::ItemIsEnabled;
     
-    QtItemFlags flags = QAbstractItemModel::flags(index) | Qt::ItemIsEnabled;
+    Qt::ItemFlags flags = QAbstractItemModel::flags(index) | Qt::ItemIsEnabled;
     if (flags & Qt::ItemIsSelectable)
-      flags =~ Qt::ItemIsSelectable;
+      flags &= ~Qt::ItemIsSelectable;
 
     return flags;
 }
@@ -144,6 +144,7 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
             return QVariant();
     }
 
+
     if (role != Qt::DisplayRole && role != Qt::SizeHintRole)
         return QVariant();
 
@@ -157,22 +158,26 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
         if (message->folder() == lastfolder)
             return QVariant();
         value = message->folder();
+        break;
 
     case COL_DATE:
         value = message->time();
+        break;
 
     case COL_FROM:
         value = message->from();
+        break;
 
     case COL_SUBJECT:
         value = message->subject();
+        break;
 
     default:
         return QVariant();
         
     }
     if (Qt::SizeHintRole == role){
-	QFontMetrics metrics(m_font);
+        QFontMetrics metrics(m_font);
         QSize s(metrics.width(value), metrics.height());
         return s;
     }
@@ -277,6 +282,7 @@ void IncomingMailModel::clearNew()
 
 void IncomingMailModel::emitChanges()
 {
+    reset();
     emit dataChanged(createIndex(0,0,0),
                      createIndex(m_messages.count(),3,0));
     emit layoutChanged();
