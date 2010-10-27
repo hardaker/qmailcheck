@@ -21,8 +21,6 @@ void MailChecker::connectSignals(QTableView *mailView, QtIncoming *mainWidget)
             mailView, SLOT(resizeRowsToContents()));
     connect(this, SIGNAL(mailUpdated()),
             mailView, SLOT(resizeColumnsToContents()));
-    connect(this, SIGNAL(mailUpdated()),
-            mailView, SLOT(repaint()));
 
     connect(this, SIGNAL(updateCount(int, int)),
             mailView, SLOT(rowCountChanged(int, int)));
@@ -235,8 +233,8 @@ void MailChecker::checkMail()
         }
     }
     qDebug() << "Done checking mail";
-    emit mailUpdated();
     emit updateCount(oldcount, m_messages->count());
+    emit mailUpdated();
     if (containsNewMessages) {
         emit newMail();
         // m_model->emitChanges();
