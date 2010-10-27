@@ -178,7 +178,8 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
     }
     if (Qt::SizeHintRole == role){
         QFontMetrics metrics(m_font);
-        QSize s(metrics.width(value), metrics.height());
+        QSize s(metrics.width(value)+6, metrics.height());
+        qDebug() << "setting size of " << index.column() << "x" << index.row() << " (" << value << ") to " << s;
         return s;
     }
     return value;

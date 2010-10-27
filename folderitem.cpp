@@ -1,10 +1,5 @@
 #include "folderitem.h"
 
-folderItem::folderItem()
-    : m_folderName(), m_displayName(), m_doNotification(true), m_doPopup(false), m_doVibrate(false), m_doLED(false)
-{
-}
-
 folderItem::folderItem(const QString &folderName, const QString &displayName,
                        bool doNotification, bool doPopup, bool doVibrate,
                        bool doLED)
