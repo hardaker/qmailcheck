@@ -38,7 +38,6 @@ public:
     void set_font(const QFont &font);
 
     void set_folderList(folderModel *list);
-    void emitChanges();
     void readSettings(QSettings &settings, Ui::PrefWindow *prefui);
     void saveSettings(QSettings &settings, Ui::PrefWindow *prefui);
     void connectSignals(QTableView *mailView, QtIncoming *mainWidget);
@@ -55,6 +54,7 @@ public slots:
     void restartCheckers();
     void checkMailSlot();
     void restartTimer();
+    void emitChanges();
 
 private:
     QTimer       m_timer;

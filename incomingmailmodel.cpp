@@ -52,6 +52,7 @@ void IncomingMailModel::restartCheckers() {
     m_checker->start();
     connect(this, SIGNAL(checkMail()), m_checker, SLOT(internalCheckMail()));
     connect(m_checker, SIGNAL(mailUpdated()), this, SLOT(restartTimer()));
+    connect(m_checker, SIGNAL(mailUpdated()), this, SLOT(emitChanges()));
     qDebug() << "past start of checker";
     //emit checkMail(); // immediate check
 }
