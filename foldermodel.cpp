@@ -249,6 +249,8 @@ void folderModel::setupFolderPrefs(int index) {
 
             m_signalMapper = new QSignalMapper();
             connect(m_signalMapper, SIGNAL(mapped(int)), this, SLOT(moveFolder(int)));
+
+            connect(m_prefui->addFolder, SIGNAL(clicked()), this, SLOT(addRow()));
         }
         for(int i = 1; i <= count(); i++) {
             QList<QWidget *> *row;
@@ -340,5 +342,10 @@ void folderModel::moveFolder(int folderNumber) {
         folderNumber = (folderNumber - 1) / 2 - 1;
         folders.swap(folderNumber, folderNumber+1);
     }
+    setupFolderPrefs(3);
+}
+
+void folderModel::addRow() {
+    folders.append(folderItem());
     setupFolderPrefs(3);
 }

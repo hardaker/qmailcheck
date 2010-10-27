@@ -4,6 +4,7 @@
 #include <QAbstractTableModel>
 #include <QSettings>
 #include <QtGui/QGridLayout>
+#include <QtGui/QVBoxLayout>
 #include <QtCore/QSignalMapper>
 
 #include "folderitem.h"
@@ -40,6 +41,7 @@ signals:
 public slots:
     void setupFolderPrefs(int index);
     void moveFolder(int folderNumber);
+    void addRow();
 
 private:
     QList<folderItem> folders;

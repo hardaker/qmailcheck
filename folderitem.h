@@ -6,8 +6,8 @@
 class folderItem
 {
 public:
-    folderItem();
-    folderItem(const QString &folderName, const QString &displayName,
+
+    folderItem(const QString &folderName = "", const QString &displayName = "",
                bool doNotification = false, bool doPopup = false, bool doVibrate = false,
                bool doLED = false);
 
