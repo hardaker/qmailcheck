@@ -180,7 +180,7 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
     if (Qt::SizeHintRole == role){
         QFontMetrics metrics(m_font);
         QSize s(metrics.width(value)+6, metrics.height());
-        qDebug() << "setting size of " << index.column() << "x" << index.row() << " (" << value << ") to " << s;
+        //qDebug() << "setting size of " << index.column() << "x" << index.row() << " (" << value << ") to " << s;
         return s;
     }
     return value;
@@ -196,6 +196,28 @@ QVariant IncomingMailModel::headerData(int section, Qt::Orientation orientation,
     if (role == Qt::SizeHintRole)
         return QSize(1,1);
 #endif
+
+    if (orientation != Qt::Horizontal)
+        return QVariant();
+
+    if (role == Qt::TextAlignmentRole)
+        return Qt::AlignLeft;
+
+    if (role == Qt::DisplayRole) {
+        qDebug() << "got section " << section;
+        switch(section) {
+        case COL_FOLDER:
+            return QString("Folder");
+        case COL_DATE:
+            return QString("Date");
+        case COL_FROM:
+            return QString("From");
+        case COL_SUBJECT:
+            return QString("Subject");
+        default:
+            return QVariant();
+        }
+    }
     return QVariant();
 #if 0
     if (orientation == Qt::Horizontal)
