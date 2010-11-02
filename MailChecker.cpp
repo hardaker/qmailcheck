@@ -26,8 +26,8 @@ void MailChecker::connectSignals(QTableView *mailView, QtIncoming *mainWidget)
     connect(this, SIGNAL(updateCount(int, int)),
             mailView, SLOT(rowCountChanged(int, int)));
 
-    connect(this, SIGNAL(newMail()),
-            mainWidget, SLOT(maybeRaise()));
+    //connect(this, SIGNAL(newMail()),
+    //        mainWidget, SLOT(maybeRaise()));  // now handled below
     connect(this, SIGNAL(mailUpdated()),
             mailView, SLOT(repaint()));
 
@@ -36,8 +36,8 @@ void MailChecker::connectSignals(QTableView *mailView, QtIncoming *mainWidget)
             mainWidget, SLOT(newMail()));
 
     // connect this after the initial check mail pass
-    connect(this, SIGNAL(newMailMessage(QString)),
-            mainWidget, SLOT(sendNotification(QString)));
+    connect(this, SIGNAL(newMailMessage(QString, bool)),
+            mainWidget, SLOT(sendNotification(QString, bool)));
 
     // notification handling
     connect(this, SIGNAL(LEDNotification()),
@@ -228,7 +228,7 @@ void MailChecker::checkMail()
             if (! uid_list.contains(msglist[i])) {
                 message.setIsNew(true);
                 containsNewMessages = true;
-                emit newMailMessage(from + "\n" + subject);
+                emit newMailMessage(from + "\n" + subject, folder.doNotification());
 
                 // figure out which notifications might need emiting
                 if (folder.doLED())
