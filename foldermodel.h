@@ -23,6 +23,7 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     const QString &folderName(int row) const;
     const QString &displayName(int row) const;
+    folderItem &folder(int row);
     bool    enablePopup(int row) const;
     int count() const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);

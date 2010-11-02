@@ -29,6 +29,11 @@ signals:
     void statusMessage(const QString &message, int timeout);
     void internalCheckMailSignal();
 
+    void popupNotification();
+    void LEDNotification();
+    void notificationNotification();
+    void vibrateNotification();
+
 public slots:
     void checkMail();
     void internalCheckMail();

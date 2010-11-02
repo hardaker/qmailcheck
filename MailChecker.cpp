@@ -1,5 +1,6 @@
 #include "MailChecker.h"
 #include "qmailcheckcommon.h"
+#include "folderitem.h"
 #include "qtincoming.h"
 
 #define DATE_WIDTH    5
@@ -177,15 +178,17 @@ void MailChecker::checkMail()
     bool containsNewMessages = false;
 
     m_checkingNow = true;
+    bool doLED = false, doVibrate = false, doNotification = false, doPopup = false;
 
     for(int mbox = 0; mbox < m_folderModel->count(); mbox++) {
+        folderItem &folder = m_folderModel->folder(mbox);
 
-        if (m_folderModel->folderName(mbox) == "")
+        if (folder.folderName() == "")
             continue;
 
-        DEBUG("---- " << m_folderModel->folderName(mbox).toAscii().data() << " ------\n");
+        DEBUG("---- " << folder.folderName().toAscii().data() << " ------\n");
 
-        sendCommand(QString("EXAMINE \"" + m_folderModel->folderName(mbox) + "\""));
+        sendCommand(QString("EXAMINE \"" + folder.folderName() + "\""));
 
         results = sendCommand(QString("UID SEARCH RECENT"));
         if (results.length() == 0) {
@@ -211,11 +214,22 @@ void MailChecker::checkMail()
                 }
             }
 
-            MailMsg message(msglist[i], m_folderModel->displayName(mbox), date, from, subject);
+            MailMsg message(msglist[i], folder.displayName(), date, from, subject);
             if (! uid_list.contains(msglist[i])) {
                 message.setIsNew(true);
                 containsNewMessages = true;
                 emit newMailMessage(from + "\n" + subject);
+
+                // figure out which notifications might need emiting
+                if (folder.doLED())
+                    doLED = true;
+                if (folder.doNotification())
+                    doNotification = true;
+                if (folder.doPopup())
+                    doPopup = true;
+                if (folder.doVibrate())
+                    doVibrate = true;
+
             } else {
                 message.setIsNew(uid_list[msglist[i]]);
             }
@@ -235,6 +249,16 @@ void MailChecker::checkMail()
     qDebug() << "Done checking mail";
     emit updateCount(oldcount, m_messages->count());
     emit mailUpdated();
+
+    if (doLED)
+        emit LEDNotification();
+    if (doNotification)
+        emit notificationNotification();
+    if (doPopup)
+        emit popupNotification();
+    if (doVibrate)
+        emit vibrateNotification();
+
     if (containsNewMessages) {
         emit newMail();
         // m_model->emitChanges();
