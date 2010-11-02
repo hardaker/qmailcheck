@@ -2,9 +2,15 @@
 #define QTINCOMING_H
 
 #include <QMainWindow>
+#include <QtDBus/QDBusInterface>
+
 #include "ui_prefs.h"
 #include "incomingmailmodel.h"
 #include "foldermodel.h"
+
+#if defined(Q_WS_MAEMO_5) || defined(MAEMO_CHANGES)
+#define IS_MAEMO 1
+#endif
 
 namespace Ui {
     class QtIncoming;
@@ -33,6 +39,11 @@ public slots:
     void set_doNotification(bool);
     void set_doPopup(bool);
 
+    void doPopup();
+    void doNotification();
+    void doLED();
+    void doVirbrate();
+
 protected:
     void changeEvent(QEvent *e);
 
@@ -48,6 +59,7 @@ private:
     bool               m_notifyCritical;
     bool               m_highlightNew;
     bool               m_firstCheck;
+    QDBusInterface    *m_dbusInterface;
 
 };
 

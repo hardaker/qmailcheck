@@ -10,6 +10,10 @@
 #include <QtGui/QPushButton>
 #include <QtGui/QLineEdit>
 
+#if IS_MAEMO
+#include <mce/dbus-names.h>
+#endif
+
 #include "qmailcheckcommon.h"
 
 QtIncoming::QtIncoming(QWidget *parent) :
@@ -85,6 +89,13 @@ QtIncoming::QtIncoming(QWidget *parent) :
             this, SLOT(fontButton()));
 
     connect(prefui->tabWidget, SIGNAL(currentChanged(int)), folderListModel, SLOT(setupFolderPrefs(int)));
+
+#ifdef IS_MAEMO
+    m_dbusInterface = new QDBusInterface(MCE_SERVICE, MCE_REQUEST_PATH, MCE_REQUEST_IF, QDBusConnection::systemBus(), this);
+    QDBusMessage reply = m_dbusInterface->call(MCE_ENABLE_LED);
+    if (reply.type() == QDBusMessage::ErrorMessage)
+        qDebug() << reply.errorMessage();
+#endif
 
     mailModel->restartCheckers();
 }
@@ -255,6 +266,33 @@ void QtIncoming::readSettings()
     mailModel->restartCheckers();
 }
 
+void QtIncoming::doLED() {
+#ifdef IS_MAEMO
+        QDBusMessage reply;
+
+        // set the LED pattern
+        reply = m_dbusInterface->call(MCE_ACTIVATE_LED_PATTERN, "PatternError");
+        if (reply.type() == QDBusMessage::ErrorMessage)
+            qDebug() << reply.errorMessage();
+
+        // turn on the display too
+        reply = m_dbusInterface->call(MCE_DISPLAY_ON_REQ, 1);
+        if (reply.type() == QDBusMessage::ErrorMessage)
+            qDebug() << reply.errorMessage();
+#endif
+}
+
+void QtIncoming::doNotification() {
+
+}
+
+void QtIncoming::doPopup() {
+
+}
+
+void QtIncoming::doVirbrate() {
+
+}
 
 
 #include "moc_qtincoming.cpp"
