@@ -204,7 +204,6 @@ QVariant IncomingMailModel::headerData(int section, Qt::Orientation orientation,
         return Qt::AlignLeft;
 
     if (role == Qt::DisplayRole) {
-        qDebug() << "got section " << section;
         switch(section) {
         case COL_FOLDER:
             return QString("Folder");
