@@ -25,7 +25,7 @@ signals:
     void mailUpdated();
     void newMail();
     void updateCount(int from, int to);
-    void newMailMessage(const QString newmessage);
+    void newMailMessage(const QString newmessage, bool folderNotifies);
     void statusMessage(const QString &message, int timeout);
     void internalCheckMailSignal();
 

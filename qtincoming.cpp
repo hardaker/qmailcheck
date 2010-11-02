@@ -132,12 +132,12 @@ void QtIncoming::changeEvent(QEvent *e)
     }
 }
 
-void QtIncoming::sendNotification(QString message)
+void QtIncoming::sendNotification(QString message, bool folderNotification)
 {
     const char name[] = "qmailcheck";
     NotifyNotification *notification;
 
-    if (!m_doNotification)
+    if (m_firstCheck || !m_doNotification || !folderNotification)
         return;
 
     notification = notify_notification_new(name, message.toAscii().data(),
@@ -303,7 +303,7 @@ void QtIncoming::doNotification() {
 }
 
 void QtIncoming::doPopup() {
-
+    maybeRaise();
 }
 
 void QtIncoming::doVirbrate() {

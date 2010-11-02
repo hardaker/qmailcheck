@@ -31,7 +31,7 @@ public slots:
     void cancelled();
     void saveSettings();
     void readSettings();
-    void sendNotification(QString message);
+    void sendNotification(QString message, bool folderNotification);
     void fontButton();
     void newMail();
 

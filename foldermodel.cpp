@@ -1,5 +1,6 @@
 #include "foldermodel.h"
 #include "ui_prefs.h"
+#include "qtincoming.h"
 
 #include <QSignalMapper>
 
@@ -64,22 +65,26 @@ void folderModel::saveSettings(QSettings &settings)
         row = widgets[i];
         QString value;
 
-        checkBox = dynamic_cast<QCheckBox *>((*row)[2]);
+        int columnNumber = 2;
+
+        checkBox = dynamic_cast<QCheckBox *>((*row)[columnNumber++]);
         folders[i].set_doNotification(checkBox->isChecked());
 
-        checkBox = dynamic_cast<QCheckBox *>((*row)[3]);
+        checkBox = dynamic_cast<QCheckBox *>((*row)[columnNumber++]);
         folders[i].set_doPopup(checkBox->isChecked());
 
-        checkBox = dynamic_cast<QCheckBox *>((*row)[4]);
+#ifdef IS_MAEMO
+        checkBox = dynamic_cast<QCheckBox *>((*row)[columnNumber++]);
         folders[i].set_doVibrate(checkBox->isChecked());
 
-        checkBox = dynamic_cast<QCheckBox *>((*row)[5]);
+        checkBox = dynamic_cast<QCheckBox *>((*row)[columnNumber++]);
         folders[i].set_doLED(checkBox->isChecked());
+#endif /* IS_MAEMO */
 
-        lineEdit = dynamic_cast<QLineEdit *>((*row)[6]);
+        lineEdit = dynamic_cast<QLineEdit *>((*row)[columnNumber++]);
         folders[i].set_folderName(value = lineEdit->text());
 
-        lineEdit = dynamic_cast<QLineEdit *>((*row)[7]);
+        lineEdit = dynamic_cast<QLineEdit *>((*row)[columnNumber++]);
         folders[i].set_displayName(value = lineEdit->text());
 
         settings.setArrayIndex(i);
@@ -105,10 +110,10 @@ void folderModel::readSettings(QSettings &settings)
         folders.push_back(
             folderItem(settings.value("folderName").toString(),
                        settings.value("displayName").toString(),
-                       settings.value("folderNotification").toBool(),
-                       settings.value("folderPopup").toBool(),
-                       settings.value("folderVibrate").toBool(),
-                       settings.value("folderLED").toBool()));
+                       settings.value("folderNotification", false).toBool(),
+                       settings.value("folderPopup", false).toBool(),
+                       settings.value("folderVibrate", false).toBool(),
+                       settings.value("folderLED", false).toBool()));
     }
     settings.endArray();
 }
@@ -255,6 +260,7 @@ void folderModel::setupFolderPrefs(int index) {
             header->setAlignment(Qt::AlignHCenter);
             m_theGrid->addWidget(header, 0, columnNumber++);
 
+#ifdef IS_MAEMO
             header = new QLabel("V");
             header->setAlignment(Qt::AlignHCenter);
             m_theGrid->addWidget(header, 0, columnNumber++);
@@ -262,6 +268,7 @@ void folderModel::setupFolderPrefs(int index) {
             header = new QLabel("L");
             header->setAlignment(Qt::AlignHCenter);
             m_theGrid->addWidget(header, 0, columnNumber++);
+#endif /* IS_MAEMO */
 
             m_theGrid->addWidget(new QLabel("Folder"), 0, columnNumber++);
             m_theGrid->addWidget(new QLabel("Alias"), 0, columnNumber++);
@@ -313,6 +320,7 @@ void folderModel::setupFolderPrefs(int index) {
                 row->push_back(checkBox);
                 m_theGrid->addWidget(checkBox, i, buttonNumber++);
 
+#ifdef IS_MAEMO
                 checkBox = new QCheckBox();
                 checkBox->setChecked(folder.doVibrate());
                 row->push_back(checkBox);
@@ -322,7 +330,7 @@ void folderModel::setupFolderPrefs(int index) {
                 checkBox->setChecked(folder.doLED());
                 row->push_back(checkBox);
                 m_theGrid->addWidget(checkBox, i, buttonNumber++);
-
+#endif /* IS_MAEMO */
 
                 // folder editing
                 lineEdit = new QLineEdit(folder.folderName());
@@ -346,12 +354,13 @@ void folderModel::setupFolderPrefs(int index) {
                 checkBox = dynamic_cast<QCheckBox *>((*row)[buttonNumber++]);
                 checkBox->setChecked(folder.doPopup());
 
+#ifdef IS_MAEMO
                 checkBox = dynamic_cast<QCheckBox *>((*row)[buttonNumber++]);
                 checkBox->setChecked(folder.doVibrate());
 
                 checkBox = dynamic_cast<QCheckBox *>((*row)[buttonNumber++]);
                 checkBox->setChecked(folder.doLED());
-
+#endif /* IS_MAEMO */
 
                 // folder editing
                 lineEdit = dynamic_cast<QLineEdit *>((*row)[buttonNumber++]);
