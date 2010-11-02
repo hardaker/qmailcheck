@@ -240,10 +240,22 @@ void folderModel::setupFolderPrefs(int index) {
             m_theGrid = new QGridLayout();
             m_prefui->scrolledFolders->setLayout(m_theGrid);
 
-            m_theGrid->addWidget(new QLabel("N"), 0, 2);
-            m_theGrid->addWidget(new QLabel("P"), 0, 3);
-            m_theGrid->addWidget(new QLabel("V"), 0, 4);
-            m_theGrid->addWidget(new QLabel("L"), 0, 5);
+            QLabel *header = new QLabel("N");
+            header->setAlignment(Qt::AlignHCenter);
+            m_theGrid->addWidget(header, 0, 2);
+
+            header = new QLabel("P");
+            header->setAlignment(Qt::AlignHCenter);
+            m_theGrid->addWidget(header, 0, 3);
+
+            header = new QLabel("N");
+            header->setAlignment(Qt::AlignHCenter);
+            m_theGrid->addWidget(header, 0, 4);
+
+            header = new QLabel("V");
+            header->setAlignment(Qt::AlignHCenter);
+            m_theGrid->addWidget(header, 0, 5);
+
             m_theGrid->addWidget(new QLabel("Folder"), 0, 6);
             m_theGrid->addWidget(new QLabel("Alias"), 0, 7);
 
