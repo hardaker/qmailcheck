@@ -264,13 +264,15 @@ void folderModel::setupFolderPrefs(int index) {
                 row = new QList<QWidget *>();
                 widgets.push_back(row);
 
-                button = new QPushButton("^");
+                QIcon icon(":/icons/arrow-up.png");
+                button = new QPushButton(icon, "");
                 row->push_back(button);
                 m_theGrid->addWidget(button, i, 0);
                 connect(button, SIGNAL(clicked()), m_signalMapper, SLOT(map()));
                 m_signalMapper->setMapping(button, i*2);
 
-                button = new QPushButton("v");
+                icon = QIcon(":/icons/arrow-down.png");
+                button = new QPushButton(icon, "");
                 row->push_back(button);
                 m_theGrid->addWidget(button, i, 1);
                 connect(button, SIGNAL(clicked()), m_signalMapper, SLOT(map()));
