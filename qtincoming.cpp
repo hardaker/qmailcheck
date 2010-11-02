@@ -272,6 +272,8 @@ void QtIncoming::readSettings()
 }
 
 void QtIncoming::doLED() {
+    if (m_firstCheck)
+        return;
 #ifdef IS_MAEMO
         QDBusMessage reply;
 
@@ -307,6 +309,8 @@ void QtIncoming::doPopup() {
 }
 
 void QtIncoming::doVirbrate() {
+    if (m_firstCheck)
+        return;
 #ifdef IS_MAEMO
     qDebug() << "vibrating";
     m_dbusInterface->call(MCE_ACTIVATE_VIBRATOR_PATTERN, "PatternChatAndEmail");
