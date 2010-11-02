@@ -72,7 +72,6 @@ void folderModel::saveSettings(QSettings &settings)
 
         checkBox = dynamic_cast<QCheckBox *>((*row)[4]);
         folders[i].set_doVibrate(checkBox->isChecked());
-        qDebug() << "Saving vibrate as " << checkBox->isChecked();
 
         checkBox = dynamic_cast<QCheckBox *>((*row)[5]);
         folders[i].set_doLED(checkBox->isChecked());
@@ -318,7 +317,6 @@ void folderModel::setupFolderPrefs(int index) {
                 checkBox->setChecked(folder.doVibrate());
                 row->push_back(checkBox);
                 m_theGrid->addWidget(checkBox, i, buttonNumber++);
-                qDebug() << "creating checkbox " << (buttonNumber-1) << " as " << folder.doVibrate();
 
                 checkBox = new QCheckBox();
                 checkBox->setChecked(folder.doLED());
@@ -336,7 +334,7 @@ void folderModel::setupFolderPrefs(int index) {
                 m_theGrid->addWidget(lineEdit, i, buttonNumber++);
             } else {
                 // change the exist widget settings
-                qDebug() << " changing settings for #" << i << " = " << folder.folderName();
+                //qDebug() << " changing settings for #" << i << " = " << folder.folderName();
                 row = widgets[i-1];
 
                 buttonNumber = 2;
@@ -350,7 +348,6 @@ void folderModel::setupFolderPrefs(int index) {
 
                 checkBox = dynamic_cast<QCheckBox *>((*row)[buttonNumber++]);
                 checkBox->setChecked(folder.doVibrate());
-                qDebug() << "setting old checkbox " << (buttonNumber-1) << " as " << folder.doVibrate();
 
                 checkBox = dynamic_cast<QCheckBox *>((*row)[buttonNumber++]);
                 checkBox->setChecked(folder.doLED());
