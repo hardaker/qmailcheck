@@ -59,6 +59,8 @@ QtIncoming::QtIncoming(QWidget *parent) :
             mailModel, SLOT(checkMailSlot()));
     connect(ui->acknowledge, SIGNAL(clicked()),
             mailModel, SLOT(clearNew()));
+    connect(ui->acknowledge, SIGNAL(clicked()),
+            this, SLOT(clearLED()));
     connect(ui->preferences, SIGNAL(clicked()),
             this, SLOT(showPrefs()));
 
@@ -273,8 +275,10 @@ void QtIncoming::doLED() {
 #ifdef IS_MAEMO
         QDBusMessage reply;
 
+        qDebug() << "setting LED";
+
         // set the LED pattern
-        reply = m_dbusInterface->call(MCE_ACTIVATE_LED_PATTERN, "PatternCommunicationEmail");
+        reply = m_dbusInterface->call(MCE_ACTIVATE_LED_PATTERN, "PatternError");
         if (reply.type() == QDBusMessage::ErrorMessage)
             qDebug() << reply.errorMessage();
 
@@ -282,6 +286,15 @@ void QtIncoming::doLED() {
         reply = m_dbusInterface->call(MCE_DISPLAY_ON_REQ, 1);
         if (reply.type() == QDBusMessage::ErrorMessage)
             qDebug() << reply.errorMessage();
+#endif
+}
+
+void QtIncoming::clearLED() {
+#ifdef IS_MAEMO
+    QDBusMessage reply;
+    reply = m_dbusInterface->call(MCE_DEACTIVATE_LED_PATTERN, "PatternError");
+    if (reply.type() == QDBusMessage::ErrorMessage)
+        qDebug() << reply.errorMessage();
 #endif
 }
 
@@ -295,6 +308,7 @@ void QtIncoming::doPopup() {
 
 void QtIncoming::doVirbrate() {
 #ifdef IS_MAEMO
+    qDebug() << "vibrating";
     m_dbusInterface->call(MCE_ACTIVATE_VIBRATOR_PATTERN, "PatternChatAndEmail");
     QTimer::singleShot(1000, this, SLOT(stopVibrate()));
 #endif
