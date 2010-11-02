@@ -39,6 +39,16 @@ void MailChecker::connectSignals(QTableView *mailView, QtIncoming *mainWidget)
     connect(this, SIGNAL(newMailMessage(QString)),
             mainWidget, SLOT(sendNotification(QString)));
 
+    // notification handling
+    connect(this, SIGNAL(LEDNotification()),
+            mainWidget, SLOT(doLED()));
+    connect(this, SIGNAL(notificationNotification()),
+            mainWidget, SLOT(doNotification()));
+    connect(this, SIGNAL(vibrateNotification()),
+            mainWidget, SLOT(doVirbrate()));
+    connect(this, SIGNAL(popupNotification()),
+            mainWidget, SLOT(doPopup()));
+
     connect(this, SIGNAL(internalCheckMailSignal()), this, SLOT(checkMail()));
 }
 
