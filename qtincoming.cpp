@@ -97,7 +97,7 @@ QtIncoming::QtIncoming(QWidget *parent) :
         qDebug() << reply.errorMessage();
 
     // enable the vibrator
-    mDbusInterface->call(MCE_ENABLE_VIBRATOR);
+    m_dbusInterface->call(MCE_ENABLE_VIBRATOR);
 #endif
 
     mailModel->restartCheckers();
