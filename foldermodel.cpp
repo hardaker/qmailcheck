@@ -117,6 +117,10 @@ int folderModel::count() const
     return folders.count();
 }
 
+folderItem &folderModel::folder(int row) {
+    return folders[row];
+}
+
 const QString &folderModel::displayName(int row) const
 {
     return ((folders[row].displayName().length() > 0) ? folders[row].displayName() : folders[row].folderName());
