@@ -23,6 +23,7 @@ FORMS += qtincoming.ui \
     prefs.ui
 CONFIG += link_pkgconfig
 PKGCONFIG += libnotify
+RESOURCES = qmailcheck.qrc
 
 CONFIG += mobility
 MOBILITY = 
