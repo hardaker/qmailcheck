@@ -43,6 +43,7 @@ public slots:
     void doNotification();
     void doLED();
     void doVirbrate();
+    void stopVibrate();
 
 protected:
     void changeEvent(QEvent *e);

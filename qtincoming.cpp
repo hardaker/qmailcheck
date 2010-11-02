@@ -95,6 +95,9 @@ QtIncoming::QtIncoming(QWidget *parent) :
     QDBusMessage reply = m_dbusInterface->call(MCE_ENABLE_LED);
     if (reply.type() == QDBusMessage::ErrorMessage)
         qDebug() << reply.errorMessage();
+
+    // enable the vibrator
+    mDbusInterface->call(MCE_ENABLE_VIBRATOR);
 #endif
 
     mailModel->restartCheckers();
@@ -271,7 +274,7 @@ void QtIncoming::doLED() {
         QDBusMessage reply;
 
         // set the LED pattern
-        reply = m_dbusInterface->call(MCE_ACTIVATE_LED_PATTERN, "PatternError");
+        reply = m_dbusInterface->call(MCE_ACTIVATE_LED_PATTERN, "PatternCommunicationEmail");
         if (reply.type() == QDBusMessage::ErrorMessage)
             qDebug() << reply.errorMessage();
 
@@ -291,8 +294,16 @@ void QtIncoming::doPopup() {
 }
 
 void QtIncoming::doVirbrate() {
-
+#ifdef IS_MAEMO
+    m_dbusInterface->call(MCE_ACTIVATE_VIBRATOR_PATTERN, "PatternChatAndEmail");
+    QTimer::singleShot(1000, this, SLOT(stopVibrate()));
+#endif
 }
 
+void QtIncoming::stopVibrate() {
+#ifdef IS_MAEMO
+    m_dbusInterface->call(MCE_DEACTIVATE_VIBRATOR_PATTERN, "PatternChatAndEmail");
+#endif
+}
 
 #include "moc_qtincoming.cpp"
