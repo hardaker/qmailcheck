@@ -1,3 +1,5 @@
+#include <QtGui/QMessageBox>
+#include <QtGui/QInputDialog>
 #include "MailSource.h"
 
 MailSource::MailSource(QObject *parent) :
@@ -24,6 +26,29 @@ const QString &MailSource::userName() const {
 
 const QString &MailSource::passPhrase() const {
     return m_passPhrase;
+}
+
+const QString &MailSource::noSavePassPhrase() const {
+    return m_noSavePassPhrase;
+}
+
+QString MailSource::openPassPhrase() {
+    if (!m_noSavePassPhrase.isEmpty())
+        return m_noSavePassPhrase;
+    if (!m_passPhrase.isEmpty())
+        return m_passPhrase;
+
+    // We don't have a pass phrase yet, so prompt for one and then save it
+    QMessageBox passphraseDialog();
+    bool pressedOk;
+    QString text = QInputDialog::getText(0, tr("Passphrase"),
+                                              tr("Passphrase"), QLineEdit::Password,
+                                              tr(""), &pressedOk);
+    if (pressedOk) {
+        m_noSavePassPhrase = text;
+        return text;
+    }
+    return QString();
 }
 
 bool MailSource::ignoreCertErrors() const {
