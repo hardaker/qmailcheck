@@ -32,7 +32,7 @@ const QString &MailSource::noSavePassPhrase() const {
     return m_noSavePassPhrase;
 }
 
-QString MailSource::openPassPhrase() {
+QString MailSource::openPassPhrase(const QString &loginDescription) {
     if (!m_noSavePassPhrase.isEmpty())
         return m_noSavePassPhrase;
     if (!m_passPhrase.isEmpty())
@@ -41,8 +41,8 @@ QString MailSource::openPassPhrase() {
     // We don't have a pass phrase yet, so prompt for one and then save it
     QMessageBox passphraseDialog();
     bool pressedOk;
-    QString text = QInputDialog::getText(0, tr("Passphrase"),
-                                              tr("Passphrase"), QLineEdit::Password,
+    QString text = QInputDialog::getText(0, loginDescription,
+                                              tr("Passphrase for %1:").arg(loginDescription), QLineEdit::Password,
                                               tr(""), &pressedOk);
     if (pressedOk) {
         m_noSavePassPhrase = text;

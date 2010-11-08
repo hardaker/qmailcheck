@@ -98,8 +98,9 @@ void MailChecker::initializeSocket()
     DEBUG("intial line: " << buf);
 
     // XXX: should check for error
-    QString passPhrase = m_mailSource->openPassPhrase();
     QString userName = m_mailSource->userName();
+    QString passPhrase = m_mailSource->openPassPhrase(userName + "@" + m_mailSource->hostName());
+
     if (passPhrase.isEmpty() || userName.isEmpty()) {
         qWarning() << "login info missing";
         m_socket->close();

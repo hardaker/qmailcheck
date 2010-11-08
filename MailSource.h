@@ -15,7 +15,7 @@ public:
     const QString &userName() const;
     const QString &passPhrase() const;
     const QString &noSavePassPhrase() const;
-    QString openPassPhrase();
+    QString openPassPhrase(const QString &loginDescription);
     bool          ignoreCertErrors() const;
 
     void    set_hostName(const QString &hostName);
