@@ -8,7 +8,9 @@
 #include <QSettings>
 #include <QFontDialog>
 #include <QtGui/QPushButton>
+#include <QtGui/QMenu>
 #include <QtGui/QLineEdit>
+#include <QtGui/QStyleFactory>
 
 #if IS_MAEMO
 #include <mce/dbus-names.h>
@@ -16,8 +18,9 @@
 
 #include "qmailcheckcommon.h"
 
-QtIncoming::QtIncoming(QWidget *parent) :
+QtIncoming::QtIncoming(QWidget *parent, QApplication *app) :
     QMainWindow(parent),
+    m_app(app),
     ui(new Ui::QtIncoming), prefui(new Ui::PrefWindow),
     prefDialog(new QDialog(parent, Qt::Window)),
     do_popup(true), m_doNotification(true), m_highlightNew(true), m_firstCheck(true)
@@ -74,6 +77,7 @@ QtIncoming::QtIncoming(QWidget *parent) :
 
     // setup the preferences UI
     prefui->setupUi(prefDialog);
+    setupStyleMenu();
 #if defined(Q_WS_MAEMO_5) || defined(MAEMO_CHANGES)
     prefDialog->setAttribute((Qt::WidgetAttribute) 127); // Qt::WA_Maemo5StackedWindow
 #endif
@@ -105,6 +109,24 @@ QtIncoming::QtIncoming(QWidget *parent) :
     mailModel->restartCheckers();
 }
 
+void QtIncoming::setupStyleMenu() {
+    QMenu *menu = new QMenu(prefui->styles);
+    prefui->styles->setMenu(menu);
+    QSignalMapper *mapper = new QSignalMapper();
+
+    QStringList myList = QStyleFactory::keys();
+    foreach(const QString item, myList) {
+        QAction *action = menu->addAction(item);
+        connect(action, SIGNAL(triggered()), mapper, SLOT(map()));
+        mapper->setMapping(action, QString(item));
+    }
+    connect(mapper, SIGNAL(mapped(QString)), this, SLOT(switchStyle(QString)));
+}
+
+void QtIncoming::switchStyle(const QString &newstyle)
+{
+    m_app->setStyle(newstyle);
+}
 
 void QtIncoming::newMail() {
     mailView->resizeRowsToContents();

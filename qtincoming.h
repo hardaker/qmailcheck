@@ -7,6 +7,7 @@
 #include "ui_prefs.h"
 #include "incomingmailmodel.h"
 #include "foldermodel.h"
+#include <QApplication>
 
 #if defined(Q_WS_MAEMO_5) || defined(MAEMO_CHANGES)
 #define IS_MAEMO 1
@@ -20,7 +21,7 @@ namespace Ui {
 class QtIncoming : public QMainWindow {
     Q_OBJECT
 public:
-    QtIncoming(QWidget *parent = 0);
+    QtIncoming(QWidget *parent = 0, QApplication *app = 0);
     ~QtIncoming();
 
 
@@ -46,10 +47,14 @@ public slots:
     void stopVibrate();
     void clearLED();
 
+    void switchStyle(const QString &newstyle);
+
 protected:
     void changeEvent(QEvent *e);
+    void setupStyleMenu();
 
 private:
+    QApplication      *m_app;
     QTableView        *mailView;
     Ui::QtIncoming    *ui;
     Ui::PrefWindow    *prefui;
