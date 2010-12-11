@@ -135,6 +135,7 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
     }
 
     if (role == Qt::ForegroundRole) {
+        return QColor(0,0,0);
         if (message->isnew())
 #if defined(Q_WS_MAEMO_5) || defined(MAEMO_CHANGES)
             return QColor(128,128,255);
@@ -204,6 +205,10 @@ QVariant IncomingMailModel::headerData(int section, Qt::Orientation orientation,
 
     if (role == Qt::TextAlignmentRole)
         return Qt::AlignLeft;
+
+    if (role == Qt::FontRole) {
+        return m_font;
+    }
 
     if (role == Qt::DisplayRole) {
         switch(section) {
