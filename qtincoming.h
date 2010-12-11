@@ -7,6 +7,8 @@
 #include "ui_prefs.h"
 #include "incomingmailmodel.h"
 #include "foldermodel.h"
+#include "TextPainter.h"
+
 #include <QApplication>
 
 #if defined(Q_WS_MAEMO_5) || defined(MAEMO_CHANGES)
