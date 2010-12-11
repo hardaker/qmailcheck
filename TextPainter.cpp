@@ -18,17 +18,31 @@ void TextPainter::paint(QPainter *painter, const QStyleOptionViewItem &option, c
 
     QString value = index.data().toString();
     if (value[0] == '*') {
+#if defined(Q_WS_MAEMO_5) || defined(MAEMO_CHANGES)
+        brush.setColor(QColor(0,0,50));
+#else
         brush.setColor(QColor(220,220,255));
+#endif
         value.remove(0, 1);
     } else
+#if defined(Q_WS_MAEMO_5) || defined(MAEMO_CHANGES)
+        brush.setColor(Qt::black);
+#else
         brush.setColor(Qt::white);
+#endif
 
     painter->setBrush(brush);
     painter->fillRect(option.rect.adjusted(-1,-1,1,1), brush);
 
+#if defined(Q_WS_MAEMO_5) || defined(MAEMO_CHANGES)
+    brush.setColor(Qt::white);
+#else
     brush.setColor(Qt::black);
+#endif
+
     painter->setBrush(brush);
-    painter->drawText(option.rect, index.data().toString());
+    painter->setFont(index.data(Qt::FontRole).value<QFont>());
+    painter->drawText(option.rect, value);
 //    painter->drawLine(option.rect.topLeft(), option.rect.bottomRight());
     painter->restore();
 }
@@ -37,5 +51,6 @@ void TextPainter::paint(QPainter *painter, const QStyleOptionViewItem &option, c
 QSize TextPainter::sizeHint(const QStyleOptionViewItem &option,
                             const QModelIndex &index) const
 {
-    return QStyledItemDelegate::sizeHint(option, index);
+    return QSize(option.fontMetrics.size(Qt::TextSingleLine, index.data().toString()));
+    //return QStyledItemDelegate::sizeHint(option, index);
 }
