@@ -35,9 +35,6 @@ QtIncoming::QtIncoming(QWidget *parent, QApplication *app) :
     mailModel = new IncomingMailModel(0, this, mailView);
     mailView->setModel(mailModel);
     mailView->setWordWrap(false);
-    for(int i = 0; i < 20; i++) {
-        mailView->setRowHeight(i, 1);
-    }
     mailView->resizeColumnsToContents();
     mailView->resizeRowsToContents();
 
