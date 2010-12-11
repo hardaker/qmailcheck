@@ -47,6 +47,8 @@ QtIncoming::QtIncoming(QWidget *parent, QApplication *app) :
     mailView->horizontalHeader()->setMinimumSectionSize(1);
     mailView->verticalHeader()->setMinimumSectionSize(1);
 
+    mailView->setItemDelegate(new TextPainter(this));
+
     folderListModel = new folderModel(this, prefui);
     mailModel->set_folderList(folderListModel);
 

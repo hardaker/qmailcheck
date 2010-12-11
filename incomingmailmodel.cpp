@@ -183,6 +183,8 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
         //qDebug() << "setting size of " << index.column() << "x" << index.row() << " (" << value << ") to " << s;
         return s;
     }
+    if (message->isnew())
+        value = "*" + value;
     return value;
 }
 
