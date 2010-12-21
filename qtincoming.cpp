@@ -44,6 +44,16 @@ QtIncoming::QtIncoming(QWidget *parent, QApplication *app) :
     mailView->horizontalHeader()->setMinimumSectionSize(1);
     mailView->verticalHeader()->setMinimumSectionSize(1);
 
+    mailView->verticalHeader()->setStyleSheet(
+      "QHeaderView::section {"
+         "padding-bottom: -5px;"
+         "padding-top: -5px;"
+         "padding-left: 0px;"
+         "padding-right: 1px;"
+         "margin: 0px;"
+      "}"
+    );
+
     mailView->setItemDelegate(new TextPainter(this));
 
     folderListModel = new folderModel(this, prefui);
