@@ -2,7 +2,10 @@
 * Introduction
 
   qmailcheck is a simple application that lets you watch multiple
-  IMAP mailboxes for new mail.
+  IMAP mailboxes for new mail.  This is similar nature to the older
+  "biff" style mail notifications, but is designed specifically to
+  watch multiple IMAP folders and be extremely portable to multiple
+  device types (eg, cell phones like the N900).
 
 * Alerts
   Each folder can be set up with different notification types when new
