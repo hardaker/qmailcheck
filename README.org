@@ -20,3 +20,4 @@
 *** TODO allow for multiple mail sources (multiple IMAP boxes)
 *** TODO create icons for the alert types
 *** TODO restructure the mail folders preference for smaller windows
+*** TODO add a delete-folder button
