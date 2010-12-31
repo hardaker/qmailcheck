@@ -11,6 +11,7 @@
 #include <QtGui/QMenu>
 #include <QtGui/QLineEdit>
 #include <QtGui/QStyleFactory>
+#include <QtGui/QIcon>
 
 #if IS_MAEMO
 #include <mce/dbus-names.h>
@@ -114,6 +115,8 @@ QtIncoming::QtIncoming(QWidget *parent, QApplication *app) :
     // enable the vibrator
     m_dbusInterface->call(MCE_ENABLE_VIBRATOR);
 #endif
+
+    setWindowIcon(QIcon(":/icons/qmailcheck-64x64.png"));
 
     mailModel->restartCheckers();
 }
