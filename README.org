@@ -1,0 +1,3 @@
+# -*- org -*-
+
+* Test to see how github handles an org file without a suffix.  Bet it doesn't.
