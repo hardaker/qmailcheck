@@ -81,7 +81,7 @@ void MailChecker::initializeSocket()
 
     qDebug() << "Opening Connection to: " << m_mailSource->hostName() << "/" << m_mailSource->portNumber();
 
-    if (true || m_mailSource->ignoreCertErrors())
+    if (m_mailSource->ignoreCertErrors())
         m_socket->setPeerVerifyMode(QSslSocket::VerifyNone);
     m_socket->connectToHostEncrypted(m_mailSource->hostName(), m_mailSource->portNumber());
     if (!m_socket->isOpen()) {

@@ -11,6 +11,7 @@
 #include <QtGui/QMenu>
 #include <QtGui/QLineEdit>
 #include <QtGui/QStyleFactory>
+#include <QtGui/QIcon>
 
 #if IS_MAEMO
 #include <mce/dbus-names.h>
@@ -43,6 +44,16 @@ QtIncoming::QtIncoming(QWidget *parent, QApplication *app) :
     mailView->verticalHeader()->hide();
     mailView->horizontalHeader()->setMinimumSectionSize(1);
     mailView->verticalHeader()->setMinimumSectionSize(1);
+
+    mailView->verticalHeader()->setStyleSheet(
+      "QHeaderView::section {"
+         "padding-bottom: -5px;"
+         "padding-top: -5px;"
+         "padding-left: 0px;"
+         "padding-right: 1px;"
+         "margin: 0px;"
+      "}"
+    );
 
     mailView->setItemDelegate(new TextPainter(this));
 
@@ -104,6 +115,8 @@ QtIncoming::QtIncoming(QWidget *parent, QApplication *app) :
     // enable the vibrator
     m_dbusInterface->call(MCE_ENABLE_VIBRATOR);
 #endif
+
+    setWindowIcon(QIcon(":/icons/qmailcheck-64x64.png"));
 
     mailModel->restartCheckers();
 }
