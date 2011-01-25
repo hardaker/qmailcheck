@@ -3,5 +3,6 @@
 <qresource>
     <file>icons/arrow-down.png</file>
     <file>icons/arrow-up.png</file>
+    <file>icons/qmailcheck-64x64.png</file>
 </qresource>
 </RCC>
