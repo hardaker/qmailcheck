@@ -93,7 +93,12 @@ void MailChecker::initializeSocket()
 
     // read throw-away line info
     char buf[4096];
-    m_socket->readLine( buf, sizeof( buf ) );
+    if (m_socket->readLine( buf, sizeof( buf ) ) < 4) {
+        // arbitrary length expectation, but it should certainly be > 4
+        qWarning() << "failed to read the initial imap connection line";
+        m_socket->close();
+        return;
+    }
 
     DEBUG("intial line: " << buf);
 

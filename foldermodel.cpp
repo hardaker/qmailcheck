@@ -3,6 +3,7 @@
 #include "qtincoming.h"
 
 #include <QSignalMapper>
+#include <QtCore/QSettings>
 
 #include <qdebug.h>
 
