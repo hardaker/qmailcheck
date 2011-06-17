@@ -44,7 +44,13 @@ OTHER_FILES += \
     debian/copyright \
     debian/README \
     debian/rules \
-    qmailcheck.desktop
+    qmailcheck.desktop \
+    qtc_packaging/debian_fremantle/rules \
+    qtc_packaging/debian_fremantle/README \
+    qtc_packaging/debian_fremantle/copyright \
+    qtc_packaging/debian_fremantle/control \
+    qtc_packaging/debian_fremantle/compat \
+    qtc_packaging/debian_fremantle/changelog
 
 unix:!symbian {
     maemo5 {
