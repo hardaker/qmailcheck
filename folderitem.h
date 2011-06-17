@@ -9,7 +9,7 @@ public:
 
     folderItem(const QString &folderName = "", const QString &displayName = "",
                bool doNotification = false, bool doPopup = false, bool doVibrate = false,
-               bool doLED = false);
+               bool doLED = false, bool doSound = false);
 
     const QString &folderName() const;
     const QString &displayName() const;
@@ -25,6 +25,9 @@ public:
     bool           doVibrate() const;
     void           set_doVibrate(bool doVibrate);
 
+    bool           doSound() const;
+    void           set_doSound(bool doSound);
+
     bool           doLED() const;
     void           set_doLED(bool doLED);
 
@@ -35,6 +38,7 @@ public:
     bool    m_doPopup;
     bool    m_doVibrate;
     bool    m_doLED;
+    bool    m_doSound;
 };
 
 #endif // FOLDERITEM_H

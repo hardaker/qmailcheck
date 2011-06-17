@@ -12,7 +12,8 @@
 #include <QtGui/QLineEdit>
 #include <QtGui/QStyleFactory>
 #include <QtGui/QIcon>
-
+#include <QtCore/QStringList>
+#include <QtCore/QFile>
 #if IS_MAEMO
 #include <mce/dbus-names.h>
 #endif
@@ -24,13 +25,29 @@ QtIncoming::QtIncoming(QWidget *parent, QApplication *app) :
     m_app(app),
     ui(new Ui::QtIncoming), prefui(new Ui::PrefWindow),
     prefDialog(new QDialog(parent, Qt::Window)),
-    do_popup(true), m_doNotification(true), m_highlightNew(true), m_firstCheck(true)
+    do_popup(true), m_doNotification(true), m_highlightNew(true), m_firstCheck(true), m_sound(0)
 {
     const char name[] = "qmailcheck";
+    QStringList soundFiles;
+    soundFiles << "/usr/share/sounds/pop.wav"
+               << "/usr/share/sounds/presence-online.wav";
+
+    foreach(QString file, soundFiles) {
+        QFile testit(file);
+        if (testit.exists()) {
+            m_sound = new QSound(file);
+            break;
+        }
+    }
 
     notify_init(name);
 
     ui->setupUi(this);
+
+    if (m_sound) {
+        m_sound->play();
+        qDebug() << m_sound->fileName() << " -- " << m_sound->isFinished() << "/" << m_sound->isAvailable();
+    }
 
     mailView = ui->mailTable;
     mailModel = new IncomingMailModel(0, this, mailView);
@@ -354,6 +371,11 @@ void QtIncoming::doVirbrate() {
     m_dbusInterface->call(MCE_ACTIVATE_VIBRATOR_PATTERN, "PatternChatAndEmail");
     QTimer::singleShot(1000, this, SLOT(stopVibrate()));
 #endif
+}
+
+void QtIncoming::doSound() {
+    if (m_sound)
+        m_sound->play();
 }
 
 void QtIncoming::stopVibrate() {

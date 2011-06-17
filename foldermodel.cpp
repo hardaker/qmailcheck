@@ -58,6 +58,9 @@ QVariant folderModel::data(const QModelIndex &index, int role) const
 
 void folderModel::saveSettings(QSettings &settings)
 {
+    if (widgets.count() == 0)
+        return;  // no widgets were created so the tab wasn't switched to
+
     settings.beginWriteArray("folderList");
     for(int i = 0; i < widgets.count(); ++i) {
         QList<QWidget *> *row;
@@ -73,6 +76,9 @@ void folderModel::saveSettings(QSettings &settings)
 
         checkBox = dynamic_cast<QCheckBox *>((*row)[columnNumber++]);
         folders[i].set_doPopup(checkBox->isChecked());
+
+        checkBox = dynamic_cast<QCheckBox *>((*row)[columnNumber++]);
+        folders[i].set_doSound(checkBox->isChecked());
 
 #ifdef IS_MAEMO
         checkBox = dynamic_cast<QCheckBox *>((*row)[columnNumber++]);
@@ -94,8 +100,8 @@ void folderModel::saveSettings(QSettings &settings)
         settings.setValue("folderNotification", folders[i].doNotification());
         settings.setValue("folderPopup", folders[i].doPopup());
         settings.setValue("folderVibrate", folders[i].doVibrate());
+        settings.setValue("folderSound", folders[i].doSound());
         settings.setValue("folderLED", folders[i].doLED());
-
     }
     settings.endArray();
 }
@@ -114,7 +120,8 @@ void folderModel::readSettings(QSettings &settings)
                        settings.value("folderNotification", false).toBool(),
                        settings.value("folderPopup", false).toBool(),
                        settings.value("folderVibrate", false).toBool(),
-                       settings.value("folderLED", false).toBool()));
+                       settings.value("folderLED", false).toBool(),
+                       settings.value("folderSound", false).toBool()));
     }
     settings.endArray();
 }
@@ -261,6 +268,10 @@ void folderModel::setupFolderPrefs(int index) {
             header->setAlignment(Qt::AlignHCenter);
             m_theGrid->addWidget(header, 0, columnNumber++);
 
+            header = new QLabel("S");
+            header->setAlignment(Qt::AlignHCenter);
+            m_theGrid->addWidget(header, 0, columnNumber++);
+
 #ifdef IS_MAEMO
             header = new QLabel("V");
             header->setAlignment(Qt::AlignHCenter);
@@ -321,6 +332,11 @@ void folderModel::setupFolderPrefs(int index) {
                 row->push_back(checkBox);
                 m_theGrid->addWidget(checkBox, i, buttonNumber++);
 
+                checkBox = new QCheckBox();
+                checkBox->setChecked(folder.doSound());
+                row->push_back(checkBox);
+                m_theGrid->addWidget(checkBox, i, buttonNumber++);
+
 #ifdef IS_MAEMO
                 checkBox = new QCheckBox();
                 checkBox->setChecked(folder.doVibrate());
@@ -354,6 +370,9 @@ void folderModel::setupFolderPrefs(int index) {
 
                 checkBox = dynamic_cast<QCheckBox *>((*row)[buttonNumber++]);
                 checkBox->setChecked(folder.doPopup());
+
+                checkBox = dynamic_cast<QCheckBox *>((*row)[buttonNumber++]);
+                checkBox->setChecked(folder.doSound());
 
 #ifdef IS_MAEMO
                 checkBox = dynamic_cast<QCheckBox *>((*row)[buttonNumber++]);

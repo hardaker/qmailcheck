@@ -2,9 +2,9 @@
 
 folderItem::folderItem(const QString &folderName, const QString &displayName,
                        bool doNotification, bool doPopup, bool doVibrate,
-                       bool doLED)
+                       bool doLED, bool doSound)
     : m_folderName(folderName), m_displayName(displayName),
-      m_doNotification(doNotification), m_doPopup(doPopup), m_doVibrate(doVibrate), m_doLED(doLED)
+      m_doNotification(doNotification), m_doPopup(doPopup), m_doVibrate(doVibrate), m_doLED(doLED), m_doSound(doSound)
 {
 }
 
@@ -63,6 +63,16 @@ bool folderItem::doVibrate() const
 void folderItem::set_doVibrate(bool doVibrate)
 {
     m_doVibrate = doVibrate;
+}
+
+bool folderItem::doSound() const
+{
+    return m_doSound;
+}
+
+void folderItem::set_doSound(bool doSound)
+{
+    m_doSound = doSound;
 }
 
 

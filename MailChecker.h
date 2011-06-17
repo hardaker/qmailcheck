@@ -33,6 +33,7 @@ signals:
     void LEDNotification();
     void notificationNotification();
     void vibrateNotification();
+    void soundNotification();
 
 public slots:
     void checkMail();

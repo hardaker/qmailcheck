@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QtDBus/QDBusInterface>
+#include <QSound>
 
 #include "ui_prefs.h"
 #include "incomingmailmodel.h"
@@ -46,6 +47,7 @@ public slots:
     void doNotification();
     void doLED();
     void doVirbrate();
+    void doSound();
     void stopVibrate();
     void clearLED();
 
@@ -69,7 +71,7 @@ private:
     bool               m_highlightNew;
     bool               m_firstCheck;
     QDBusInterface    *m_dbusInterface;
-
+    QSound            *m_sound;
 };
 
 #endif // QTINCOMING_H

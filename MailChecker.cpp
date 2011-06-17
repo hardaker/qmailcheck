@@ -46,6 +46,8 @@ void MailChecker::connectSignals(QTableView *mailView, QtIncoming *mainWidget)
             mainWidget, SLOT(doNotification()));
     connect(this, SIGNAL(vibrateNotification()),
             mainWidget, SLOT(doVirbrate()));
+    connect(this, SIGNAL(soundNotification()),
+            mainWidget, SLOT(doSound()));
     connect(this, SIGNAL(popupNotification()),
             mainWidget, SLOT(doPopup()));
 
@@ -202,7 +204,7 @@ void MailChecker::checkMail()
     bool containsNewMessages = false;
 
     m_checkingNow = true;
-    bool doLED = false, doVibrate = false, doNotification = false, doPopup = false;
+    bool doLED = false, doVibrate = false, doNotification = false, doPopup = false, doSound = false;
 
     for(int mbox = 0; mbox < m_folderModel->count(); mbox++) {
         folderItem &folder = m_folderModel->folder(mbox);
@@ -253,6 +255,8 @@ void MailChecker::checkMail()
                     doPopup = true;
                 if (folder.doVibrate())
                     doVibrate = true;
+                if (folder.doSound())
+                    doSound = true;
 
             } else {
                 message.setIsNew(uid_list[msglist[i]]);
@@ -282,6 +286,8 @@ void MailChecker::checkMail()
         emit popupNotification();
     if (doVibrate)
         emit vibrateNotification();
+    if (doSound)
+        emit soundNotification();
 
     if (containsNewMessages) {
         emit newMail();
