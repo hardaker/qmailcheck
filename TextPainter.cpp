@@ -51,6 +51,11 @@ void TextPainter::paint(QPainter *painter, const QStyleOptionViewItem &option, c
 QSize TextPainter::sizeHint(const QStyleOptionViewItem &option,
                             const QModelIndex &index) const
 {
-    return QSize(option.fontMetrics.size(Qt::TextSingleLine, index.data().toString()));
-    //return QStyledItemDelegate::sizeHint(option, index);
+    QSize s(option.fontMetrics.size(Qt::TextSingleLine, index.data().toString()));
+    if (QApplication::style()->inherits("QMaemo5Style")) {
+        if (s.height() < 70) {
+            s.setHeight(70); // MAEMO hack; ugh.
+        }
+    }
+    return s;
 }
