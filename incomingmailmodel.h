@@ -75,6 +75,8 @@ private:
 
     QString m_statusMessage;
     QFont   m_font;
+    int                m_maxFromWidth;
+    int                m_maxSubjectWidth;
 };
 
 #endif // INCOMINGMAILMODEL_H

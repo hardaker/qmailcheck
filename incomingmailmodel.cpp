@@ -168,10 +168,12 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
 
     case COL_FROM:
         value = message->from();
+        value.truncate(m_maxFromWidth);
         break;
 
     case COL_SUBJECT:
         value = message->subject();
+        value.truncate(m_maxSubjectWidth);
         break;
 
     default:
@@ -253,6 +255,9 @@ void IncomingMailModel::readSettings(QSettings &settings, Ui::PrefWindow *prefui
     (*source)->set_portNumber(settings.value("serverPort", 993).toInt());
 
     set_font(settings.value("font").value<QFont>());
+
+    m_maxFromWidth = settings.value("maxFromWidth", 30).toInt();
+    m_maxSubjectWidth = settings.value("maxSubjectWidth", 100).toInt();
 }
 
 void IncomingMailModel::saveSettings(QSettings &settings, Ui::PrefWindow *prefui) {
@@ -261,6 +266,8 @@ void IncomingMailModel::saveSettings(QSettings &settings, Ui::PrefWindow *prefui
     settings.setValue("userName", prefui->userName->text());
     settings.setValue("password", prefui->password->text());
     settings.setValue("font", m_font);
+    settings.setValue("maxFromWidth", m_maxFromWidth);
+    settings.setValue("maxSubjectWidth", m_maxSubjectWidth);
 }
 
 void IncomingMailModel::set_checkinterval(int checkinterval) {

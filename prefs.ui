@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>800</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,6 +19,63 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Display</string>
+      </attribute>
+      <widget class="QWidget" name="formLayoutWidget_4">
+       <property name="geometry">
+        <rect>
+         <x>-1</x>
+         <y>-1</y>
+         <width>781</width>
+         <height>331</height>
+        </rect>
+       </property>
+       <layout class="QFormLayout" name="formLayout_4">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Maximum From Width</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QSpinBox" name="fromWidth">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>100</number>
+          </property>
+          <property name="value">
+           <number>20</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>Maximum Subject Width</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="subjectWidth">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>100</number>
+          </property>
+          <property name="value">
+           <number>60</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
      <widget class="QWidget" name="Notifications">
       <attribute name="title">
        <string>Notifications</string>
@@ -28,8 +85,8 @@
         <rect>
          <x>0</x>
          <y>10</y>
-         <width>381</width>
-         <height>221</height>
+         <width>781</width>
+         <height>321</height>
         </rect>
        </property>
        <layout class="QFormLayout" name="formLayout">
@@ -145,8 +202,8 @@
         <rect>
          <x>0</x>
          <y>10</y>
-         <width>381</width>
-         <height>221</height>
+         <width>781</width>
+         <height>321</height>
         </rect>
        </property>
        <layout class="QFormLayout" name="formLayout_2">
@@ -185,8 +242,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>381</width>
-         <height>221</height>
+         <width>781</width>
+         <height>331</height>
         </rect>
        </property>
        <layout class="QFormLayout" name="formLayout_3">
@@ -247,8 +304,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>69</width>
-              <height>16</height>
+              <width>768</width>
+              <height>283</height>
              </rect>
             </property>
            </widget>
