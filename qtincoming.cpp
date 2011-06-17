@@ -173,9 +173,13 @@ void QtIncoming::sendNotification(QString message, bool folderNotification)
 
     if (m_firstCheck || !m_doNotification || !folderNotification)
         return;
-
+#ifdef IS_MAEMO
+    notification = notify_notification_new(name, message.toAscii().data(),
+                                           NULL, NULL);
+#else /* ! maemo */
     notification = notify_notification_new(name, message.toAscii().data(),
                                            NULL);
+#endif
     if (notification) {
         notify_notification_set_timeout(notification, 60000);
         if (!notify_notification_show(notification, NULL)) {
