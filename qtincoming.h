@@ -11,6 +11,7 @@
 #include "TextPainter.h"
 
 #include <QApplication>
+#include <QtGui/QKeyEvent>
 
 #if defined(Q_WS_MAEMO_5) || defined(MAEMO_CHANGES)
 #define IS_MAEMO 1
@@ -27,6 +28,7 @@ public:
     QtIncoming(QWidget *parent = 0, QApplication *app = 0);
     ~QtIncoming();
 
+    void keyPressEvent(QKeyEvent *e);
 
 public slots:
     void maybeRaise();

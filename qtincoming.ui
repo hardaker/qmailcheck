@@ -39,28 +39,28 @@
       <item>
        <widget class="QToolButton" name="checkMail">
         <property name="text">
-         <string>CheckMail</string>
+         <string>&amp;CheckMail</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QToolButton" name="acknowledge">
         <property name="text">
-         <string>Acknowledge</string>
+         <string>&amp;Acknowledge</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QToolButton" name="hideAll">
         <property name="text">
-         <string>hide all</string>
+         <string>&amp;Hide all</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QToolButton" name="unhideAll">
         <property name="text">
-         <string>unhide all</string>
+         <string>&amp;Unhide all</string>
         </property>
        </widget>
       </item>

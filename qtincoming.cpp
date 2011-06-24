@@ -183,6 +183,23 @@ void QtIncoming::changeEvent(QEvent *e)
     }
 }
 
+void QtIncoming::keyPressEvent(QKeyEvent *event) {
+    switch(event->key()) {
+    case Qt::Key_A:
+        mailModel->clearNew();
+        break;
+    case Qt::Key_C:
+        mailModel->checkMailSlot();
+        break;
+    case Qt::Key_H:
+        mailModel->hideMessages();
+        break;
+    case Qt::Key_U:
+        mailModel->clearHideList();
+        break;
+    }
+}
+
 void QtIncoming::sendNotification(QString message, bool folderNotification)
 {
     const char name[] = "qmailcheck";
