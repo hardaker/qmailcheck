@@ -6,6 +6,7 @@
 #include <QtGui/QGridLayout>
 #include <QtGui/QVBoxLayout>
 #include <QtCore/QSignalMapper>
+#include <QtGui/QPushButton>
 
 #include "folderitem.h"
 
@@ -51,6 +52,7 @@ private:
     Ui::PrefWindow    *m_prefui;
     int                m_gridCount;
     QSignalMapper     *m_signalMapper;
+    QPushButton       *m_addButton;
 };
 
 #endif // FOLDERMODEL_H

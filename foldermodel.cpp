@@ -7,6 +7,8 @@
 
 #include <qdebug.h>
 
+static const int MAIL_TAB_NUMBER = 4;
+
 enum folder_columns 
 {
     COL_FOLDERNAME    = 0,
@@ -253,7 +255,7 @@ Qt::ItemFlags folderModel::flags(const QModelIndex &index) const
 void folderModel::setupFolderPrefs(int index) {
     qDebug() << "switched to tab " << index;
 
-    if (index == 3) { // the index of the folder tab
+    if (index == MAIL_TAB_NUMBER) { // the index of the folder tab
         if (!m_theGrid) {
             m_theGrid = new QGridLayout();
             m_prefui->scrolledFolders->setLayout(m_theGrid);
@@ -289,8 +291,6 @@ void folderModel::setupFolderPrefs(int index) {
 
             m_signalMapper = new QSignalMapper();
             connect(m_signalMapper, SIGNAL(mapped(int)), this, SLOT(moveFolder(int)));
-
-            connect(m_prefui->addFolder, SIGNAL(clicked()), this, SLOT(addRow()));
         }
         for(int i = 1; i <= count(); i++) {
             QList<QWidget *> *row;
@@ -397,6 +397,8 @@ void folderModel::setupFolderPrefs(int index) {
             }
         }
         m_gridCount = count();
+        m_theGrid->addWidget(m_addButton = new QPushButton("Add New Folder"), count()*2+2, 0, 1, 4);
+        connect(m_addButton, SIGNAL(clicked()), this, SLOT(addRow()));
     }
 }
 
@@ -409,10 +411,11 @@ void folderModel::moveFolder(int folderNumber) {
         folderNumber = (folderNumber - 1) / 2 - 1;
         folders.swap(folderNumber, folderNumber+1);
     }
-    setupFolderPrefs(3);
+    setupFolderPrefs(MAIL_TAB_NUMBER);
 }
 
 void folderModel::addRow() {
     folders.append(folderItem());
-    setupFolderPrefs(3);
+    delete m_addButton; // the grid widget will auto-detect the delition
+    setupFolderPrefs(MAIL_TAB_NUMBER);
 }
