@@ -25,7 +25,7 @@ QtIncoming::QtIncoming(QWidget *parent, QApplication *app) :
     m_app(app),
     ui(new Ui::QtIncoming), prefui(new Ui::PrefWindow),
     prefDialog(new QDialog(parent, Qt::Window)),
-    do_popup(true), m_doNotification(true), m_highlightNew(true), m_firstCheck(true), m_sound(0)
+    do_popup(true), m_doNotification(true), m_highlightNew(true), m_firstCheck(true), m_audioOutput(0)
 {
     const char name[] = "qmailcheck";
     QStringList soundFiles;
@@ -35,7 +35,8 @@ QtIncoming::QtIncoming(QWidget *parent, QApplication *app) :
     foreach(QString file, soundFiles) {
         QFile testit(file);
         if (testit.exists()) {
-            m_sound = new QSound(file);
+            m_soundFile = new QFile;
+            m_soundFile->setFileName(file);
             break;
         }
     }
@@ -43,11 +44,6 @@ QtIncoming::QtIncoming(QWidget *parent, QApplication *app) :
     notify_init(name);
 
     ui->setupUi(this);
-
-    if (m_sound) {
-        m_sound->play();
-        qDebug() << m_sound->fileName() << " -- " << m_sound->isFinished() << "/" << m_sound->isAvailable();
-    }
 
     mailView = ui->mailTable;
     mailModel = new IncomingMailModel(0, this, mailView);
@@ -241,8 +237,15 @@ void QtIncoming::maybeRaise()
 
 void QtIncoming::showPrefs()
 {
-    if (prefDialog)
-        prefDialog->show();
+    if (prefDialog) {
+#ifdef IS_MAEMO
+        m_app->setStyle(QStyleFactory::create("Maemo5"));
+#endif
+        prefDialog->exec();
+#ifdef IS_MAEMO
+        m_app->setStyle(QStyleFactory::create("Cleanlooks"));
+#endif
+    }
     folderListModel->setupFolderPrefs(prefui->tabWidget->currentIndex());
 }
 
@@ -391,8 +394,31 @@ void QtIncoming::doVirbrate() {
 }
 
 void QtIncoming::doSound() {
-    if (m_sound)
-        m_sound->play();
+    if (!m_audioOutput) {
+        QAudioFormat format;
+        format.setFrequency(44100);
+        format.setChannels(1);
+        format.setSampleSize(16);
+        format.setCodec("audio/pcm");
+        format.setByteOrder(QAudioFormat::LittleEndian);
+        format.setSampleType(QAudioFormat::SignedInt);
+
+        m_audioOutput = new QAudioOutput( format, 0);
+
+        if (!m_audioOutput) {
+            qWarning() << "failed to open audio output";
+            return;
+        }
+    }
+
+    if (!m_soundFile) {
+        qWarning() << "No sound file to play";
+        return;
+    }
+
+    qDebug() << "playing sound from here!";
+
+    m_audioOutput->start(m_soundFile);
 }
 
 void QtIncoming::stopVibrate() {

@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QtDBus/QDBusInterface>
-#include <QSound>
+#include <QtCore/QFile>
 
 #include "ui_prefs.h"
 #include "incomingmailmodel.h"
@@ -12,6 +12,7 @@
 
 #include <QApplication>
 #include <QtGui/QKeyEvent>
+#include <QtMultimedia/QAudioOutput>
 
 #if defined(Q_WS_MAEMO_5) || defined(MAEMO_CHANGES)
 #define IS_MAEMO 1
@@ -73,7 +74,8 @@ private:
     bool               m_highlightNew;
     bool               m_firstCheck;
     QDBusInterface    *m_dbusInterface;
-    QSound            *m_sound;
+    QAudioOutput      *m_audioOutput;
+    QFile             *m_soundFile;
 };
 
 #endif // QTINCOMING_H

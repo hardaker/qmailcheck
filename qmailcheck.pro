@@ -1,7 +1,7 @@
 # -------------------------------------------------
 # Project created by QtCreator 2010-05-19T19:06:51
 # -------------------------------------------------
-QT += network core gui
+QT += network core gui multimedia
 TARGET = qmailcheck
 TEMPLATE = app
 SOURCES += main.cpp \
