@@ -260,6 +260,7 @@ void folderModel::setupFolderPrefs(int index) {
 
             int columnNumber = 2;
 
+#ifdef NOPE
             QLabel *header = new QLabel("N");
             header->setAlignment(Qt::AlignHCenter);
             m_theGrid->addWidget(header, 0, columnNumber++);
@@ -281,6 +282,7 @@ void folderModel::setupFolderPrefs(int index) {
             header->setAlignment(Qt::AlignHCenter);
             m_theGrid->addWidget(header, 0, columnNumber++);
 #endif /* IS_MAEMO */
+#endif /* NOPE */
 
             m_theGrid->addWidget(new QLabel("Folder"), 0, columnNumber++);
             m_theGrid->addWidget(new QLabel("Alias"), 0, columnNumber++);
@@ -296,6 +298,7 @@ void folderModel::setupFolderPrefs(int index) {
             QCheckBox *checkBox;
             QLineEdit *lineEdit;
             folderItem &folder = getFolderAt(i-1);
+            QHBoxLayout *hbox;
 
             int buttonNumber = 0;
 
@@ -309,54 +312,57 @@ void folderModel::setupFolderPrefs(int index) {
                 QIcon icon(":/icons/arrow-up.png");
                 button = new QPushButton(icon, "");
                 row->push_back(button);
-                m_theGrid->addWidget(button, i, buttonNumber++);
+                m_theGrid->addWidget(button, i*2, buttonNumber++);
                 connect(button, SIGNAL(clicked()), m_signalMapper, SLOT(map()));
-                m_signalMapper->setMapping(button, i*2);
+                m_signalMapper->setMapping(button, i);
 
                 icon = QIcon(":/icons/arrow-down.png");
                 button = new QPushButton(icon, "");
                 row->push_back(button);
-                m_theGrid->addWidget(button, i, buttonNumber++);
+                m_theGrid->addWidget(button, i*2, buttonNumber++);
                 connect(button, SIGNAL(clicked()), m_signalMapper, SLOT(map()));
-                m_signalMapper->setMapping(button, i*2+1);
+                m_signalMapper->setMapping(button, i);
 
+                // Put the checkboxes in a separate (wide) hbox
+                hbox = new QHBoxLayout();
+                m_theGrid->addLayout(hbox, i*2+1, buttonNumber, 1, 2);
 
                 // Checkboxes for notification types
-                checkBox = new QCheckBox();
+                checkBox = new QCheckBox("N");
                 checkBox->setChecked(folder.doNotification());
                 row->push_back(checkBox);
-                m_theGrid->addWidget(checkBox, i, buttonNumber++);
+                hbox->addWidget(checkBox);
 
-                checkBox = new QCheckBox();
+                checkBox = new QCheckBox("P");
                 checkBox->setChecked(folder.doPopup());
                 row->push_back(checkBox);
-                m_theGrid->addWidget(checkBox, i, buttonNumber++);
+                hbox->addWidget(checkBox);
 
-                checkBox = new QCheckBox();
+                checkBox = new QCheckBox("S");
                 checkBox->setChecked(folder.doSound());
                 row->push_back(checkBox);
-                m_theGrid->addWidget(checkBox, i, buttonNumber++);
+                hbox->addWidget(checkBox);
 
 #ifdef IS_MAEMO
-                checkBox = new QCheckBox();
+                checkBox = new QCheckBox("V");
                 checkBox->setChecked(folder.doVibrate());
                 row->push_back(checkBox);
-                m_theGrid->addWidget(checkBox, i, buttonNumber++);
+                hbox->addWidget(checkBox);
 
-                checkBox = new QCheckBox();
+                checkBox = new QCheckBox("L");
                 checkBox->setChecked(folder.doLED());
                 row->push_back(checkBox);
-                m_theGrid->addWidget(checkBox, i, buttonNumber++);
+                hbox->addWidget(checkBox);
 #endif /* IS_MAEMO */
 
                 // folder editing
                 lineEdit = new QLineEdit(folder.folderName());
                 row->push_back(lineEdit);
-                m_theGrid->addWidget(lineEdit, i, buttonNumber++);
+                m_theGrid->addWidget(lineEdit, i*2, buttonNumber++);
 
                 lineEdit = new QLineEdit(folder.displayName());
                 row->push_back(lineEdit);
-                m_theGrid->addWidget(lineEdit, i, buttonNumber++);
+                m_theGrid->addWidget(lineEdit, i*2, buttonNumber++);
             } else {
                 // change the exist widget settings
                 //qDebug() << " changing settings for #" << i << " = " << folder.folderName();
