@@ -1,0 +1,60 @@
+Source: qmailcheck
+Section: user/network
+Priority: optional
+Maintainer: Wes Hardaker <wjhns177@hardakers.net>
+Build-Depends: debhelper (>= 5), libqt4-dev
+Standards-Version: 3.7.3
+Homepage: http://www.hardakers.net/code/qmailcheck
+
+Package: qmailcheck
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: A simple application to check multiple IMAP mailboxes
+XSBC-Bugtracker: https://github.com/hardaker/qmailcheck/issues
+XB-Maemo-Icon-26: 
+ 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
+ ODowMGUPmI4AAAAASUVORK5CYII=
+ ====
