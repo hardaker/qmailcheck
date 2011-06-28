@@ -168,12 +168,14 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
 
     case COL_FROM:
         value = message->from();
-        value.truncate(m_maxFromWidth);
+        if (m_maxFromWidth > 0)
+            value.truncate(m_maxFromWidth);
         break;
 
     case COL_SUBJECT:
         value = message->subject();
-        value.truncate(m_maxSubjectWidth);
+        if (m_maxSubjectWidth > 0)
+            value.truncate(m_maxSubjectWidth);
         break;
 
     default:
