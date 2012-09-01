@@ -111,7 +111,7 @@ QtIncoming::QtIncoming(QWidget *parent, QApplication *app) :
     connect(prefui->buttonBox, SIGNAL(accepted()),
             this, SLOT(changedSettings()));
     connect(prefui->buttonBox, SIGNAL(accepted()),
-            folderListModel, SLOT(changedSettings()));
+            this, SLOT(changedSettings()));
     connect(prefui->buttonBox, SIGNAL(rejected()),
             this, SLOT(cancelled()));
     connect(prefui->fontSelectButton, SIGNAL(clicked()),

@@ -68,7 +68,7 @@ unix:!symbian {
     INSTALLS += target
 
     CONFIG += link_pkgconfig
-    PKGCONFIG += libnotify glib-2.0 dbus-1 gbus-glib-1 gmodule-2.0 gdk-2.0 atk gtk+-2.0
+    PKGCONFIG += libnotify glib-2.0 dbus-1 gmodule-2.0 gdk-2.0 atk gtk+-2.0
 }
 
 unix:!symbian {

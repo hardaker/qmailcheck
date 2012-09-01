@@ -185,8 +185,10 @@ void MailChecker::checkMail()
     if (!m_socket || ! m_socket->isOpen()) {
         DEBUG("socket not open\n");
         initializeSocket();
-        if (!m_socket || ! m_socket->isOpen())
+        if (!m_socket || ! m_socket->isOpen()) {
+            emit mailUpdated();
             return;
+        }
     }
 
     QMap<QString, bool> uid_list;
@@ -221,6 +223,7 @@ void MailChecker::checkMail()
             // socket probably died.
             reInitializeSocket();
             m_checkingNow = false;
+            emit mailUpdated();
             return;
         }
 
