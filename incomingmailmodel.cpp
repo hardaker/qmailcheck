@@ -22,7 +22,7 @@ enum column_list
 
 IncomingMailModel::IncomingMailModel(QObject *parent, QtIncoming *mainWidget, QTableView *mailView) :
     QAbstractTableModel(parent), m_timer(parent), m_mainWidget(mainWidget), m_mailView(mailView), m_checker(0), m_mutex(new QMutex()),
-    folderList(0), m_messages(), m_hideList(), m_checkinterval(600), m_highlightNew(true), m_statusMessage()
+    folderList(0), m_messages(), m_hideList(), m_checkinterval(600), m_highlightNew(true), m_useUnseen(false), m_statusMessage()
 {
     //setupTimer();
     QTimer::singleShot(1000, this, SLOT(checkMailSlot()));
@@ -260,6 +260,7 @@ void IncomingMailModel::readSettings(QSettings &settings, Ui::PrefWindow *prefui
 
     m_maxFromWidth = settings.value("maxFromWidth", 30).toInt();
     m_maxSubjectWidth = settings.value("maxSubjectWidth", 100).toInt();
+    m_useUnseen = settings.value("useUnseen", false).toBool();
 }
 
 void IncomingMailModel::saveSettings(QSettings &settings, Ui::PrefWindow *prefui) {
@@ -270,6 +271,7 @@ void IncomingMailModel::saveSettings(QSettings &settings, Ui::PrefWindow *prefui
     settings.setValue("font", m_font);
     settings.setValue("maxFromWidth", m_maxFromWidth);
     settings.setValue("maxSubjectWidth", m_maxSubjectWidth);
+    settings.setValue("useUnseen", prefui->useUnseen->isChecked());
 }
 
 void IncomingMailModel::set_checkinterval(int checkinterval) {

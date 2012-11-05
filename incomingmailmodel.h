@@ -42,6 +42,8 @@ public:
     void saveSettings(QSettings &settings, Ui::PrefWindow *prefui);
     void connectSignals(QTableView *mailView, QtIncoming *mainWidget);
 
+    bool useUnseen() { return m_useUnseen; }
+
 signals:
     void newMail();
     void checkMail();
@@ -72,6 +74,7 @@ private:
     
     int m_checkinterval;
     bool m_highlightNew;
+    bool m_useUnseen;
 
     QString m_statusMessage;
     QFont   m_font;

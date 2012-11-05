@@ -133,7 +133,7 @@ void MailChecker::reInitializeSocket()
     initializeSocket();
 }
 
-QList<QString> MailChecker::sendCommand(const QString &cmd) {
+QList<QString> MailChecker::sendCommand(const QString &cmd, bool debugOutput) {
     char buf[1024];
 
     QString fullcmd ( QString('A') + QString::number(++__counter) +
@@ -157,7 +157,9 @@ QList<QString> MailChecker::sendCommand(const QString &cmd) {
         QString resultString(buf);
         resultString = resultString.trimmed();
         results.push_back(resultString);
-        // DEBUG( "data: " << resultString.toAscii().data() << "\n");
+        if (debugOutput) {
+            qDebug() << "data: " << resultString.toAscii().data() << "\n";
+        }
 
         if (donematch.indexIn(resultString) != -1) {
             notDone = false;
@@ -170,6 +172,10 @@ QList<QString> MailChecker::sendCommand(const QString &cmd) {
 
 void MailChecker::checkMail()
 {
+
+    QString searchString = "UID SEARCH RECENT";
+    if (m_model->useUnseen())
+        searchString = "UID SEARCH UNSEEN";
 
     DEBUG("Attempting to check mail...\n");
 
@@ -218,7 +224,7 @@ void MailChecker::checkMail()
 
         sendCommand(QString("EXAMINE \"" + folder.folderName() + "\""));
 
-        results = sendCommand(QString("UID SEARCH RECENT"));
+        results = sendCommand(searchString, true);
         if (results.length() == 0) {
             // socket probably died.
             reInitializeSocket();
@@ -232,7 +238,7 @@ void MailChecker::checkMail()
             QString subject, from, date;
             QStringList headers =
                 sendCommand(QString("UID FETCH " + msglist[i] +
-                                    " (FLAGS BODY[HEADER])"));
+                                    " (FLAGS BODY[HEADER.FIELDS (SUBJECT FROM DATE)])"), true);
             for(int j = 0; j < headers.length(); j++) {
                 if (subjectMatch.indexIn(headers[j]) != -1) {
                     subject = subjectMatch.cap( 1 );

@@ -18,7 +18,7 @@ public:
     void shutDown();
     void initializeSocket();
     void reInitializeSocket();
-    QList<QString> sendCommand(const QString &cmd);
+    QList<QString> sendCommand(const QString &cmd, bool debugOutput = false);
     void connectSignals(QTableView *mailView, QtIncoming *mainWidget);
 
 signals:
