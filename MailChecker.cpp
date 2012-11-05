@@ -2,6 +2,8 @@
 #include "qmailcheckcommon.h"
 #include "folderitem.h"
 #include "qtincoming.h"
+#include <QDateTime>
+#include <QDate>
 
 #define DATE_WIDTH    5
 #define FROM_WIDTH    20
@@ -10,7 +12,7 @@
 MailChecker::MailChecker(IncomingMailModel *model, QMutex *mutex, MailSource *mailSource, folderModel *folderModel, int checkInterval,
                          QList<MailMsg> *messages) :
     QThread(0), m_socket(0), m_timer(0), m_model(model), m_mutex(mutex), m_mailSource(mailSource), m_folderModel(folderModel),
-    m_messages(messages), m_checkingNow(false)
+    m_messages(messages), m_checkingNow(false), m_cachedMessages()
 {
     qDebug() << "----- New CHECKER";
 }
@@ -138,7 +140,8 @@ QList<QString> MailChecker::sendCommand(const QString &cmd, bool debugOutput) {
 
     QString fullcmd ( QString('A') + QString::number(++__counter) +
                       QString(' ') + cmd + QString('\n') );
-    DEBUG ("sending: " << fullcmd.toAscii().data());
+    if (debugOutput)
+        qDebug() << "sending: " << fullcmd;
     m_socket->write(fullcmd.toAscii().data(), fullcmd.length());
 
     QRegExp donematch(QString("^A") + QString::number(__counter) + QString(" "));
@@ -174,8 +177,11 @@ void MailChecker::checkMail()
 {
 
     QString searchString = "UID SEARCH RECENT";
-    if (m_model->useUnseen())
-        searchString = "UID SEARCH UNSEEN";
+    if (m_model->useUnseen()) {
+        QDate myDate = QDate::currentDate();
+        QString searchDate = myDate.toString("d-MMM-yyyy");
+        searchString = "UID SEARCH UNSEEN SINCE " + searchDate;
+    }
 
     DEBUG("Attempting to check mail...\n");
 
@@ -236,20 +242,29 @@ void MailChecker::checkMail()
         QStringList msglist = results[0].split(' ');
         for(int i = 2; i < msglist.length(); i++) {
             QString subject, from, date;
-            QStringList headers =
-                sendCommand(QString("UID FETCH " + msglist[i] +
-                                    " (FLAGS BODY[HEADER.FIELDS (SUBJECT FROM DATE)])"), true);
-            for(int j = 0; j < headers.length(); j++) {
-                if (subjectMatch.indexIn(headers[j]) != -1) {
-                    subject = subjectMatch.cap( 1 );
-                } else if (fromMatch.indexIn(headers[j]) != -1) {
-                    from = fromMatch.cap( 1 );
-                } else if (dateMatch.indexIn(headers[j]) != -1) {
-                    date = dateMatch.cap( 1 );
+
+            MailMsg message;
+            if (m_cachedMessages.contains(QPair<QString, QString>(folder.folderName(), msglist[i]))) {
+                message = m_cachedMessages[QPair<QString, QString>(folder.folderName(), msglist[i])];
+            } else {
+
+                QStringList headers =
+                        sendCommand(QString("UID FETCH " + msglist[i] +
+                                            " (FLAGS BODY[HEADER.FIELDS (SUBJECT FROM DATE)])"), true);
+                for(int j = 0; j < headers.length(); j++) {
+                    if (subjectMatch.indexIn(headers[j]) != -1) {
+                        subject = subjectMatch.cap( 1 );
+                    } else if (fromMatch.indexIn(headers[j]) != -1) {
+                        from = fromMatch.cap( 1 );
+                    } else if (dateMatch.indexIn(headers[j]) != -1) {
+                        date = dateMatch.cap( 1 );
+                    }
                 }
+
+                message = MailMsg(msglist[i], folder.displayName(), date, from, subject);
+                m_cachedMessages.insert(QPair<QString, QString>(folder.folderName(), msglist[i]), message);
             }
 
-            MailMsg message(msglist[i], folder.displayName(), date, from, subject);
             if (! uid_list.contains(msglist[i])) {
                 message.setIsNew(true);
                 containsNewMessages = true;

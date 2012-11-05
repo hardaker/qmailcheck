@@ -50,6 +50,7 @@ private:
     QList<MailMsg>         *m_messages;
     QString                 m_statusMessage;
     bool                    m_checkingNow;
+    QMap<QPair<QString, QString>, MailMsg>  m_cachedMessages;
 };
 
 #endif // MAILCHECKER_H
