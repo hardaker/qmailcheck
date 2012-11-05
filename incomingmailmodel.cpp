@@ -90,7 +90,7 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
     QList<MailMsg>::const_iterator message;
     QList<MailMsg>::const_iterator stopat = m_messages.end();
     int findrow = index.row();
-    QString lastfolder;
+    QString lastfolder = "";
     
     if (index.column() > COL_SUBJECT)
         return QVariant();
@@ -102,7 +102,8 @@ QVariant IncomingMailModel::data(const QModelIndex &index, int role) const
             break;
         if (message == stopat)
             return QVariant();
-        lastfolder = message->folder();
+        if (! m_hideList.contains(message->uid()))
+            lastfolder = message->folder();
     }
 
     if (message == stopat)
