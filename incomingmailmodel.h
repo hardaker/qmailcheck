@@ -30,7 +30,6 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
     QFont font();
 
-    void setupTimer();
     QList<QString> sendCommand(const QString &cmd);
 
     void set_checkinterval(int interval);
@@ -59,7 +58,6 @@ public slots:
     void emitChanges();
 
 private:
-    QTimer       m_timer;
     QtIncoming  *m_mainWidget;
     QTableView  *m_mailView;
     MailChecker *m_checker;
