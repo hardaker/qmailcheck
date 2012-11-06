@@ -20,6 +20,7 @@ public:
     void reInitializeSocket();
     QList<QString> sendCommand(const QString &cmd, bool debugOutput = false);
     void connectSignals(QTableView *mailView, QtIncoming *mainWidget);
+    void foundMessage(const folderItem &folder, const QString &folderName, MailMsg message);
 
 signals:
     void mailUpdated();
@@ -51,6 +52,9 @@ private:
     QString                 m_statusMessage;
     bool                    m_checkingNow;
     QMap<QPair<QString, QString>, MailMsg>  m_cachedMessages;
+    QMap<QString, bool>     uid_list;
+
+    bool doLED, doVibrate, doNotification, doPopup, doSound, containsNewMessages;
 };
 
 #endif // MAILCHECKER_H

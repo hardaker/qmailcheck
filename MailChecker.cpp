@@ -12,7 +12,7 @@
 MailChecker::MailChecker(IncomingMailModel *model, QMutex *mutex, MailSource *mailSource, folderModel *folderModel, int checkInterval,
                          QList<MailMsg> *messages) :
     QThread(0), m_socket(0), m_timer(0), m_model(model), m_mutex(mutex), m_mailSource(mailSource), m_folderModel(folderModel),
-    m_messages(messages), m_checkingNow(false), m_cachedMessages()
+    m_messages(messages), m_checkingNow(false), m_cachedMessages(), uid_list()
 {
     qDebug() << "----- New CHECKER";
 }
@@ -203,7 +203,7 @@ void MailChecker::checkMail()
         }
     }
 
-    QMap<QString, bool> uid_list;
+    uid_list.clear();
     for(int i = 0; i < m_messages->count(); i++) {
         uid_list.insert((*m_messages)[i].uid(), (*m_messages)[i].isnew());
     }
@@ -215,10 +215,11 @@ void MailChecker::checkMail()
     QRegExp subjectMatch("Subject: +(.*)");
     QRegExp fromMatch("From: +(.*)");
     QRegExp dateMatch("Date: +(.*)");
-    bool containsNewMessages = false;
+    QRegExp newMessageMatch("^\\*.*FETCH.*UID ([0-9]+)");
 
     m_checkingNow = true;
-    bool doLED = false, doVibrate = false, doNotification = false, doPopup = false, doSound = false;
+    doLED = false; doVibrate = false; doNotification = false; doPopup = false; doSound = false;
+    containsNewMessages = false;
 
     for(int mbox = 0; mbox < m_folderModel->count(); mbox++) {
         folderItem &folder = m_folderModel->folder(mbox);
@@ -230,7 +231,7 @@ void MailChecker::checkMail()
 
         sendCommand(QString("EXAMINE \"" + folder.folderName() + "\""));
 
-        results = sendCommand(searchString, true);
+        results = sendCommand(searchString);
         if (results.length() == 0) {
             // socket probably died.
             reInitializeSocket();
@@ -240,19 +241,28 @@ void MailChecker::checkMail()
         }
 
         QStringList msglist = results[0].split(' ');
-        for(int i = 2; i < msglist.length(); i++) {
-            QString subject, from, date;
+        msglist.pop_front(); // get rid of the prefixes
+        msglist.pop_front();
 
+        for(int i = 0; i < msglist.length(); i++) {
+            QString subject, from, date, uid;
             MailMsg message;
             if (m_cachedMessages.contains(QPair<QString, QString>(folder.folderName(), msglist[i]))) {
-                message = m_cachedMessages[QPair<QString, QString>(folder.folderName(), msglist[i])];
+                foundMessage(folder, folder.folderName(),
+                             m_cachedMessages[QPair<QString, QString>(folder.folderName(), msglist[i])]);
             } else {
 
                 QStringList headers =
                         sendCommand(QString("UID FETCH " + msglist[i] +
-                                            " (FLAGS BODY[HEADER.FIELDS (SUBJECT FROM DATE)])"), true);
+                                            " (FLAGS BODY[HEADER.FIELDS (SUBJECT FROM DATE)])"));
                 for(int j = 0; j < headers.length(); j++) {
-                    if (subjectMatch.indexIn(headers[j]) != -1) {
+                    if (newMessageMatch.indexIn(headers[j]) != -1) {
+                        if (uid.length() > 0) {
+                            foundMessage(folder, folder.folderName(),
+                                         MailMsg(uid, folder.displayName(), date, from, subject));
+                        }
+                        uid = newMessageMatch.cap(1);
+                    } else if (subjectMatch.indexIn(headers[j]) != -1) {
                         subject = subjectMatch.cap( 1 );
                     } else if (fromMatch.indexIn(headers[j]) != -1) {
                         from = fromMatch.cap( 1 );
@@ -261,40 +271,19 @@ void MailChecker::checkMail()
                     }
                 }
 
-                message = MailMsg(msglist[i], folder.displayName(), date, from, subject);
-                m_cachedMessages.insert(QPair<QString, QString>(folder.folderName(), msglist[i]), message);
+                if (uid.length() > 0) {
+                    foundMessage(folder, folder.folderName(),
+                                 MailMsg(uid, folder.displayName(), date, from, subject));
+                }
             }
 
-            if (! uid_list.contains(msglist[i])) {
-                message.setIsNew(true);
-                containsNewMessages = true;
-                emit newMailMessage(from + "\n" + subject, folder.doNotification());
-
-                // figure out which notifications might need emiting
-                if (folder.doLED())
-                    doLED = true;
-                if (folder.doNotification())
-                    doNotification = true;
-                if (folder.doPopup())
-                    doPopup = true;
-                if (folder.doVibrate())
-                    doVibrate = true;
-                if (folder.doSound())
-                    doSound = true;
-
-            } else {
-                message.setIsNew(uid_list[msglist[i]]);
-            }
-
-            m_messages->push_back(message);
-
-            date.truncate(DATE_WIDTH);
-            from.truncate(FROM_WIDTH);
-            subject.truncate(SUBJECT_WIDTH);
-            QString output = QString("%1 | %2 | %3")
-                .arg(date, - DATE_WIDTH)
-                .arg(from, - FROM_WIDTH)
-                .arg(subject, - SUBJECT_WIDTH);
+            //date.truncate(DATE_WIDTH);
+            //from.truncate(FROM_WIDTH);
+            //subject.truncate(SUBJECT_WIDTH);
+            //QString output = QString("%1 | %2 | %3")
+            //    .arg(date, - DATE_WIDTH)
+            //    .arg(from, - FROM_WIDTH)
+            //    .arg(subject, - SUBJECT_WIDTH);
             //DEBUG(output.toAscii().data() << "\n");
         }
     }
@@ -320,4 +309,32 @@ void MailChecker::checkMail()
     m_statusMessage = QString("%1 messages available").arg(m_messages->count());
     emit statusMessage(m_statusMessage, 0);
     m_checkingNow = false;
+}
+
+void MailChecker::foundMessage(const folderItem &folder, const QString &folderName, MailMsg message) {
+    //qDebug() << " --- found message " << message.uid();
+    m_cachedMessages.insert(QPair<QString, QString>(folderName, message.uid()), message);
+
+    if (! uid_list.contains(message.uid())) {
+        message.setIsNew(true);
+        containsNewMessages = true;
+        emit newMailMessage(message.from() + "\n" + message.subject(), folder.doNotification());
+
+        // figure out which notifications might need emiting
+        if (folder.doLED())
+            doLED = true;
+        if (folder.doNotification())
+            doNotification = true;
+        if (folder.doPopup())
+            doPopup = true;
+        if (folder.doVibrate())
+            doVibrate = true;
+        if (folder.doSound())
+            doSound = true;
+
+    } else {
+        message.setIsNew(uid_list[message.uid()]);
+    }
+
+    m_messages->push_back(message);
 }
