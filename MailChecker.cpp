@@ -241,41 +241,46 @@ void MailChecker::checkMail()
         }
 
         QStringList msglist = results[0].split(' ');
+        QStringList fetchList;
         msglist.pop_front(); // get rid of the prefixes
         msglist.pop_front();
 
+        // checked for cached copies
         for(int i = 0; i < msglist.length(); i++) {
-            QString subject, from, date, uid;
-            MailMsg message;
             if (m_cachedMessages.contains(QPair<QString, QString>(folder.folderName(), msglist[i]))) {
                 foundMessage(folder, folder.folderName(),
                              m_cachedMessages[QPair<QString, QString>(folder.folderName(), msglist[i])]);
             } else {
+                fetchList.push_back(msglist[i]);
+            }
+        }
 
-                QStringList headers =
-                        sendCommand(QString("UID FETCH " + msglist[i] +
-                                            " (FLAGS BODY[HEADER.FIELDS (SUBJECT FROM DATE)])"));
-                for(int j = 0; j < headers.length(); j++) {
-                    if (newMessageMatch.indexIn(headers[j]) != -1) {
-                        if (uid.length() > 0) {
-                            foundMessage(folder, folder.folderName(),
-                                         MailMsg(uid, folder.displayName(), date, from, subject));
-                        }
-                        uid = newMessageMatch.cap(1);
-                    } else if (subjectMatch.indexIn(headers[j]) != -1) {
-                        subject = subjectMatch.cap( 1 );
-                    } else if (fromMatch.indexIn(headers[j]) != -1) {
-                        from = fromMatch.cap( 1 );
-                    } else if (dateMatch.indexIn(headers[j]) != -1) {
-                        date = dateMatch.cap( 1 );
-                    }
-                }
+        // pull anything not cached
+        QString subject, from, date, uid;
 
+        QStringList headers =
+                sendCommand(QString("UID FETCH " + fetchList.join(",") +
+                                    " (FLAGS BODY[HEADER.FIELDS (SUBJECT FROM DATE)])"));
+        for(int j = 0; j < headers.length(); j++) {
+            if (newMessageMatch.indexIn(headers[j]) != -1) {
                 if (uid.length() > 0) {
                     foundMessage(folder, folder.folderName(),
                                  MailMsg(uid, folder.displayName(), date, from, subject));
                 }
+                uid = newMessageMatch.cap(1);
+            } else if (subjectMatch.indexIn(headers[j]) != -1) {
+                subject = subjectMatch.cap( 1 );
+            } else if (fromMatch.indexIn(headers[j]) != -1) {
+                from = fromMatch.cap( 1 );
+            } else if (dateMatch.indexIn(headers[j]) != -1) {
+                date = dateMatch.cap( 1 );
             }
+        }
+
+        if (uid.length() > 0) {
+            foundMessage(folder, folder.folderName(),
+                         MailMsg(uid, folder.displayName(), date, from, subject));
+        }
 
             //date.truncate(DATE_WIDTH);
             //from.truncate(FROM_WIDTH);
@@ -285,7 +290,6 @@ void MailChecker::checkMail()
             //    .arg(from, - FROM_WIDTH)
             //    .arg(subject, - SUBJECT_WIDTH);
             //DEBUG(output.toAscii().data() << "\n");
-        }
     }
     qDebug() << "Done checking mail";
     emit updateCount(oldcount, m_messages->count());
