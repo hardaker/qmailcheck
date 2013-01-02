@@ -94,6 +94,8 @@ QtIncoming::QtIncoming(QWidget *parent, QApplication *app) :
             mailModel, SLOT(hideMessages()));
     connect(ui->unhideAll, SIGNAL(clicked()),
             mailModel, SLOT(clearHideList()));
+    connect(ui->unhideAll, SIGNAL(clicked()),
+            mailView, SLOT(resizeColumnsToContents()));
 
     connect(ui->actionPreferences, SIGNAL(activated()),
             this, SLOT(showPrefs()));
