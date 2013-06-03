@@ -21,7 +21,7 @@ void TextPainter::paint(QPainter *painter, const QStyleOptionViewItem &option, c
 #if defined(Q_WS_MAEMO_5) || defined(MAEMO_CHANGES)
         brush.setColor(QColor(0,0,50));
 #else
-        brush.setColor(QColor(220,220,255));
+        brush.setColor(QColor(255,255,180));
 #endif
         value.remove(0, 1);
     } else
