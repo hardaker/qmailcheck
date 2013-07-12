@@ -8,6 +8,8 @@
 
 #include "incomingmailmodel.h"
 
+typedef QPair<QString, QString> stringpair;
+
 class MailChecker : public QThread
 {
     Q_OBJECT
@@ -51,7 +53,7 @@ private:
     QList<MailMsg>         *m_messages;
     QString                 m_statusMessage;
     bool                    m_checkingNow;
-    QMap<QPair<QString, QString>, MailMsg>  m_cachedMessages;
+    QMap<stringpair, MailMsg>  m_cachedMessages;
     QMap<QString, bool>     uid_list;
 
     bool doLED, doVibrate, doNotification, doPopup, doSound, containsNewMessages;

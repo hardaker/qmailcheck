@@ -161,7 +161,7 @@ QList<QString> MailChecker::sendCommand(const QString &cmd, bool debugOutput) {
         resultString = resultString.trimmed();
         results.push_back(resultString);
         if (debugOutput) {
-            qDebug() << "data: " << resultString.toAscii().data() << "\n";
+            qDebug() << "data: " << resultString.toAscii().data();
         }
 
         if (donematch.indexIn(resultString) != -1) {
@@ -216,10 +216,13 @@ void MailChecker::checkMail()
     QRegExp fromMatch("From: +(.*)");
     QRegExp dateMatch("Date: +(.*)");
     QRegExp newMessageMatch("^\\*.*FETCH.*UID ([0-9]+)");
+    QRegExp flagsMatch("FLAGS +\\(.*\\)");
 
     m_checkingNow = true;
     doLED = false; doVibrate = false; doNotification = false; doPopup = false; doSound = false;
     containsNewMessages = false;
+
+    // RFC3501: imap4
 
     for(int mbox = 0; mbox < m_folderModel->count(); mbox++) {
         folderItem &folder = m_folderModel->folder(mbox);
@@ -245,7 +248,16 @@ void MailChecker::checkMail()
         msglist.pop_front(); // get rid of the prefixes
         msglist.pop_front();
 
+        foreach(stringpair index, m_cachedMessages.keys()) {
+            if (index.first == folder.folderName() &&
+                    !msglist.contains(index.second)) {
+                // the message has disappeared; nuke it from our cache
+                m_cachedMessages.remove(index);
+            }
+        }
+
         // checked for cached copies
+        // mark messages we've never seen for fetching data for
         for(int i = 0; i < msglist.length(); i++) {
             if (m_cachedMessages.contains(QPair<QString, QString>(folder.folderName(), msglist[i]))) {
                 foundMessage(folder, folder.folderName(),
@@ -258,39 +270,36 @@ void MailChecker::checkMail()
         // pull anything not cached
         QString subject, from, date, uid;
 
-        QStringList headers =
-                sendCommand(QString("UID FETCH " + fetchList.join(",") +
-                                    " (FLAGS BODY[HEADER.FIELDS (SUBJECT FROM DATE)])"));
-        for(int j = 0; j < headers.length(); j++) {
-            if (newMessageMatch.indexIn(headers[j]) != -1) {
-                if (uid.length() > 0) {
-                    foundMessage(folder, folder.folderName(),
-                                 MailMsg(uid, folder.displayName(), date, from, subject));
+        if (fetchList.count() > 0) {
+            QStringList headers =
+                    sendCommand(QString("UID FETCH " + fetchList.join(",") +
+                                        " (FLAGS BODY[HEADER.FIELDS (SUBJECT FROM DATE)])"));
+            qDebug() << "headers: " << headers;
+            for(int j = 0; j < headers.length(); j++) {
+                if (newMessageMatch.indexIn(headers[j]) != -1) {
+                    if (uid.length() > 0) {
+                        foundMessage(folder, folder.folderName(),
+                                     MailMsg(uid, folder.displayName(), date, from, subject));
+                    }
+                    uid = newMessageMatch.cap(1);
+                } else if (subjectMatch.indexIn(headers[j]) != -1) {
+                    subject = subjectMatch.cap( 1 );
+                } else if (fromMatch.indexIn(headers[j]) != -1) {
+                    from = fromMatch.cap( 1 );
+                } else if (dateMatch.indexIn(headers[j]) != -1) {
+                    date = dateMatch.cap( 1 );
+                } else if (flagsMatch.indexIn(headers[j]) != -1) {
+                    qDebug() << "found flags: " << headers[j];
                 }
-                uid = newMessageMatch.cap(1);
-            } else if (subjectMatch.indexIn(headers[j]) != -1) {
-                subject = subjectMatch.cap( 1 );
-            } else if (fromMatch.indexIn(headers[j]) != -1) {
-                from = fromMatch.cap( 1 );
-            } else if (dateMatch.indexIn(headers[j]) != -1) {
-                date = dateMatch.cap( 1 );
+            }
+
+            if (uid.length() > 0) {
+                foundMessage(folder, folder.folderName(),
+                             MailMsg(uid, folder.displayName(), date, from, subject));
             }
         }
-
-        if (uid.length() > 0) {
-            foundMessage(folder, folder.folderName(),
-                         MailMsg(uid, folder.displayName(), date, from, subject));
-        }
-
-            //date.truncate(DATE_WIDTH);
-            //from.truncate(FROM_WIDTH);
-            //subject.truncate(SUBJECT_WIDTH);
-            //QString output = QString("%1 | %2 | %3")
-            //    .arg(date, - DATE_WIDTH)
-            //    .arg(from, - FROM_WIDTH)
-            //    .arg(subject, - SUBJECT_WIDTH);
-            //DEBUG(output.toAscii().data() << "\n");
     }
+
     qDebug() << "Done checking mail";
     emit updateCount(oldcount, m_messages->count());
     emit mailUpdated();
