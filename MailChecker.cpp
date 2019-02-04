@@ -245,12 +245,8 @@ void MailChecker::checkMail()
 
         QStringList msglist = results[0].split(' ');
         QStringList fetchList;
-        if (!msglist.isEmpty()) {
-            msglist.pop_front(); // get rid of the prefixes
-        }
-        if (!msglist.isEmpty()) {
-          msglist.pop_front();
-        }
+        msglist.pop_front(); // get rid of the prefixes
+        msglist.pop_front();
 
         foreach(stringpair index, m_cachedMessages.keys()) {
             if (index.first == folder.folderName() &&
